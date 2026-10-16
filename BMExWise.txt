@@ -1,0 +1,219 @@
+BME HACKNIGHT & DAY x WISE
+==========================================================
+
+BME HackNight & Day × Wise Report
+PROJECT REPORT / TEAM TEMPLATE
+
+----------------------------------------------------------
+ABOUT THIS TEMPLATE
+----------------------------------------------------------
+This is a writing guide for hackathon teams, not a form to answer in one sentence per field. Use the headings below to tell the story of your project: what problem you identified, what you built, how it works, and why it removes friction for users.
+
+Aim for 6–10 pages of report content, excluding appendices. The original ten-part outline is retained. Sections marked optional can be shortened or skipped when irrelevant, but the core problem, working solution, technical evidence and AI disclosure should be clear. Replace the italic guidance with your own explanations, screenshots, diagrams, results and working links. You do not have to follow the prompts word for word.
+
+The report should support your live pitch, not replace it. The jury also evaluates your working demonstration and answers during Q&A. The official Max Ease challenge and complete grading rubric are reproduced at the end.
+
+----------------------------------------------------------
+WHAT MATTERS MOST TO THE JUDGES
+----------------------------------------------------------
+Criterion                            Weight   Where to make it clear
+-----------------------------------  ------   ------------------------------------------------------
+Friction Removal & Utility           25%      Sections 3–4: real user problem, simpler journey, evidence of improvement
+Technical & Architectural Execution  25%      Sections 5–6: working prototype, architecture, checks and limitations
+Presentation & Pitching              35%      Sections 2 and 5: clear story, live demo and explainable design choices
+AI Usage & Transparency              15%      Required AI disclosure after Section 6: exact use and original team work
+
+==========================================================
+1. TITLE, TEAM & CONTACTS
+==========================================================
+Identify your project and the people behind it. Make sure the jury can easily find the main contact and access the code or demo.
+
+Detail                    Team information
+------------------------  ------------------------------------------------------------
+Project name & tagline    [Project title] — [One-line statement of what becomes easier]
+Team members & roles      [Names and primary contributions: product, design, frontend, backend, research, etc.]
+Main contact              [Name and email]
+Repository / demo         [Working links; repeat in Section 5 with access instructions]
+
+==========================================================
+2. THREE-SENTENCE SUMMARY (ELEVATOR PITCH)
+==========================================================
+Write exactly three sentences that someone unfamiliar with your project can understand. Avoid opening with a list of technologies.
+
+Sentence 1 — Problem: Who is the user, and what task or situation is frustrating, slow, confusing or inaccessible?
+
+Sentence 2 — Solution: What did you actually build and what is the main action it enables?
+
+Sentence 3 — Value: What improves for the user and, if relevant, the organisation? Be specific about the benefit.
+
+[Write your three-sentence project summary here.]
+
+==========================================================
+3. PROBLEM AND TARGET GROUP (optional as a separate section)
+==========================================================
+The problem itself must still be understandable somewhere in your report. If this section adds no value, weave the essential points into Sections 2 and 4.
+
+Target user and context: Describe one specific group or persona and the real situation in which the issue occurs. What are they trying to accomplish?
+
+Current user journey: Explain the process today, from start to finish. Identify the exact steps where time, mistakes, uncertainty or exclusion occur. A simple "before" workflow works well.
+
+Why this matters: Give an observation, user example, interview insight, test, or clearly labelled assumption. Where possible, establish a baseline, such as minutes, steps, error points or required tools.
+
+[Describe the current situation and friction. Insert a simple "before" flow or user example if useful.]
+
+==========================================================
+4. SOLUTION & UNIQUE SELLING PROPOSITION (USP)
+==========================================================
+Explain the product from the user's perspective before describing the technology. Show how the proposed solution addresses the friction above.
+
+How it works: Describe the core user journey: what the user starts with, what they do in your product and what they receive. Focus on the main path, not every feature.
+
+Features and benefits: Explain 2–4 important functions and directly connect each to a previously identified pain point. Include accessibility or clarity of interaction when relevant.
+
+Why this approach: What makes the solution different from existing methods or alternatives? Explain your strongest design trade-off or advantage without unsupported claims.
+
+Evidence of easier use: Compare "before" with "after" using a small example, step count, timing, or concrete reduction in complexity. If not yet measured, describe how you would validate it.
+
+[Explain the solution in 2–4 short paragraphs, supported by a user flow or before/after comparison.]
+
+==========================================================
+5. PROOF OF CONCEPT (PoC) / DEMO DESCRIPTION
+==========================================================
+This section should make it possible for a jury member to understand, run and verify your prototype. The live pitch is judged separately, so prepare a demonstration of the main journey.
+
+What is working now: Distinguish completed end-to-end functionality from mockups, sample data, unfinished features or planned ideas. Be clear about the state of the prototype.
+
+Live demonstration: Walk through one realistic user scenario in 3–5 steps: starting point and input; key action; outcome. Indicate what the audience will actually see.
+
+How to try it: Provide the deployed URL or repository, quick start commands if needed, prerequisites, sample data, and test credentials if appropriate. Ensure every jury member can access it.
+
+Architecture overview: Insert a small system diagram or a short description of frontend, backend, storage, external APIs and major data flow. Explain how the parts connect.
+
+[Describe the demo scenario and what it proves. Add a screenshot or architecture diagram where helpful.]
+
+Resource                  Link / access details
+------------------------  ------------------------------------------------------------
+Source repository         [URL; confirm read access for all jury members]
+Live app / demo           [URL and any login or sample inputs]
+Run locally               [Short commands / dependencies, or link to README]
+Demo video (if available) [URL]
+
+==========================================================
+6. TECHNICAL VALIDATION & SCALABILITY
+==========================================================
+Provide enough technical detail to demonstrate that your team understands the system and that the prototype works beyond a static screen. You do not need production-level infrastructure for a hackathon.
+
+Stack and decisions: Name the main technologies and explain 1–2 design decisions that matter to reliability, simplicity, speed, usability or integration.
+
+Validation: Describe how you tested the main flow and at least one edge case or failure situation. State what passed, what failed and the evidence (tests, observed behavior, screenshots or logs).
+
+Reproducibility: Explain how another developer could run your solution. Mention configuration, data sources, dependencies and anything that is not yet automated.
+
+Scale and limitations: Identify realistic bottlenecks such as latency, API limits, manual steps, data quality or privacy. Explain what would need to change for more users. Clearly label unfinished areas.
+
+[Summarise the architecture, technical evidence and known limitations. Link detailed test output in an appendix.]
+
+==========================================================
+REQUIRED DISCLOSURE — AI USAGE & TRANSPARENCY (15% of the score)
+==========================================================
+Identify the AI tools used and explain precisely which parts were AI-assisted versus created by the team. This includes generated code, logic, design assets and written content, not just AI inside the finished product. If no AI was used, state "No AI tools used."
+
+Tool                         Specific use / affected parts                                      Team's original work and verification
+---------------------------  -----------------------------------------------------------------  ----------------------------------------------------------------
+[Tool or None]               [Task, code component, logic, design or assets supported]          [What you designed, changed, understood, reviewed and tested]
+[Optional additional tool]   [Specific contribution]                                            [Original work / validation]
+
+If your product uses AI as a user-facing feature, also explain what model or service is involved, its input/output, and any important reliability or privacy limitations.
+
+==========================================================
+7. BUSINESS RELEVANCE & EXAMPLE CALCULATIONS (optional)
+==========================================================
+If relevant, connect the user benefit to practical organisational or commercial value. A simple, transparent estimate is more useful than a large unsupported claim.
+
+Who benefits: Explain who gains value: end users, organisations, service teams or communities. Relate this to the Max Ease objective of reducing effort.
+
+Illustrative calculation: Use your own assumption and show the arithmetic: e.g., time saved per task × estimated tasks per month = time saved per month. Label assumptions and avoid pretending estimates are measured results.
+
+Adoption or costs: Briefly mention operating cost, integration, willingness to adopt or key constraints, only if you have a reasonable basis.
+
+[State the value and, where applicable, one transparent estimate with its assumptions.]
+
+==========================================================
+8. COMPETITION & MARKET (optional)
+==========================================================
+Mention existing solutions or manual alternatives when they help explain why your project is useful. A short grounded comparison is sufficient.
+
+Current alternatives: What would the user use without your product? Include an ordinary workaround if there is no direct competitor.
+
+Difference and audience: Explain the exact gap you address and who might use the solution. Provide a rough market estimate only if it adds value and can be explained.
+
+[Give one or two relevant alternatives and a concise explanation of your difference.]
+
+==========================================================
+9. PROTECTABILITY / INTELLECTUAL PROPERTY NOTES (optional)
+==========================================================
+Keep this short. Identify relevant ownership, open-source licences, third-party data and APIs, or a distinctive technical method. Do not claim patentability without evidence.
+
+[Any relevant IP/licensing considerations; otherwise write "Not applicable."]
+
+==========================================================
+10. NEXT STEPS & REQUESTS
+==========================================================
+Show that you can distinguish what is proven at the hackathon from what would be needed next. Prioritise the most valuable improvement rather than writing a long feature wish list.
+
+Next milestone: What would you build or test first, and why?
+
+Validation or pilot: Who should try it next, and what metric or feedback would you collect?
+
+Help needed: Identify realistic support, access, data, partnerships or resources needed to advance it, if any.
+
+[Write a short, prioritised roadmap and any specific requests.]
+
+==========================================================
+APPENDIX A / OFFICIAL CHALLENGE
+==========================================================
+Challenge: Max Ease
+
+A core aspect of Wise's mission is convenience, making it easy to do more, in more places, with less effort. Build a project that removes friction from an everyday experience: simplifying a complicated process, anticipating what someone needs, or helping people get something done faster and more confidently.
+
+Project direction & inspiration
+  * Simplifying Complex Workflows: Making a confusing form, workflow, or application easier to complete.
+  * Seamless Navigation: Helping people navigate a new city, service, or system without needing local knowledge.
+  * Effortless Coordination: Reducing the effort involved in organizing a trip, event, household, or group activity.
+  * Inclusive Accessibility: Making an essential service more accessible to people with different needs, languages, or levels of digital confidence.
+
+==========================================================
+APPENDIX B / OFFICIAL GRADING RUBRIC
+==========================================================
+Scores range from 1 (Poor / Missing) to 4 (Exceptional). Categories are weighted as shown below.
+
+FRICTION REMOVAL & UTILITY (25%)
+  1 · Poor / Missing   Fails to solve a meaningful problem or adds unnecessary complexity and friction to the process.
+  2 · Fair             Addresses a minor issue, but the experience remains clunky and fails to anticipate user needs.
+  3 · Good             Measurably reduces effort in a real scenario. Solution is intuitive, easy to use, and practical.
+  4 · Exceptional      Eliminates complex friction entirely. Solution feels effortless, highly intuitive, and accessible to all.
+
+TECHNICAL & ARCHITECTURAL EXECUTION (25%)
+  1 · Poor / Missing   Demo is non-functional, relies only on static mockups, or exhibits fatal runtime errors.
+  2 · Fair             Basic proof-of-concept exists, but core features break easily or rely on heavy hardcoded shortcuts.
+  3 · Good             Fully functional end-to-end prototype with clean architecture, proper APIs, and solid stability.
+  4 · Exceptional      Production-ready execution with high performance, elegant error handling, and robust technology choices.
+
+PRESENTATION & PITCHING (35%)
+  1 · Poor / Missing   Unclear pitch, no working live demo shown, or unable to explain design choices during Q&A.
+  2 · Fair             Understandable structure, but relies heavily on slides rather than demonstrating the actual product live.
+  3 · Good             Clear storytelling with a working live demo of the primary user journey. Confident during Q&A.
+  4 · Exceptional      Highly compelling pitch, flawless live demo showcasing effortless flow, and exceptional team engagement in Q&A.
+
+AI USAGE & TRANSPARENCY (15%)
+  1 · Poor / Missing   No Disclosure: Failed to declare AI usage or concealed AI-generated assets, logic, or code snippets.
+  2 · Fair             Limited Disclosure: Vague mention of AI usage without identifying specific components or prompt-driven code.
+  3 · Good             Somewhat Disclosed: Disclosed key tools used (e.g., Copilot, ChatGPT) and noted main AI-assisted segments.
+  4 · Exceptional      Fully Disclosed: Complete transparency. Explicitly detailed where AI was leveraged vs. custom original work.
+
+SCORING
+Final Score = (Friction Removal Score × 0.25) + (Technical Execution Score × 0.25) + (Presentation Score × 0.35) + (AI Transparency Score × 0.15)
+
+Maximum Raw Score: 4.00
+
+Scaled Percentage Score: Multiply the Final Score by 25 to convert to a 100% scale.
