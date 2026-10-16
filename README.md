@@ -11,7 +11,7 @@ BME & Wise Hack Night and Day: a 24-hour hackathon to build a fintech product.
 ## How to run
 1. Clone the repo
 2. Install dependencies: `pip install -r requirements.txt`
-3. Run: `python src/main.py
+3. Run: `python src/main.py`
 
 ## Folder structure
 - `src/` – application code
