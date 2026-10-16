@@ -1,0 +1,15 @@
+{
+  "holder": "Aoife Brennan",
+  "homeCity": "Dublin",
+  "homeCountry": "Ireland",
+  "homeCountryCode": "IE",
+  "currentCity": "Budapest",
+  "currentCountry": "Hungary",
+  "currentCountryCode": "HU",
+  "arrivedOn": "2026-10-15",
+  "balances": [
+    { "value": 2480.5, "currency": "EUR", "primary": true },
+    { "value": 184200, "currency": "HUF", "primary": false }
+  ],
+  "_source": "Illustrative account. Mock data for the BME x Wise hackathon prototype; not a real Wise account."
+}

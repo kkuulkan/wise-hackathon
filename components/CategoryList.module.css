@@ -1,0 +1,26 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Items stay visible here on purpose. GSAP applies the hidden start state in a
+ * layout effect before paint, so nothing flashes, and if the script never runs
+ * the cards are still readable.
+ */
+.item {
+  will-change: transform, opacity;
+}
+
+.empty {
+  margin-top: 24px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  color: var(--muted);
+}

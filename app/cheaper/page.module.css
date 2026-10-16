@@ -1,0 +1,72 @@
+.main {
+  padding-bottom: 64px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 20px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--ink);
+}
+
+.head {
+  padding: 24px 0 28px;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stamp);
+}
+
+.stampMark {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--stamp);
+  border-radius: 2px;
+  transform: rotate(-12deg);
+}
+
+.title {
+  margin-top: 12px;
+  font-size: clamp(40px, 12vw, 60px);
+  letter-spacing: -0.03em;
+}
+
+.lede {
+  margin-top: 14px;
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 42ch;
+}
+
+.lede strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.foot {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.rate {
+  margin-top: 8px;
+}

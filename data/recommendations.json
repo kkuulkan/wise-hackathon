@@ -1,0 +1,89 @@
+{
+  "city": "Budapest",
+  "countryCode": "HU",
+  "comparedTo": { "city": "Dublin", "countryCode": "IE" },
+  "fxRate": { "pair": "EUR/HUF", "rate": 395, "asOf": "2026-10-17" },
+  "_source": "Price levels are a seeded snapshot for the two cities, not live data. Place names are illustrative; each maps link searches the category within the named district rather than a specific business.",
+  "categories": [
+    {
+      "slug": "gym-membership",
+      "label": "Gym membership",
+      "unit": "per month",
+      "homeAvgEur": 65,
+      "localAvgEur": 32,
+      "purchasesPerYear": 12,
+      "source": "Seeded from published membership rates in both cities, Oct 2026.",
+      "products": [
+        { "name": "Danube Strength Club", "area": "District XIII", "priceEur": 24, "priceHuf": 9480, "mapsQuery": "gym District XIII Budapest" },
+        { "name": "Buda Hills Fitness", "area": "District II", "priceEur": 29, "priceHuf": 11455, "mapsQuery": "gym District II Budapest" },
+        { "name": "Pest Central Gym", "area": "District VII", "priceEur": 34, "priceHuf": 13430, "mapsQuery": "gym District VII Budapest" }
+      ]
+    },
+    {
+      "slug": "speciality-coffee",
+      "label": "Speciality coffee",
+      "unit": "per cup",
+      "homeAvgEur": 4.2,
+      "localAvgEur": 2.6,
+      "purchasesPerYear": 180,
+      "source": "Seeded from menu prices for a flat white in both cities, Oct 2026.",
+      "products": [
+        { "name": "Szikra Espresso", "area": "District VII", "priceEur": 2.28, "priceHuf": 900, "mapsQuery": "speciality coffee District VII Budapest" },
+        { "name": "Gozsdu Coffee Room", "area": "District VII", "priceEur": 2.53, "priceHuf": 1000, "mapsQuery": "coffee shop Gozsdu Budapest" },
+        { "name": "Kávé Műhely", "area": "District VI", "priceEur": 2.91, "priceHuf": 1150, "mapsQuery": "speciality coffee District VI Budapest", "visited": true }
+      ]
+    },
+    {
+      "slug": "physiotherapy",
+      "label": "Physiotherapy",
+      "unit": "per 60 min session",
+      "homeAvgEur": 70,
+      "localAvgEur": 30,
+      "purchasesPerYear": 6,
+      "source": "Seeded from private clinic list prices in both cities, Oct 2026.",
+      "products": [
+        { "name": "Buda Movement Clinic", "area": "District I", "priceEur": 25, "priceHuf": 9875, "mapsQuery": "physiotherapy District I Budapest" },
+        { "name": "Városliget Physio", "area": "District XIV", "priceEur": 28, "priceHuf": 11060, "mapsQuery": "physiotherapy District XIV Budapest" }
+      ]
+    },
+    {
+      "slug": "haircut",
+      "label": "Haircut",
+      "unit": "per cut",
+      "homeAvgEur": 32,
+      "localAvgEur": 18,
+      "purchasesPerYear": 10,
+      "source": "Seeded from barber list prices in both cities, Oct 2026.",
+      "products": [
+        { "name": "Borbély Műhely", "area": "District VII", "priceEur": 14, "priceHuf": 5530, "mapsQuery": "barber District VII Budapest" },
+        { "name": "Deák Barber Room", "area": "District V", "priceEur": 19, "priceHuf": 7505, "mapsQuery": "barber District V Budapest" }
+      ]
+    },
+    {
+      "slug": "dental-cleaning",
+      "label": "Dental cleaning",
+      "unit": "per cleaning",
+      "homeAvgEur": 95,
+      "localAvgEur": 38,
+      "purchasesPerYear": 2,
+      "source": "Seeded from private dental price lists in both cities, Oct 2026.",
+      "products": [
+        { "name": "Duna Dental Studio", "area": "District V", "priceEur": 32, "priceHuf": 12640, "mapsQuery": "dental clinic District V Budapest" },
+        { "name": "Margit Dental", "area": "District II", "priceEur": 40, "priceHuf": 15800, "mapsQuery": "dental clinic District II Budapest" }
+      ]
+    },
+    {
+      "slug": "prescription-eyewear",
+      "label": "Prescription glasses",
+      "unit": "per pair, frames and lenses",
+      "homeAvgEur": 220,
+      "localAvgEur": 95,
+      "purchasesPerYear": 0.5,
+      "source": "Seeded from optician package prices in both cities, Oct 2026.",
+      "products": [
+        { "name": "Optika Lumen", "area": "District VI", "priceEur": 78, "priceHuf": 30810, "mapsQuery": "optician District VI Budapest" },
+        { "name": "Látás Optika", "area": "District XI", "priceEur": 92, "priceHuf": 36340, "mapsQuery": "optician District XI Budapest" }
+      ]
+    }
+  ]
+}

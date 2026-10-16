@@ -1,0 +1,32 @@
+{
+  "fxRate": { "pair": "EUR/HUF", "rate": 395, "asOf": "2026-10-17" },
+  "_source": "Illustrative transactions shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype.",
+  "transactions": [
+    { "id": "t-025", "date": "2026-10-17", "merchant": "Kávé Műhely", "category": "speciality-coffee", "city": "Budapest", "countryCode": "HU", "amount": { "value": 1150, "currency": "HUF" }, "amountEur": 2.91 },
+    { "id": "t-024", "date": "2026-10-16", "merchant": "Nagy Piac Market", "category": "other", "city": "Budapest", "countryCode": "HU", "amount": { "value": 6420, "currency": "HUF" }, "amountEur": 16.25 },
+    { "id": "t-023", "date": "2026-10-16", "merchant": "Kávé Műhely", "category": "speciality-coffee", "city": "Budapest", "countryCode": "HU", "amount": { "value": 1150, "currency": "HUF" }, "amountEur": 2.91 },
+    { "id": "t-022", "date": "2026-10-15", "merchant": "Airport Transfer Budapest", "category": "other", "city": "Budapest", "countryCode": "HU", "amount": { "value": 2200, "currency": "HUF" }, "amountEur": 5.57 },
+
+    { "id": "t-021", "date": "2026-10-13", "merchant": "Proper Grind Coffee", "category": "speciality-coffee", "city": "Dublin", "countryCode": "IE", "amount": { "value": 4.2, "currency": "EUR" }, "amountEur": 4.2 },
+    { "id": "t-020", "date": "2026-10-12", "merchant": "Rathmines Grocery", "category": "other", "city": "Dublin", "countryCode": "IE", "amount": { "value": 48.3, "currency": "EUR" }, "amountEur": 48.3 },
+    { "id": "t-019", "date": "2026-10-10", "merchant": "Proper Grind Coffee", "category": "speciality-coffee", "city": "Dublin", "countryCode": "IE", "amount": { "value": 4.2, "currency": "EUR" }, "amountEur": 4.2 },
+    { "id": "t-018", "date": "2026-10-09", "merchant": "FlexFit Gym Dublin", "category": "gym-membership", "city": "Dublin", "countryCode": "IE", "amount": { "value": 65, "currency": "EUR" }, "amountEur": 65 },
+    { "id": "t-017", "date": "2026-10-08", "merchant": "Proper Grind Coffee", "category": "speciality-coffee", "city": "Dublin", "countryCode": "IE", "amount": { "value": 4.2, "currency": "EUR" }, "amountEur": 4.2 },
+    { "id": "t-016", "date": "2026-10-06", "merchant": "Liffey Physio Clinic", "category": "physiotherapy", "city": "Dublin", "countryCode": "IE", "amount": { "value": 70, "currency": "EUR" }, "amountEur": 70 },
+    { "id": "t-015", "date": "2026-10-04", "merchant": "Leap Card Top-Up", "category": "other", "city": "Dublin", "countryCode": "IE", "amount": { "value": 30, "currency": "EUR" }, "amountEur": 30 },
+    { "id": "t-014", "date": "2026-10-02", "merchant": "Proper Grind Coffee", "category": "speciality-coffee", "city": "Dublin", "countryCode": "IE", "amount": { "value": 4.2, "currency": "EUR" }, "amountEur": 4.2 },
+    { "id": "t-013", "date": "2026-09-28", "merchant": "Sharp & Co Barbers", "category": "haircut", "city": "Dublin", "countryCode": "IE", "amount": { "value": 32, "currency": "EUR" }, "amountEur": 32 },
+    { "id": "t-012", "date": "2026-09-25", "merchant": "Rathmines Grocery", "category": "other", "city": "Dublin", "countryCode": "IE", "amount": { "value": 52.1, "currency": "EUR" }, "amountEur": 52.1 },
+    { "id": "t-011", "date": "2026-09-20", "merchant": "Proper Grind Coffee", "category": "speciality-coffee", "city": "Dublin", "countryCode": "IE", "amount": { "value": 4.2, "currency": "EUR" }, "amountEur": 4.2 },
+    { "id": "t-010", "date": "2026-09-15", "merchant": "Liffey Physio Clinic", "category": "physiotherapy", "city": "Dublin", "countryCode": "IE", "amount": { "value": 70, "currency": "EUR" }, "amountEur": 70 },
+    { "id": "t-009", "date": "2026-09-09", "merchant": "FlexFit Gym Dublin", "category": "gym-membership", "city": "Dublin", "countryCode": "IE", "amount": { "value": 65, "currency": "EUR" }, "amountEur": 65 },
+    { "id": "t-008", "date": "2026-09-03", "merchant": "Grafton Dental Care", "category": "dental-cleaning", "city": "Dublin", "countryCode": "IE", "amount": { "value": 95, "currency": "EUR" }, "amountEur": 95 },
+    { "id": "t-007", "date": "2026-08-30", "merchant": "Sharp & Co Barbers", "category": "haircut", "city": "Dublin", "countryCode": "IE", "amount": { "value": 32, "currency": "EUR" }, "amountEur": 32 },
+    { "id": "t-006", "date": "2026-08-22", "merchant": "Proper Grind Coffee", "category": "speciality-coffee", "city": "Dublin", "countryCode": "IE", "amount": { "value": 4.2, "currency": "EUR" }, "amountEur": 4.2 },
+    { "id": "t-005", "date": "2026-08-14", "merchant": "Clearview Opticians", "category": "prescription-eyewear", "city": "Dublin", "countryCode": "IE", "amount": { "value": 220, "currency": "EUR" }, "amountEur": 220 },
+    { "id": "t-004", "date": "2026-08-09", "merchant": "FlexFit Gym Dublin", "category": "gym-membership", "city": "Dublin", "countryCode": "IE", "amount": { "value": 65, "currency": "EUR" }, "amountEur": 65 },
+    { "id": "t-003", "date": "2026-08-01", "merchant": "Liffey Physio Clinic", "category": "physiotherapy", "city": "Dublin", "countryCode": "IE", "amount": { "value": 70, "currency": "EUR" }, "amountEur": 70 },
+    { "id": "t-002", "date": "2026-07-26", "merchant": "Sharp & Co Barbers", "category": "haircut", "city": "Dublin", "countryCode": "IE", "amount": { "value": 32, "currency": "EUR" }, "amountEur": 32 },
+    { "id": "t-001", "date": "2026-07-18", "merchant": "Proper Grind Coffee", "category": "speciality-coffee", "city": "Dublin", "countryCode": "IE", "amount": { "value": 4.2, "currency": "EUR" }, "amountEur": 4.2 }
+  ]
+}
