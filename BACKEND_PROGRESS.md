@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | All API routes wrapped in `handle()`: clean JSON 503 when the database is down, JSON 500 otherwise (§16). Route handlers are now `export const GET = handle(get)` | If you add a route, wrap it the same way |
 | 2026-10-17 | **Neon Postgres database** (§16). Users, transactions, trips, notifications, consent, feedback, events and verified price snapshots now live in 13 tables (Drizzle schema + migration). `lib/server/store.ts` and `seed.ts` are DB-backed and async; new `pricedata.ts`, `db.ts`; `neon.ts` added by `neon init`. `app/page.tsx` gains one `await`. `/api/dev/reset` is blocked in production unless `OTHERWISE_ALLOW_RESET=true` | **After pulling: run `neon env pull` (or set `DATABASE_URL`), then `npm run db:migrate && npm run db:seed && npm run db:load-prices`** |
 | 2026-10-17 | **Third user `saoirse`** (Dublin gamer) + Microsoft Store official list prices for electronics with a VAT-normalised consistency gate (§15). New `listPriceCheck` on categories; new `digital-games` category (never recommended). `data/real/brand-prices.json` added | Additive. The user picker now lists 3 users |
 | 2026-10-17 | `products[].localComparison`: national average, per-kg/L vs the median of ≥5 similar verified products in the same country, or `null` (§14). Fetch script computes per-type medians (`products.json` → `localStats`) | Additive. **Frontend action needed in `Visa`** (§14) |
@@ -508,7 +509,7 @@ The category taxonomy stays a config file. The catalog cache stays in memory (no
 ### Runtime behaviour
 - `store.ts` (trips, consent, feedback, events, notifications) and `seed.ts` (users, transactions) are DB-backed and async. Trip upserts and resets run in transactions.
 - `pricedata.ts` reads the current snapshot (5-minute in-process cache). **If the database is unreachable, the catalog serves the bundled verified files** with `source: "fallback"`; it switches back to `live` automatically.
-- User-specific endpoints need the database and currently return a bare HTTP 500 when it is down (follow-up: a clean JSON 503).
+- Every route is wrapped in `handle()` (`lib/server/http.ts`): database unreachable → **`503 {error:{code:"unavailable"}}`**, anything else unexpected → `500 {error:{code:"internal"}}`. Details go to the server log only. `unstable_rethrow` is called first so Next's own signals (`cookies()`, `searchParams`, redirects) are never swallowed.
 - `/api/dev/reset` clears app state only (never users, transactions or prices) and is **disabled in production** unless `OTHERWISE_ALLOW_RESET=true`.
 
 ### Verified on 2026-10-17 (against Neon, `production` branch while empty)
@@ -518,5 +519,5 @@ The category taxonomy stays a config file. The catalog cache stays in memory (no
 | `npm run smoke` | **78/78**, 0 server errors (~28 s; DB in us-east-2) |
 | Restart persistence | killed the server mid-trip, started a new process: active trip, `notifications: false` consent, thumbs-down (coffee hidden) and the stored notification all survived; re-arriving gave `already-seen`, no duplicate notification |
 | DB integrity | Postgres rejected: a second current snapshot, a second active trip, a transaction for an unknown user, a duplicate thumbs-down (all attempts rolled back) |
-| DB unreachable | catalog answered in 20 ms from the bundled snapshot (`source: "fallback"`), home page 200; back to `live` when the DB returned |
+| DB unreachable | catalog answered from the bundled snapshot (`source: "fallback"`, 200); user endpoints return JSON `503 unavailable`; home page 200; back to `live` when the DB returned |
 

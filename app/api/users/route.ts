@@ -2,9 +2,10 @@ import { connection } from "next/server";
 
 import { COUNTRIES } from "@/lib/server/config";
 import { getProfiles } from "@/lib/server/seed";
+import { handle } from "@/lib/server/http";
 
 /** The demo users, for the sign-in picker. Read from the database per request. */
-export async function GET() {
+async function get() {
   await connection();
   return Response.json({
     users: (await getProfiles()).map((profile) => ({
@@ -15,3 +16,5 @@ export async function GET() {
     })),
   });
 }
+
+export const GET = handle(get);

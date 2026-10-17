@@ -1,4 +1,4 @@
-import { fail } from "@/lib/server/http";
+import { fail, handle } from "@/lib/server/http";
 import { resetState } from "@/lib/server/store";
 
 /**
@@ -9,10 +9,12 @@ import { resetState } from "@/lib/server/store";
  * The data now lives in a shared database, so on a public deployment this is
  * off unless OTHERWISE_ALLOW_RESET=true is set deliberately.
  */
-export async function POST() {
+async function post() {
   if (process.env.NODE_ENV === "production" && process.env.OTHERWISE_ALLOW_RESET !== "true") {
     return fail(403, "forbidden", "Reset is disabled on this deployment.");
   }
   await resetState();
   return Response.json({ ok: true });
 }
+
+export const POST = handle(post);

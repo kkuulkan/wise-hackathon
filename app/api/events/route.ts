@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 
-import { badRequest, parseCountry, readObject, unknownKeys } from "@/lib/server/http";
+import { badRequest, parseCountry, readObject, unknownKeys, handle } from "@/lib/server/http";
 import { getCategoryDef } from "@/lib/server/seed";
 import { listEvents, recordEvent } from "@/lib/server/store";
 import { EVENT_TYPES, type AnalyticsEvent, type EventType } from "@/lib/server/types";
@@ -15,7 +15,7 @@ import { EVENT_TYPES, type AnalyticsEvent, type EventType } from "@/lib/server/t
  * itself. The client sends notification_opened, recommendations_viewed,
  * category_viewed and product_tapped.
  */
-export async function POST(request: Request) {
+async function post(request: Request) {
   const body = await readObject(request);
   if (body instanceof Response) return body;
 
@@ -51,7 +51,10 @@ export async function POST(request: Request) {
 }
 
 /** For the team dashboard. Contains no personal financial data by construction. */
-export async function GET() {
+async function get() {
   await connection();
   return Response.json({ events: await listEvents() });
 }
+
+export const POST = handle(post);
+export const GET = handle(get);

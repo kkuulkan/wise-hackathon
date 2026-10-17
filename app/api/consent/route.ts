@@ -1,9 +1,9 @@
-import { badRequest, readObject, unknownKeys } from "@/lib/server/http";
+import { badRequest, readObject, unknownKeys, handle } from "@/lib/server/http";
 import { requireUser } from "@/lib/server/session";
 import { getConsent, recordEvent, setConsent } from "@/lib/server/store";
 
 /** GET the signed-in user's consent (US-6.3). */
-export async function GET() {
+async function get() {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
   return Response.json(await getConsent(profile.userId));
@@ -16,7 +16,7 @@ export async function GET() {
  * Withdrawing personalisation means the next recommendations response uses
  * no transaction data at all (US-6.2).
  */
-export async function PUT(request: Request) {
+async function put(request: Request) {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
@@ -44,3 +44,6 @@ export async function PUT(request: Request) {
 
   return Response.json({ ...after, confirmation: "Your choice is saved and applies right away." });
 }
+
+export const GET = handle(get);
+export const PUT = handle(put);

@@ -1,9 +1,10 @@
 import { COUNTRIES } from "@/lib/server/config";
 import { requireUser } from "@/lib/server/session";
 import { getActiveTrip } from "@/lib/server/store";
+import { handle } from "@/lib/server/http";
 
 /** The signed-in user's profile, balances and active trip (drives the home banner, FR-7). */
-export async function GET() {
+async function get() {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
@@ -25,3 +26,5 @@ export async function GET() {
     },
   });
 }
+
+export const GET = handle(get);
