@@ -6,6 +6,7 @@ import { HeaderBackdrop } from "@/components/HeaderBackdrop";
 import { TitleFlight } from "@/components/TitleFlight";
 import { VisaSpread } from "@/components/VisaSpread";
 import { ConsentPanel } from "@/components/live/ConsentPanel";
+import { FlightSpinner } from "@/components/live/FlightSpinner";
 import { TrackView } from "@/components/live/TrackView";
 import { getLiveRecommendations, getLiveSession } from "@/lib/live";
 import styles from "./page.module.css";
@@ -22,13 +23,9 @@ export default function Cheaper({ searchParams }: PageProps<"/cheaper">) {
         </div>
       </div>
 
-      <Suspense
-        fallback={
-          <p className={`page ${styles.loading}`}>
-            <span className="fieldLabel">Checking prices…</span>
-          </p>
-        }
-      >
+      {/* The same plane that covered the account on the way here, so the
+          two halves of the wait are one movement. */}
+      <Suspense fallback={<FlightSpinner className={styles.loading} />}>
         <CheaperContent searchParams={searchParams} />
       </Suspense>
     </main>

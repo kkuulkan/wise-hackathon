@@ -4,6 +4,8 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { dismissTicket } from "@/lib/ticket";
+import { Dropdown } from "./Dropdown";
+import { FlightScrim } from "./FlightScrim";
 import styles from "./DemoBar.module.css";
 
 type DemoUser = { id: string; holder: string; homeCity: string };
@@ -12,6 +14,9 @@ type Destination = { code: string; name: string; eligible: boolean };
 type Props = {
   /** Who the server rendered the page for, or null when signed out. */
   userId: string | null;
+  /** Their name and city, so the picker reads correctly before the list loads. */
+  holder: string | null;
+  homeCity: string | null;
   homeCountryCode: string | null;
   /** Country of the active trip, so the picker starts there. */
   tripCountry: string | null;
@@ -44,15 +49,25 @@ async function call<T>(method: string, path: string, body?: unknown): Promise<T>
  */
 export function DemoBar({
   userId,
+  holder,
+  homeCity,
   homeCountryCode,
   tripCountry,
   notificationsAllowed,
 }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [users, setUsers] = useState<DemoUser[]>([]);
+  /*
+   * Seeded with whoever the server rendered for. /api/users only answers once
+   * the page is interactive, and without this the control would say "None"
+   * about an account that is plainly open on the screen behind it.
+   */
+  const [users, setUsers] = useState<DemoUser[]>(
+    userId && holder ? [{ id: userId, holder, homeCity: homeCity ?? "" }] : [],
+  );
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [destination, setDestination] = useState(tripCountry ?? "PT");
+  const [flying, setFlying] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -79,8 +94,14 @@ export function DemoBar({
       .catch((error: Error) => setMessage(error.message));
   }, [userId]);
 
-  const run = (action: () => Promise<void>) => {
+  /*
+   * `flying` rather than `pending` alone: every control here runs through
+   * this, and a plane crossing the screen belongs to arriving somewhere, not
+   * to picking a traveller or resetting the demo.
+   */
+  const run = (action: () => Promise<void>, flight = false) => {
     setMessage(null);
+    setFlying(flight);
     startTransition(async () => {
       try {
         await action();
@@ -124,7 +145,7 @@ export function DemoBar({
       } else if (result.status === "arrived" && !result.notification) {
         setMessage("Arrival recorded. Notifications are switched off for this traveller.");
       }
-    });
+    }, true);
 
 
   return (
@@ -132,21 +153,24 @@ export function DemoBar({
       <p className={`fieldLabel ${styles.label}`}>For demo purpose:</p>
 
       <div className={styles.controls}>
-        <label className={styles.field}>
+        <div className={styles.field}>
           <span className={styles.fieldName}>Traveller</span>
-          <select
+          <Dropdown
+            srLabel="Traveller"
+            className={styles.control}
             value={userId ?? ""}
-            onChange={(event) => signIn(event.target.value)}
+            onChange={signIn}
             disabled={pending}
-          >
-            <option value="">Signed out</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.holder} · {user.homeCity}
-              </option>
-            ))}
-          </select>
-        </label>
+            options={[
+              { value: "", label: "Signed out" },
+              ...users.map((user) => ({
+                value: user.id,
+                label: user.holder,
+                note: user.homeCity,
+              })),
+            ]}
+          />
+        </div>
 
         {userId && !notificationsAllowed && (
           <p className={styles.declined}>
@@ -157,21 +181,22 @@ export function DemoBar({
 
         {userId && notificationsAllowed && (
           <>
-            <label className={styles.field}>
+            <div className={styles.field}>
               <span className={styles.fieldName}>Arrive in</span>
-              <select
+              <Dropdown
+                srLabel="Arrive in"
+                className={styles.control}
                 value={destination}
-                onChange={(event) => setDestination(event.target.value)}
+                onChange={setDestination}
                 disabled={pending}
-              >
-                {destinations.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.name}
-                    {country.eligible ? "" : " (outside the E.U.)"}
-                  </option>
-                ))}
-              </select>
-            </label>
+                placeholder="Loading…"
+                options={destinations.map((country) => ({
+                  value: country.code,
+                  label: country.name,
+                  note: country.eligible ? undefined : "outside the E.U.",
+                }))}
+              />
+            </div>
 
             <button
               type="button"
@@ -210,6 +235,8 @@ export function DemoBar({
           {message}
         </p>
       )}
+
+      <FlightScrim show={pending && flying} />
 
     </section>
   );

@@ -10,7 +10,9 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 60;
-  width: min(100% - 2 * var(--space-3), 980px);
+  /* Wide enough that the label and every control, Reset demo included, sit
+     on one line; it still shrinks to the viewport below that. */
+  width: min(100% - 2 * var(--space-3), 1180px);
 
   display: flex;
   flex-wrap: wrap;
@@ -60,14 +62,12 @@
   color: var(--muted);
 }
 
-.field select {
-  font: inherit;
+/* Look comes from the shared `.select`; this is only its size in the bar,
+   matched to the 36px controls beside it. */
+.control {
+  height: 36px;
+  padding: 0 var(--space-6) 0 var(--space-2);
   font-size: 13px;
-  padding: var(--space-1) var(--space-2);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-btn);
-  background: rgba(255, 255, 255, 0.6);
-  color: var(--ink);
 }
 
 .primary,
@@ -149,11 +149,6 @@
 
   .field {
     flex: 1 1 150px;
-  }
-
-  .field select {
-    width: 100%;
-    min-width: 0;
   }
 }
 

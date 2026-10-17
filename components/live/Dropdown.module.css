@@ -1,0 +1,117 @@
+.root {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+/*
+ * The closed control. Its paper, border and chevron come from the shared
+ * `.select` class in globals.css, so it sits beside the real form controls
+ * without looking like a different species.
+ */
+.trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*
+ * The open list: a slip of paper laid over the page, with the same ruled
+ * border and shadow as the cards.
+ */
+.list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  /* Never narrower than the control, free to be wider than it. */
+  min-width: 100%;
+  max-width: min(320px, 80vw);
+  /* Over the demo bar it belongs to, under the loading scrim. */
+  z-index: 70;
+
+  max-height: 288px;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  color: var(--ink);
+
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+
+  animation: open 140ms ease-out both;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  /* 36px of target, matching the controls in the bar. */
+  min-height: 36px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.optionLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Where the keyboard or the pointer currently is. */
+.active {
+  background: var(--band);
+}
+
+/* The one in force, which stays legible under the highlight above. */
+.option[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.option[aria-selected="true"] .note {
+  color: rgba(240, 240, 182, 0.76);
+}
+
+.note {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.tick {
+  flex: none;
+  margin-left: auto;
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list {
+    animation: none;
+  }
+}

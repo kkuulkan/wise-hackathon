@@ -32,6 +32,8 @@ async function HomeContent() {
       <>
         <DemoBar
           userId={null}
+          holder={null}
+          homeCity={null}
           homeCountryCode={null}
           tripCountry={null}
           notificationsAllowed={false}
@@ -60,6 +62,8 @@ async function HomeContent() {
 
       <DemoBar
         userId={profile.userId}
+        holder={account.holder}
+        homeCity={account.homeCity}
         homeCountryCode={profile.homeCountry}
         tripCountry={tripCountry}
         notificationsAllowed={consent.notifications}

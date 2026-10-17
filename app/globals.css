@@ -91,10 +91,16 @@
 }
 
 /* Bilingual field label, as a passport sets them: tiny, wide, unmissable. */
+/*
+ * The small caps that title a figure or a list: "Balance", "Spent this week",
+ * "Recommended Products". Larger than the 9px they started at, so they read
+ * as labels rather than as dense stencilling, and at 600 rather than the
+ * original 700: present without shouting at that size.
+ */
 .fieldLabel {
   font-family: var(--font-display);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   font-stretch: 125%;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -190,6 +196,49 @@ button {
 /* Money and dates: aligned columns, never ambiguous. */
 .tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Dropdowns, in the document's own hand rather than the operating system's.
+ * The native control is stripped back and redrawn: paper fill, ruled border,
+ * mono type and a chevron of our own. Sizing is deliberately left out so each
+ * place can match the controls beside it.
+ *
+ * The open list itself is the browser's, and cannot be themed reliably, so
+ * only its ink and paper are set below.
+ */
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-btn);
+  background-color: rgba(255, 255, 255, 0.62);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%230f2c5c' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: 11px 8px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.select:hover:not(:disabled) {
+  border-color: var(--ink);
+  background-color: rgba(255, 255, 255, 0.82);
+}
+
+.select:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.select option {
+  background: var(--surface);
+  color: var(--ink);
 }
 
 :focus-visible {

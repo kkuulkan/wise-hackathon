@@ -39,12 +39,7 @@
   }
 }
 
-.eyebrow {
-  color: var(--stamp);
-}
-
 .title {
-  margin-top: var(--space-3);
   font-family: var(--font-display);
   font-size: clamp(30px, 4.6vw, 42px);
   font-weight: 800;
