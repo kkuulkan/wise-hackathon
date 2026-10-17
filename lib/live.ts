@@ -3,13 +3,16 @@ import "server-only";
 import { connection } from "next/server";
 
 import { COUNTRIES, DEMO_TODAY, HISTORY_WINDOW_DAYS } from "@/lib/server/config";
-import { getFx } from "@/lib/server/pricedata";
 import { buildRecommendations } from "@/lib/server/recommendations";
 import { getCategoryDef, getTransactions, type Profile } from "@/lib/server/seed";
 import { currentUser } from "@/lib/server/session";
-import { getActiveTrip } from "@/lib/server/store";
+import { getActiveTrip, getConsent } from "@/lib/server/store";
 import { isEligiblePair } from "@/lib/server/trips";
-import type { RecommendationCategory, RecommendationsResponse } from "@/lib/server/types";
+import type {
+  Consent,
+  RecommendationCategory,
+  RecommendationsResponse,
+} from "@/lib/server/types";
 
 import type { Account, Category, CurrencyCode, Transaction } from "./types";
 
@@ -34,6 +37,8 @@ export type LiveSession = {
   account: Account;
   /** Country of the active trip, or null at home. */
   tripCountry: string | null;
+  /** Their answer to the consent question, and whether they have given one. */
+  consent: Consent;
 };
 
 /** The signed-in user as the frontend's Account, or null when signed out. */
@@ -64,7 +69,12 @@ export async function getLiveSession(): Promise<LiveSession | null> {
     })),
   };
 
-  return { profile, account, tripCountry: away ? here : null };
+  return {
+    profile,
+    account,
+    tripCountry: away ? here : null,
+    consent: await getConsent(profile.userId),
+  };
 }
 
 /**
@@ -80,28 +90,19 @@ export async function getLiveTransactions(profile: Profile): Promise<Transaction
     }));
 }
 
-function toCategory(
-  category: RecommendationCategory,
-  country: string,
-  homeCity: string,
-  hufPerEur: number,
-): Category {
+function toCategory(category: RecommendationCategory, homeCity: string): Category {
   const { products, comparison, typicalPurchase } = category;
   const mean = (values: number[]) =>
     values.length ? values.reduce((total, value) => total + value, 0) / values.length : 0;
 
-  // Annualised: what this user spent here in 90 days, scaled to a year, at
-  // the category's official saving. General suggestions have no spend.
-  const annualSavingEur = category.reason
-    ? round2(category.reason.spentEur * YEAR_OVER_WINDOW * (category.savingPct / 100))
-    : 0;
-
   return {
     slug: category.slug,
     label: category.label,
+    icon: category.icon,
     unit: typicalPurchase ? "Your average purchase" : "Typical shelf prices",
-    // The visa's two rates: the user's own average purchase when there is one,
-    // otherwise the mean of the real products shown.
+    // The visa's two rates: the user's own average purchase when there is one
+    // (categories such as haircuts have no shelf products), otherwise the mean
+    // of the real products shown.
     homeAvgEur: round2(typicalPurchase?.home.amount ?? mean(products.map((p) => p.homePrice.amount))),
     localAvgEur: round2(typicalPurchase?.local.amount ?? mean(products.map((p) => p.localPrice.amount))),
     purchasesPerYear: category.reason
@@ -119,19 +120,21 @@ function toCategory(
         ? " Shelf products are real Open Prices sightings; their home prices are estimates."
         : ""),
     savingPct: category.savingPct,
-    annualSavingEur,
     products: products.map((product) => ({
+      id: product.id,
       name: product.name,
       area: product.description,
       priceEur: product.localPrice.amount,
-      // The visa always prints a forint line; outside Hungary it is the
-      // converted figure at the ECB rate.
-      priceHuf: product.localPrice.local?.amount ?? Math.round(product.localPrice.amount * hufPerEur),
-      mapsQuery: `${product.name} ${countryName(country)}`,
-      // Null means there is no honest local comparison. The visa has no way to
-      // hide its average line yet, so 0 ("At {country} avg") stands in until
-      // the frontend renders localComparison directly. See BACKEND_PROGRESS §14.
-      vsLocalAvgPct: product.localComparison?.pct ?? 0,
+      // Present only where the destination does not use the euro, so a
+      // Portuguese price is one figure and a Hungarian one is two.
+      priceLocal: product.localPrice.local
+        ? {
+            amount: product.localPrice.local.amount,
+            currency: product.localPrice.local.currency as CurrencyCode,
+          }
+        : null,
+      savingPct: product.savingPct,
+      url: product.url,
     })),
   };
 }
@@ -157,12 +160,12 @@ export async function getLiveRecommendations(
     return { ok: false, reason: "not-eligible" };
   }
 
-  const [response, fx] = await Promise.all([buildRecommendations(session.profile, country), getFx()]);
+  const response = await buildRecommendations(session.profile, country);
   return {
     ok: true,
     response,
     categories: response.categories.map((category) =>
-      toCategory(category, country, session.profile.homeCity, fx.perEur.HUF),
+      toCategory(category, session.profile.homeCity),
     ),
   };
 }

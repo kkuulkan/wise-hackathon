@@ -40,8 +40,8 @@
   top: var(--space-3);
   right: var(--space-3);
   z-index: 2;
-  width: 92px;
-  height: 92px;
+  width: 104px;
+  height: 104px;
   display: grid;
   place-content: center;
   gap: 1px;
@@ -57,7 +57,7 @@
 .stampTop,
 .stampBottom {
   font-family: var(--font-display);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 700;
   font-stretch: 125%;
   letter-spacing: 0.18em;
@@ -66,7 +66,7 @@
 
 .stampFigure {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 38px;
   font-weight: 700;
   font-stretch: 112%;
   line-height: 1;
@@ -75,11 +75,14 @@
 
 .head {
   /* Clear of the stamp. */
-  padding-right: 104px;
-  min-height: 92px;
+  padding-right: 118px;
+  min-height: 104px;
 }
 
 .label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin-top: 2px;
   font-family: var(--font-display);
   font-size: 24px;
@@ -92,14 +95,15 @@
 .unit {
   margin-top: var(--space-1);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 15px;
   letter-spacing: 0.04em;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .rates {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--space-2);
   margin: var(--space-4) 0 0;
   padding: var(--space-3) 0;
@@ -107,14 +111,21 @@
   border-bottom: 1px solid var(--ink);
 }
 
+@media (min-width: 560px) {
+  .rates {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .rates dd {
   margin: 2px 0 0;
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 26px;
   font-weight: 500;
 }
 
 .rateWas {
+  font-weight: 600;
   color: var(--muted);
   text-decoration: line-through;
   text-decoration-thickness: 1.5px;
@@ -122,10 +133,6 @@
 
 .rateNow {
   color: var(--accent);
-}
-
-.rateKept {
-  color: var(--stamp);
 }
 
 .endorsements {
@@ -138,14 +145,32 @@
   padding: 0;
 }
 
-/* Register-ruled rows: name and meta left, price and map right. */
+/*
+ * Register-ruled rows: name and meta left, price and the outbound mark right.
+ * The whole row is the link (US-5), so the target is the full width of the
+ * card and comfortably over the 44px minimum.
+ */
 .place {
   display: grid;
   grid-template-columns: 1fr auto auto;
   align-items: center;
   gap: var(--space-1) var(--space-3);
+  min-height: 44px;
   padding: var(--space-2) 0;
   border-bottom: 1px dotted var(--line);
+  color: inherit;
+  text-decoration: none;
+}
+
+.place:hover .placeName {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.place:hover .placeGo {
+  border-color: var(--ink);
+  background: var(--band);
 }
 
 .placeName {
@@ -153,7 +178,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-2);
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 500;
   min-width: 0;
 }
@@ -163,7 +188,7 @@
   color: var(--stamp);
   padding: 0 4px;
   font-family: var(--font-display);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 700;
   font-stretch: 125%;
   letter-spacing: 0.16em;
@@ -175,7 +200,8 @@
   grid-column: 1;
   grid-row: 2;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -186,18 +212,18 @@
   flex-direction: column;
   align-items: flex-end;
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 21px;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .placeLocal {
-  font-size: 11px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--muted);
 }
 
-.placeMap {
+.placeGo {
   grid-column: 3;
   grid-row: 1 / span 2;
   display: grid;
@@ -209,27 +235,21 @@
   color: var(--ink);
 }
 
-.placeMap:hover {
-  border-color: var(--ink);
-  background: var(--band);
-}
-
+/* Text, not colour alone, carries the comparison (PRD accessibility). */
 .below {
   color: var(--positive-ink);
-}
-
-.above {
-  color: var(--stamp);
-}
-
-.level {
-  color: var(--muted);
 }
 
 .source {
   margin-top: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 13px;
   line-height: 1.5;
+  font-weight: 600;
   color: var(--muted);
+}
+
+.labelIcon {
+  flex: none;
+  color: var(--stamp);
 }

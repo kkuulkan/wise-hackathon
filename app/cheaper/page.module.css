@@ -1,53 +1,48 @@
+/* The header reaches the top and both edges, so the page itself is bare. */
 .main {
-  padding-top: var(--space-6);
+  position: relative;
   padding-bottom: var(--space-16);
 }
 
-/* Sits on the navy cover, above the page. */
+/* Floats over the photograph, aligned with the container beneath it. */
+.backWrap {
+  position: absolute;
+  top: var(--space-6);
+  left: 0;
+  right: 0;
+  z-index: 5;
+}
+
+.loading {
+  padding-top: var(--space-16);
+}
+
+.body {
+  padding-top: var(--space-8);
+}
+
 .back {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 700;
   font-stretch: 125%;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(240, 240, 182, 0.8);
   text-decoration: none;
 }
 
 .back:hover {
-  color: var(--ink);
+  color: var(--ink-invert);
 }
 
 /* Same stitched spine as the data page, so it reads as one booklet. */
 .booklet {
   position: relative;
-  padding-left: var(--space-3);
-}
-
-.booklet::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: var(--ink);
-  border-radius: 2px;
-}
-
-.booklet::after {
-  content: "";
-  position: absolute;
-  inset: var(--space-4) auto var(--space-4) 7px;
-  width: 1px;
-  background: repeating-linear-gradient(
-    to bottom,
-    var(--line-strong) 0 6px,
-    transparent 6px 12px
-  );
 }
 
 /* The open visa page: beige, inked navy, holding header, spread and footnotes. */
@@ -55,31 +50,56 @@
   padding: var(--space-2) 0;
 }
 
+/*
+ * The header carries the account screen's photograph, with the country title
+ * sitting on top of it. Text here is beige, so a veil keeps it readable
+ * wherever the image happens to be bright.
+ */
 .head {
-  padding: var(--space-2) 0 var(--space-6);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--ink-invert);
 }
 
-.title {
-  margin-top: var(--space-2);
-  font-family: var(--font-display);
-  font-size: clamp(48px, 14vw, 68px);
-  font-weight: 700;
-  font-stretch: 112%;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+/* Clear of the back link above it, and tight to the top otherwise. */
+.headInner {
+  padding: 68px 0 var(--space-10);
+}
+
+.headBg {
+  z-index: -1;
+  object-fit: cover;
+  object-position: center;
+}
+
+.head::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(15, 44, 92, 0.58);
+}
+
+.head :global(.fieldLabel) {
+  color: rgba(240, 240, 182, 0.78);
+}
+
+@media (max-width: 560px) {
+  .headInner {
+    padding-top: 60px;
+    padding-bottom: var(--space-8);
+  }
 }
 
 .lede {
   margin-top: var(--space-3);
   max-width: 42ch;
-  font-size: 15px;
-  color: var(--muted);
-}
-
-.lede strong {
-  color: var(--ink);
+  font-size: 21px;
+  /* 700 is a weight the body face actually ships (see app/layout.tsx); 600
+     was being synthesised. Full-strength ink with it, rather than held back. */
   font-weight: 700;
+  color: var(--ink-invert);
 }
 
 .foot {
@@ -87,11 +107,20 @@
   padding-top: var(--space-4);
   border-top: 1px solid var(--ink);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 15px;
   line-height: 1.6;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .rate {
   margin-top: var(--space-2);
+}
+
+/*
+ * Page 2 runs larger throughout, and that includes the shared label class.
+ * Scoped to this page's root so the account screen keeps its own scale.
+ */
+.main :global(.fieldLabel) {
+  font-size: 13px;
 }

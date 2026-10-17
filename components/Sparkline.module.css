@@ -1,0 +1,6 @@
+.spark {
+  display: block;
+  width: 100%;
+  height: 64px;
+  margin-top: var(--space-4);
+}

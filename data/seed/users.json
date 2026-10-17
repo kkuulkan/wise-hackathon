@@ -11,11 +11,6 @@
           "value": 2480.5,
           "currency": "EUR",
           "primary": true
-        },
-        {
-          "value": 184200,
-          "currency": "HUF",
-          "primary": false
         }
       ]
     },

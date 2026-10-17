@@ -134,13 +134,28 @@ export async function listNotifications(userId: string): Promise<Notification[]>
 
 // Consent
 
-/** PRD open question 5: covered by existing T&Cs, so no row means opted in. */
-const DEFAULT_CONSENT: Consent = { personalisation: true, notifications: true, updatedAt: new Date(0).toISOString() };
+/**
+ * PRD open question 5: consent is covered by existing T&Cs, so with no row the
+ * permissions start granted and an API-only caller behaves as before. A row
+ * exists only once the user has answered, which is what `decided` reports and
+ * what the UI goes by: until then the app asks before it shows anything (US-6.1).
+ */
+const DEFAULT_CONSENT: Consent = {
+  personalisation: true,
+  notifications: true,
+  decided: false,
+  updatedAt: new Date(0).toISOString(),
+};
 
 export async function getConsent(userId: string): Promise<Consent> {
   const [row] = await db().select().from(schema.consent).where(eq(schema.consent.userId, userId)).limit(1);
   if (!row) return DEFAULT_CONSENT;
-  return { personalisation: row.personalisation, notifications: row.notifications, updatedAt: row.updatedAt.toISOString() };
+  return {
+    personalisation: row.personalisation,
+    notifications: row.notifications,
+    decided: true,
+    updatedAt: row.updatedAt.toISOString(),
+  };
 }
 
 export async function setConsent(userId: string, consent: Consent): Promise<void> {

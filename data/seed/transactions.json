@@ -811,420 +811,17 @@
     ],
     "jonas": [
       {
-        "id": "jk-034",
-        "date": "2026-10-16",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
-      },
-      {
-        "id": "jk-033",
-        "date": "2026-10-11",
-        "merchant": "Uniqlo Tauentzienstraße",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 49.9,
-          "currency": "EUR"
-        },
-        "amountEur": 49.9
-      },
-      {
-        "id": "jk-032",
-        "date": "2026-10-09",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 24,
-          "currency": "EUR"
-        },
-        "amountEur": 24
-      },
-      {
-        "id": "jk-031",
-        "date": "2026-10-08",
-        "merchant": "Saturn Berlin",
-        "category": "electronics",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 59,
-          "currency": "EUR"
-        },
-        "amountEur": 59
-      },
-      {
-        "id": "jk-030",
-        "date": "2026-10-04",
-        "merchant": "Lidl Neukölln",
-        "category": "groceries",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 19.8,
-          "currency": "EUR"
-        },
-        "amountEur": 19.8
-      },
-      {
-        "id": "jk-029",
-        "date": "2026-10-01",
-        "merchant": "BVG Deutschlandticket",
-        "category": "transport",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 58,
-          "currency": "EUR"
-        },
-        "amountEur": 58
-      },
-      {
-        "id": "jk-028",
-        "date": "2026-10-01",
-        "merchant": "Hausverwaltung Neukölln",
-        "category": "rent",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 780,
-          "currency": "EUR"
-        },
-        "amountEur": 780
-      },
-      {
-        "id": "jk-027",
-        "date": "2026-09-28",
-        "merchant": "Mustafa's Gemüse Kebap",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 14.5,
-          "currency": "EUR"
-        },
-        "amountEur": 14.5
-      },
-      {
-        "id": "jk-026",
-        "date": "2026-09-28",
-        "merchant": "Telekom Prepaid",
-        "category": "telecom",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-025",
-        "date": "2026-09-24",
-        "merchant": "Cyberport Berlin",
-        "category": "electronics",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 34.99,
-          "currency": "EUR"
-        },
-        "amountEur": 34.99
-      },
-      {
-        "id": "jk-024",
-        "date": "2026-09-20",
-        "merchant": "Tipico Sportwetten",
-        "category": "gambling",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 15,
-          "currency": "EUR"
-        },
-        "amountEur": 15
-      },
-      {
-        "id": "jk-023",
-        "date": "2026-09-19",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
-      },
-      {
-        "id": "jk-022",
-        "date": "2026-09-17",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 31,
-          "currency": "EUR"
-        },
-        "amountEur": 31
-      },
-      {
-        "id": "jk-021",
-        "date": "2026-09-14",
-        "merchant": "Snipes Friedrichstraße",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 120,
-          "currency": "EUR"
-        },
-        "amountEur": 120
-      },
-      {
-        "id": "jk-020",
-        "date": "2026-09-06",
-        "merchant": "Mustafa's Gemüse Kebap",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 18,
-          "currency": "EUR"
-        },
-        "amountEur": 18
-      },
-      {
-        "id": "jk-019",
-        "date": "2026-09-03",
+        "id": "jk-001",
+        "date": "2026-07-22",
         "merchant": "MediaMarkt Alexanderplatz",
         "category": "electronics",
         "city": "Berlin",
         "countryCode": "DE",
         "amount": {
-          "value": 129,
+          "value": 89,
           "currency": "EUR"
         },
-        "amountEur": 129
-      },
-      {
-        "id": "jk-018",
-        "date": "2026-09-01",
-        "merchant": "BVG Deutschlandticket",
-        "category": "transport",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 58,
-          "currency": "EUR"
-        },
-        "amountEur": 58
-      },
-      {
-        "id": "jk-017",
-        "date": "2026-09-01",
-        "merchant": "Hausverwaltung Neukölln",
-        "category": "rent",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 780,
-          "currency": "EUR"
-        },
-        "amountEur": 780
-      },
-      {
-        "id": "jk-016",
-        "date": "2026-08-30",
-        "merchant": "Lidl Neukölln",
-        "category": "groceries",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 23.4,
-          "currency": "EUR"
-        },
-        "amountEur": 23.4
-      },
-      {
-        "id": "jk-015",
-        "date": "2026-08-28",
-        "merchant": "Telekom Prepaid",
-        "category": "telecom",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-014",
-        "date": "2026-08-26",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 27.5,
-          "currency": "EUR"
-        },
-        "amountEur": 27.5
-      },
-      {
-        "id": "jk-013",
-        "date": "2026-08-23",
-        "merchant": "Zalando",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 79.95,
-          "currency": "EUR"
-        },
-        "amountEur": 79.95
-      },
-      {
-        "id": "jk-012",
-        "date": "2026-08-22",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
-      },
-      {
-        "id": "jk-011",
-        "date": "2026-08-16",
-        "merchant": "Tipico Sportwetten",
-        "category": "gambling",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-010",
-        "date": "2026-08-15",
-        "merchant": "Mustafa's Gemüse Kebap",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 13.9,
-          "currency": "EUR"
-        },
-        "amountEur": 13.9
-      },
-      {
-        "id": "jk-009",
-        "date": "2026-08-11",
-        "merchant": "Saturn Berlin",
-        "category": "electronics",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 42,
-          "currency": "EUR"
-        },
-        "amountEur": 42
-      },
-      {
-        "id": "jk-008",
-        "date": "2026-08-04",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 22,
-          "currency": "EUR"
-        },
-        "amountEur": 22
-      },
-      {
-        "id": "jk-007",
-        "date": "2026-08-01",
-        "merchant": "BVG Deutschlandticket",
-        "category": "transport",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 58,
-          "currency": "EUR"
-        },
-        "amountEur": 58
-      },
-      {
-        "id": "jk-006",
-        "date": "2026-08-01",
-        "merchant": "Hausverwaltung Neukölln",
-        "category": "rent",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 780,
-          "currency": "EUR"
-        },
-        "amountEur": 780
-      },
-      {
-        "id": "jk-005",
-        "date": "2026-07-29",
-        "merchant": "Snipes Friedrichstraße",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 100,
-          "currency": "EUR"
-        },
-        "amountEur": 100
-      },
-      {
-        "id": "jk-004",
-        "date": "2026-07-28",
-        "merchant": "Telekom Prepaid",
-        "category": "telecom",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-003",
-        "date": "2026-07-25",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
+        "amountEur": 89
       },
       {
         "id": "jk-002",
@@ -1240,17 +837,472 @@
         "amountEur": 16.5
       },
       {
-        "id": "jk-001",
-        "date": "2026-07-22",
+        "id": "jk-003",
+        "date": "2026-07-25",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-004",
+        "date": "2026-07-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-005",
+        "date": "2026-07-29",
+        "merchant": "Snipes Friedrichstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 100,
+          "currency": "EUR"
+        },
+        "amountEur": 100
+      },
+      {
+        "id": "jk-006",
+        "date": "2026-08-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-007",
+        "date": "2026-08-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-008",
+        "date": "2026-08-04",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 22,
+          "currency": "EUR"
+        },
+        "amountEur": 22
+      },
+      {
+        "id": "jk-009",
+        "date": "2026-08-11",
+        "merchant": "Saturn Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 42,
+          "currency": "EUR"
+        },
+        "amountEur": 42
+      },
+      {
+        "id": "jk-010",
+        "date": "2026-08-15",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 13.9,
+          "currency": "EUR"
+        },
+        "amountEur": 13.9
+      },
+      {
+        "id": "jk-011",
+        "date": "2026-08-16",
+        "merchant": "Tipico Sportwetten",
+        "category": "gambling",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-012",
+        "date": "2026-08-22",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-013",
+        "date": "2026-08-23",
+        "merchant": "Zalando",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 79.95,
+          "currency": "EUR"
+        },
+        "amountEur": 79.95
+      },
+      {
+        "id": "jk-014",
+        "date": "2026-08-26",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 27.5,
+          "currency": "EUR"
+        },
+        "amountEur": 27.5
+      },
+      {
+        "id": "jk-015",
+        "date": "2026-08-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-016",
+        "date": "2026-08-30",
+        "merchant": "Lidl Neukölln",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 23.4,
+          "currency": "EUR"
+        },
+        "amountEur": 23.4
+      },
+      {
+        "id": "jk-017",
+        "date": "2026-09-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-018",
+        "date": "2026-09-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-019",
+        "date": "2026-09-03",
         "merchant": "MediaMarkt Alexanderplatz",
         "category": "electronics",
         "city": "Berlin",
         "countryCode": "DE",
         "amount": {
-          "value": 89,
+          "value": 129,
           "currency": "EUR"
         },
-        "amountEur": 89
+        "amountEur": 129
+      },
+      {
+        "id": "jk-020",
+        "date": "2026-09-06",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 18,
+          "currency": "EUR"
+        },
+        "amountEur": 18
+      },
+      {
+        "id": "jk-021",
+        "date": "2026-09-14",
+        "merchant": "Snipes Friedrichstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 120,
+          "currency": "EUR"
+        },
+        "amountEur": 120
+      },
+      {
+        "id": "jk-022",
+        "date": "2026-09-17",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 31,
+          "currency": "EUR"
+        },
+        "amountEur": 31
+      },
+      {
+        "id": "jk-023",
+        "date": "2026-09-19",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-024",
+        "date": "2026-09-20",
+        "merchant": "Tipico Sportwetten",
+        "category": "gambling",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 15,
+          "currency": "EUR"
+        },
+        "amountEur": 15
+      },
+      {
+        "id": "jk-025",
+        "date": "2026-09-24",
+        "merchant": "Cyberport Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 34.99,
+          "currency": "EUR"
+        },
+        "amountEur": 34.99
+      },
+      {
+        "id": "jk-026",
+        "date": "2026-09-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-027",
+        "date": "2026-09-28",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 14.5,
+          "currency": "EUR"
+        },
+        "amountEur": 14.5
+      },
+      {
+        "id": "jk-028",
+        "date": "2026-10-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-029",
+        "date": "2026-10-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-030",
+        "date": "2026-10-04",
+        "merchant": "Lidl Neukölln",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 19.8,
+          "currency": "EUR"
+        },
+        "amountEur": 19.8
+      },
+      {
+        "id": "jk-038",
+        "date": "2026-10-06",
+        "merchant": "BVG Tageskarte",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 9.9,
+          "currency": "EUR"
+        },
+        "amountEur": 9.9
+      },
+      {
+        "id": "jk-037",
+        "date": "2026-10-07",
+        "merchant": "The Barn Kaffeerösterei",
+        "category": "coffee",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 10.8,
+          "currency": "EUR"
+        },
+        "amountEur": 10.8
+      },
+      {
+        "id": "jk-031",
+        "date": "2026-10-08",
+        "merchant": "Saturn Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 59,
+          "currency": "EUR"
+        },
+        "amountEur": 59
+      },
+      {
+        "id": "jk-032",
+        "date": "2026-10-09",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 24,
+          "currency": "EUR"
+        },
+        "amountEur": 24
+      },
+      {
+        "id": "jk-033",
+        "date": "2026-10-11",
+        "merchant": "Uniqlo Tauentzienstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 49.9,
+          "currency": "EUR"
+        },
+        "amountEur": 49.9
+      },
+      {
+        "id": "jk-035",
+        "date": "2026-10-12",
+        "merchant": "REWE Warschauer Straße",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 31.8,
+          "currency": "EUR"
+        },
+        "amountEur": 31.8
+      },
+      {
+        "id": "jk-036",
+        "date": "2026-10-13",
+        "merchant": "Mustafas Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 18.5,
+          "currency": "EUR"
+        },
+        "amountEur": 18.5
+      },
+      {
+        "id": "jk-034",
+        "date": "2026-10-16",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
       }
     ],
     "saoirse": [

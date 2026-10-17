@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { dismissTicket } from "@/lib/ticket";
 import styles from "./DemoBar.module.css";
 
 type DemoUser = { id: string; holder: string; homeCity: string };
 type Destination = { code: string; name: string; eligible: boolean };
-type Notification = { title: string; body: string; deepLink: string; country: string };
 
 type Props = {
   /** Who the server rendered the page for, or null when signed out. */
@@ -16,6 +15,12 @@ type Props = {
   homeCountryCode: string | null;
   /** Country of the active trip, so the picker starts there. */
   tripCountry: string | null;
+  /**
+   * False when this traveller declined. Arrival is something the bank does to
+   * them on the strength of their consent, so without it there is nothing to
+   * simulate and the control goes away.
+   */
+  notificationsAllowed: boolean;
 };
 
 /** Every API error has `{ error: { message } }`; anything else gets a generic line. */
@@ -31,17 +36,23 @@ async function call<T>(method: string, path: string, body?: unknown): Promise<T>
 }
 
 /**
- * The demo's control strip: pick a traveller, simulate where they are, and
- * see the arrival notification the backend sends. Everything here goes
- * through the HTTP API; the page re-renders from the server afterwards.
+ * The demo's control strip: pick a traveller and simulate where they are.
+ *
+ * Everything here goes through the HTTP API and the page re-renders from the
+ * server afterwards. The arrival notification the backend returns is not shown:
+ * the ticket beside the balance already carries that message.
  */
-export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
+export function DemoBar({
+  userId,
+  homeCountryCode,
+  tripCountry,
+  notificationsAllowed,
+}: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [users, setUsers] = useState<DemoUser[]>([]);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [destination, setDestination] = useState(tripCountry ?? "PT");
-  const [notification, setNotification] = useState<Notification | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -49,6 +60,17 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
       .then((data) => setUsers(data.users))
       .catch((error: Error) => setMessage(error.message));
   }, []);
+
+  /*
+   * The notices here are asides — "already notified", "nothing was sent" —
+   * and none of them needs acting on, so they clear themselves rather than
+   * sitting over the page until the next action.
+   */
+  useEffect(() => {
+    if (message === null) return;
+    const timer = window.setTimeout(() => setMessage(null), 2000);
+    return () => window.clearTimeout(timer);
+  }, [message]);
 
   useEffect(() => {
     if (!userId) return;
@@ -69,21 +91,32 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
     });
   };
 
+  /*
+   * Consent is remembered per customer, as it should be, so signing out and
+   * back in does not ask again. This wipes the server's demo state — trips,
+   * notifications, consent, feedback — and signs out, which is what makes the
+   * opt-in appear again on the next pick.
+   */
+  const resetDemo = () =>
+    run(async () => {
+      await call("POST", "/api/dev/reset");
+      await call("DELETE", "/api/session");
+      setMessage("Demo reset. Pick a traveller to be asked for consent again.");
+    });
+
   const signIn = (id: string) =>
     run(async () => {
-      setNotification(null);
       if (id) await call("POST", "/api/session", { userId: id });
       else await call("DELETE", "/api/session");
     });
 
   const moveTo = (countryCode: string) =>
     run(async () => {
-      const result = await call<{ status: string; notification: Notification | null }>(
+      const result = await call<{ status: string; notification: unknown | null }>(
         "POST",
         "/api/location",
         { countryCode },
       );
-      setNotification(result.notification);
       if (result.status === "ineligible") {
         setMessage("OtherWise only compares prices between E.U. countries, so nothing was sent.");
       } else if (result.status === "already-seen") {
@@ -93,15 +126,10 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
       }
     });
 
-  const open = (note: Notification) => {
-    // Fire and forget: analytics must never block the user.
-    call("POST", "/api/events", { type: "notification_opened", country: note.country }).catch(() => {});
-    setNotification(null);
-  };
 
   return (
     <section className={styles.bar} aria-label="Demo controls">
-      <p className="fieldLabel">Demo / Démonstration</p>
+      <p className={`fieldLabel ${styles.label}`}>For demo purpose:</p>
 
       <div className={styles.controls}>
         <label className={styles.field}>
@@ -120,7 +148,14 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
           </select>
         </label>
 
-        {userId && (
+        {userId && !notificationsAllowed && (
+          <p className={styles.declined}>
+            Consent declined, so OtherWise does not watch for arrivals. Turn it back on in
+            OtherWise settings, or reset the demo.
+          </p>
+        )}
+
+        {userId && notificationsAllowed && (
           <>
             <label className={styles.field}>
               <span className={styles.fieldName}>Arrive in</span>
@@ -151,7 +186,7 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
               <button
                 type="button"
                 className={styles.secondary}
-                onClick={() => moveTo(homeCountryCode)}
+                onClick={() => void dismissTicket().then(() => moveTo(homeCountryCode))}
                 disabled={pending}
               >
                 Fly home
@@ -159,6 +194,15 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
             )}
           </>
         )}
+
+        <button
+          type="button"
+          className={styles.reset}
+          onClick={resetDemo}
+          disabled={pending}
+        >
+          Reset demo
+        </button>
       </div>
 
       {message && (
@@ -167,20 +211,6 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
         </p>
       )}
 
-      {notification && (
-        <div className={styles.notification} role="alert">
-          <p className="fieldLabel">OtherWise · now</p>
-          <p className={styles.notificationTitle}>{notification.title}</p>
-          <p className={styles.notificationBody}>{notification.body}</p>
-          <Link
-            href={notification.deepLink}
-            className={styles.primary}
-            onClick={() => open(notification)}
-          >
-            See what&rsquo;s cheaper
-          </Link>
-        </div>
-      )}
     </section>
   );
 }

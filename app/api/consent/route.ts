@@ -34,13 +34,19 @@ async function put(request: Request) {
   const after = {
     personalisation: (body.personalisation as boolean | undefined) ?? before.personalisation,
     notifications: (body.notifications as boolean | undefined) ?? before.notifications,
+    // Writing here at all means they have answered, whichever way (US-6.1).
+    decided: true,
     updatedAt: new Date().toISOString(),
   };
   await setConsent(profile.userId, after);
 
   const wasOn = before.personalisation && before.notifications;
   const isOn = after.personalisation && after.notifications;
-  if (wasOn !== isOn) await recordEvent({ type: isOn ? "opt_in" : "opt_out", at: after.updatedAt });
+  // The first answer is always worth logging, even when it grants exactly what
+  // the defaults already allowed and so changes no value (FR-23).
+  if (!before.decided || wasOn !== isOn) {
+    await recordEvent({ type: isOn ? "opt_in" : "opt_out", at: after.updatedAt });
+  }
 
   return Response.json({ ...after, confirmation: "Your choice is saved and applies right away." });
 }

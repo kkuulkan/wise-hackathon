@@ -237,6 +237,12 @@ export type Consent = {
   personalisation: boolean;
   /** FR-21: may we send arrival notifications? */
   notifications: boolean;
+  /**
+   * US-6.1: has this user actually answered yet? False means they have never
+   * been asked, which is what makes the app ask them. Any write to
+   * /api/consent is an answer, so it sets this true.
+   */
+  decided: boolean;
   updatedAt: string;
 };
 

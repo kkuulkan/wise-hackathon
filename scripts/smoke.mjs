@@ -213,6 +213,14 @@ check("new trip -> notifies again", r.json.notification !== null && r.json.trip.
 r = await aoife.call("GET", "/api/recommendations");
 check("previous trip's feedback no longer hides coffee", r.json.categories.some((c) => c.slug === "coffee"));
 
+// US-6.1: the app asks first. No answer yet -> decided false; any answer -> decided true.
+r = await jonas.call("GET", "/api/consent");
+check("consent undecided before Jonas answers", r.json.decided === false && r.json.personalisation === true);
+r = await jonas.call("PUT", "/api/consent", { personalisation: true, notifications: true });
+check("answering marks consent decided (stored in the database)", r.status === 200 && r.json.decided === true);
+r = await jonas.call("GET", "/api/consent");
+check("decided persists on re-read", r.json.decided === true);
+
 // US-6: consent is per user
 r = await aoife.call("PUT", "/api/consent", { personalisation: false, notifications: false });
 check("Aoife withdraws consent", r.status === 200 && r.json.personalisation === false);
@@ -236,6 +244,7 @@ r = await anon.call("GET", "/api/events");
 const types = new Set(r.json.events.map((e) => e.type));
 check("server logged notification_sent, opt_out, feedback",
   types.has("notification_sent") && types.has("opt_out") && types.has("feedback"));
+check("first consent answer logged even though it changed no value (opt_in)", types.has("opt_in"));
 
 // Input validation and sign-out
 r = await aoife.call("POST", "/api/location", { countryCode: "XX" });
