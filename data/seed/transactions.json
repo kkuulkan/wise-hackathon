@@ -1,5 +1,5 @@
 {
-  "_source": "Illustrative 90-day statements for the two demo users, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Each includes rows the backend must ignore (rent, insurance, pharmacy, gambling) so the exclusions are visible. Café visits are categorised 'cafe' (bought locally either way), distinct from 'coffee' bought to take home.",
+  "_source": "Illustrative 90-day statements for the three demo users, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Each includes rows the backend must ignore (rent, insurance, pharmacy, gambling) so the exclusions are visible. Café visits are categorised 'cafe' (bought locally either way), distinct from 'coffee' bought to take home.",
   "transactions": {
     "aoife": [
       {
@@ -1251,6 +1251,502 @@
           "currency": "EUR"
         },
         "amountEur": 89
+      }
+    ],
+    "saoirse": [
+      {
+        "id": "sn-038",
+        "date": "2026-10-14",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-037",
+        "date": "2026-10-12",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-036",
+        "date": "2026-10-11",
+        "merchant": "GAME Stephen's Green",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 69.99,
+          "currency": "EUR"
+        },
+        "amountEur": 69.99
+      },
+      {
+        "id": "sn-035",
+        "date": "2026-10-08",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-034",
+        "date": "2026-10-06",
+        "merchant": "Steam",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 19.99,
+          "currency": "EUR"
+        },
+        "amountEur": 19.99
+      },
+      {
+        "id": "sn-033",
+        "date": "2026-10-03",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 29.3,
+          "currency": "EUR"
+        },
+        "amountEur": 29.3
+      },
+      {
+        "id": "sn-032",
+        "date": "2026-10-02",
+        "merchant": "Amazon.ie",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 49.99,
+          "currency": "EUR"
+        },
+        "amountEur": 49.99
+      },
+      {
+        "id": "sn-031",
+        "date": "2026-10-01",
+        "merchant": "Xbox Game Pass",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 14.99,
+          "currency": "EUR"
+        },
+        "amountEur": 14.99
+      },
+      {
+        "id": "sn-030",
+        "date": "2026-10-01",
+        "merchant": "Phibsborough Flatshare",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1200.0,
+          "currency": "EUR"
+        },
+        "amountEur": 1200.0
+      },
+      {
+        "id": "sn-029",
+        "date": "2026-09-28",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-028",
+        "date": "2026-09-28",
+        "merchant": "GoMo",
+        "category": "telecom",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 15.0,
+          "currency": "EUR"
+        },
+        "amountEur": 15.0
+      },
+      {
+        "id": "sn-027",
+        "date": "2026-09-23",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 27.6,
+          "currency": "EUR"
+        },
+        "amountEur": 27.6
+      },
+      {
+        "id": "sn-026",
+        "date": "2026-09-22",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-025",
+        "date": "2026-09-19",
+        "merchant": "JD Sports Henry St",
+        "category": "sneakers-clothing",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 79.99,
+          "currency": "EUR"
+        },
+        "amountEur": 79.99
+      },
+      {
+        "id": "sn-024",
+        "date": "2026-09-15",
+        "merchant": "Currys Blanchardstown",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 119.0,
+          "currency": "EUR"
+        },
+        "amountEur": 119.0
+      },
+      {
+        "id": "sn-023",
+        "date": "2026-09-13",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 33.8,
+          "currency": "EUR"
+        },
+        "amountEur": 33.8
+      },
+      {
+        "id": "sn-022",
+        "date": "2026-09-09",
+        "merchant": "Steam",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 29.99,
+          "currency": "EUR"
+        },
+        "amountEur": 29.99
+      },
+      {
+        "id": "sn-021",
+        "date": "2026-09-03",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 30.1,
+          "currency": "EUR"
+        },
+        "amountEur": 30.1
+      },
+      {
+        "id": "sn-020",
+        "date": "2026-09-03",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-019",
+        "date": "2026-09-01",
+        "merchant": "Xbox Game Pass",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 14.99,
+          "currency": "EUR"
+        },
+        "amountEur": 14.99
+      },
+      {
+        "id": "sn-018",
+        "date": "2026-09-01",
+        "merchant": "Phibsborough Flatshare",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1200.0,
+          "currency": "EUR"
+        },
+        "amountEur": 1200.0
+      },
+      {
+        "id": "sn-017",
+        "date": "2026-08-31",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-016",
+        "date": "2026-08-29",
+        "merchant": "Amazon.ie",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 89.99,
+          "currency": "EUR"
+        },
+        "amountEur": 89.99
+      },
+      {
+        "id": "sn-015",
+        "date": "2026-08-28",
+        "merchant": "GoMo",
+        "category": "telecom",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 15.0,
+          "currency": "EUR"
+        },
+        "amountEur": 15.0
+      },
+      {
+        "id": "sn-014",
+        "date": "2026-08-24",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 26.5,
+          "currency": "EUR"
+        },
+        "amountEur": 26.5
+      },
+      {
+        "id": "sn-013",
+        "date": "2026-08-20",
+        "merchant": "PlayStation Store",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 59.99,
+          "currency": "EUR"
+        },
+        "amountEur": 59.99
+      },
+      {
+        "id": "sn-012",
+        "date": "2026-08-14",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 34.2,
+          "currency": "EUR"
+        },
+        "amountEur": 34.2
+      },
+      {
+        "id": "sn-011",
+        "date": "2026-08-14",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-010",
+        "date": "2026-08-12",
+        "merchant": "Smyths Toys Jervis",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 64.99,
+          "currency": "EUR"
+        },
+        "amountEur": 64.99
+      },
+      {
+        "id": "sn-009",
+        "date": "2026-08-04",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 28.9,
+          "currency": "EUR"
+        },
+        "amountEur": 28.9
+      },
+      {
+        "id": "sn-008",
+        "date": "2026-08-03",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-007",
+        "date": "2026-08-01",
+        "merchant": "Xbox Game Pass",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 14.99,
+          "currency": "EUR"
+        },
+        "amountEur": 14.99
+      },
+      {
+        "id": "sn-006",
+        "date": "2026-08-01",
+        "merchant": "Phibsborough Flatshare",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1200.0,
+          "currency": "EUR"
+        },
+        "amountEur": 1200.0
+      },
+      {
+        "id": "sn-005",
+        "date": "2026-07-30",
+        "merchant": "Steam",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 19.99,
+          "currency": "EUR"
+        },
+        "amountEur": 19.99
+      },
+      {
+        "id": "sn-004",
+        "date": "2026-07-28",
+        "merchant": "GoMo",
+        "category": "telecom",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 15.0,
+          "currency": "EUR"
+        },
+        "amountEur": 15.0
+      },
+      {
+        "id": "sn-003",
+        "date": "2026-07-27",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-002",
+        "date": "2026-07-25",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 31.4,
+          "currency": "EUR"
+        },
+        "amountEur": 31.4
+      },
+      {
+        "id": "sn-001",
+        "date": "2026-07-24",
+        "merchant": "Currys Blanchardstown",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 129.99,
+          "currency": "EUR"
+        },
+        "amountEur": 129.99
       }
     ]
   }

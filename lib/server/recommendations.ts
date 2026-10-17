@@ -118,6 +118,7 @@ export async function buildRecommendations(
       savingPct: comparison.savingPct,
       comparison,
       typicalPurchase,
+      listPriceCheck: answer.listPriceCheck,
       products,
     });
   });

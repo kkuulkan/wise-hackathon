@@ -17,7 +17,7 @@
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
 | New dependencies | None (`import "server-only"` is resolved by Next itself) |
 | Env vars | None required. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE` (see §6) |
-| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **71/71** against `next start` |
+| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **78/78** against `next start` |
 
 ### Scope decisions (from aim-t, 2026-10-17)
 
@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | **Third user `saoirse`** (Dublin gamer) + Microsoft Store official list prices for electronics with a VAT-normalised consistency gate (§15). New `listPriceCheck` on categories; new `digital-games` category (never recommended). `data/real/brand-prices.json` added | Additive. The user picker now lists 3 users |
 | 2026-10-17 | `products[].localComparison`: national average, per-kg/L vs the median of ≥5 similar verified products in the same country, or `null` (§14). Fetch script computes per-type medians (`products.json` → `localStats`) | Additive. **Frontend action needed in `Visa`** (§14) |
 | 2026-10-17 | **Only recommend what a traveller can buy here instead of at home** (§13). Categories gain `buyWhere`; transport, mobile, dining and the new `cafe` category are never recommended. Coffee means coffee to take home. Groceries are shelf-stable take-home goods only. New official matched items from CSO Ireland + KSH Hungary (haircuts, sugar). Product lists vary across sub-categories. Café transactions re-tagged `cafe` | Additive API (`evidence` is now a union, see §13). `categories.json` and `transactions.json` changed |
 | 2026-10-17 | **Real data replaces the mock catalog.** New `scripts/fetch-real-data.mjs` (`npm run fetch-data`) builds `data/real/` from Eurostat, Open Prices and the ECB through verification gates. `data/seed/catalog.json` deleted. Category savings now come from official price levels; products are real shelf prices; FX is the real ECB rate (363 HUF, was a hard-coded 395). `categories.json` gains `priceLevel`. API responses gain fields (none removed); `products` may now be empty. `lib/live.ts` adapted | Additive API. Frontend reading `products[0]` must handle empty lists (§12) |
@@ -438,4 +439,40 @@ These are medians of crowdsourced products (often branded or specialty), **not n
 3. Word the line from `basis` (table above). Don't call a similar-products median an "average".
 4. Also outstanding: show `homePriceBasis` ("estimated" vs "observed"); hide the forint line when `fx` is null; let the map pin open `url`.
 Once `Visa` takes these, `lib/live.ts` can pass the fields straight through and drop `vsLocalAvgPct`.
+
+## 15. Third user and electronics (2026-10-17)
+
+**Saoirse Nolan** (`saoirse`, Dublin, IE): a gamer whose biggest spend is electronics (Currys, Smyths, Amazon.ie, GAME), plus Steam, PlayStation Store and Game Pass.
+Those last three are the new `digital-games` category (`non-actionable`, never recommended).
+
+### Research summary (what was checked before building)
+| Source | Result |
+|---|---|
+| Digital games (Steam, Microsoft Store), tested live | **Identical prices** in all 5 countries (Steam €17.99/€59.99 everywhere) and tied to the account's country, so nothing to save |
+| Apple (apple.de/.hu…) | ❌ Apple's terms forbid scraping **and "any similar or equivalent manual process"** to copy or monitor prices. Not used |
+| Alza | ❌ No public or partner price API (supplier feeds only); also only HU and DE among our countries |
+| eBay Browse API | Official and free, covers IE/DE/ES. aim-t's developer account is still under review |
+| Keepa (Amazon) | Covers IE/DE/ES; €49/month, which the team can't pay |
+| SerpApi (Google Shopping) | Free tier, needs a sign-up key. **Not yet evaluated.** Use only if it shows real shop offers |
+| **Microsoft Store catalogue** | ✅ Used. Public, undocumented endpoint the store itself uses; official MSRP per market; hardware sold in IE, DE, PT, ES (not HU) |
+
+### Microsoft list prices (`npm run fetch-data` → `data/real/brand-prices.json`)
+Gates: new only (not refurbished) · **MSRP, never ListPrice** (ListPrice carries temporary sales; controllers looked cheaper in DE and ES only because of a 16–19 Oct sale) ·
+currency matches the market · same SKU in ≥2 of our markets · **pre-VAT consistency**: each market's price ÷ (1 + VAT) must be within 10% of the others' median.
+That gate removed the stale Xbox Series S/X listings (DE €599.99/€749.99 vs PT/ES €399.99/€549.99 on old 2020 SKUs) and a mouse priced €53 vs €79 in two markets.
+It's a **soft** source: if the endpoint fails, the previous file is kept and the rest of the snapshot still refreshes.
+
+Result (2026-10-17): 361 devices, 365 SKUs kept. From Ireland: **median 0% difference** in DE (174 items), ES (86), PT (86); largest gap 3.7%; **0 items ≥5% cheaper**.
+Brands set one euro-area price and differ only by VAT.
+
+### API (additive)
+- `categories[].listPriceCheck` / catalog `listPriceCheck`: `{ brand, itemsCompared, medianPct, itemsCheaper, source }` or `null`.
+- Brand SKUs appear as products only when ≥5% cheaper (`MIN_LIST_PRICE_SAVING_PCT`), with `evidence: { source: "Manufacturer list price", brand }`,
+  `homePriceBasis: "observed"` and `url` = the local Microsoft Store page (checked: `microsoft.com/{locale}/d/_/{productId}` returns 200).
+- **What Saoirse sees in Spain:** Electronics 8% cheaper (Eurostat: what shops charge) **and** "Microsoft's official prices for 86 identical items: median 0% difference",
+  i.e. the saving comes from shop prices, not the brand. In Hungary, electronics doesn't show (only 4% cheaper).
+- `lib/live.ts` puts the list-price sentence into the card's `source` line, so the current UI already shows it.
+
+### To get product-level shop prices for electronics later
+eBay (when approved) or a free SerpApi key. Either would plug in as another source behind `queryCatalog`, with the same gates (new, fixed price, seller located in that country, outlier and VAT consistency).
 

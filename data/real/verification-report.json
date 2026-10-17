@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-17T07:04:42.459Z",
+  "fetchedAt": "2026-10-17T07:59:46.973Z",
   "today": "2026-10-17",
   "fx": {
     "ecb": {
@@ -298,5 +298,58 @@
     "candidates": 4,
     "kept": 4,
     "rejected": []
+  },
+  "microsoft": {
+    "devices": 361,
+    "skus": 1737,
+    "kept": 365,
+    "skippedBy": {
+      "new, not refurbished": 59,
+      "has an official list price (MSRP)": 428,
+      "currency matches market": 0
+    },
+    "rejectedBy": {
+      "sold in fewer than two of our markets": 1371,
+      "pre-VAT price inconsistent across markets": 1
+    },
+    "inconsistentExamples": [
+      {
+        "name": "Microsoft Adaptive Mouse",
+        "country": "IE",
+        "priceEur": 53,
+        "others": {
+          "IE": 53,
+          "DE": 79
+        }
+      },
+      {
+        "name": "Microsoft Adaptive Mouse",
+        "country": "DE",
+        "priceEur": 79,
+        "others": {
+          "DE": 79
+        }
+      },
+      {
+        "name": "Xbox Series X – 1TB Digital Edition (White)",
+        "country": "DE",
+        "priceEur": 749.99,
+        "others": {
+          "DE": 749.99,
+          "PT": 549.99,
+          "ES": 549.99
+        }
+      },
+      {
+        "name": "Xbox Series S – 1TB (White)",
+        "country": "DE",
+        "priceEur": 599.99,
+        "others": {
+          "DE": 599.99,
+          "PT": 399.99,
+          "ES": 399.99
+        }
+      }
+    ]
   }
 }

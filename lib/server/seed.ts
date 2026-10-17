@@ -1,5 +1,6 @@
 import "server-only";
 
+import brandPricesJson from "@/data/real/brand-prices.json";
 import priceLevelsJson from "@/data/real/price-levels.json";
 import productsJson from "@/data/real/products.json";
 import referenceItemsJson from "@/data/real/reference-items.json";
@@ -8,6 +9,7 @@ import transactionsJson from "@/data/seed/transactions.json";
 import usersJson from "@/data/seed/users.json";
 
 import type {
+  BrandListItem,
   CategoryDef,
   LocalTypeStat,
   PriceLevels,
@@ -68,6 +70,11 @@ export function getRealProducts(): RealProduct[] {
 /** Median unit price per product type, per country (see LocalTypeStat). */
 export function getLocalStats(): Record<string, Record<string, LocalTypeStat>> {
   return productsJson.localStats as Record<string, Record<string, LocalTypeStat>>;
+}
+
+/** Manufacturer list prices per market (Microsoft Store catalogue). */
+export function getBrandListItems(): BrandListItem[] {
+  return brandPricesJson.items as BrandListItem[];
 }
 
 /** Official national average prices matched across countries (CSO, KSH). */

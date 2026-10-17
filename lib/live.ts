@@ -113,6 +113,9 @@ function toCategory(
       (products.some((p) => p.evidence.source === "National statistics")
         ? " Named items are official national averages in both countries."
         : "") +
+      (category.listPriceCheck
+        ? ` ${category.listPriceCheck.brand}'s official prices for ${category.listPriceCheck.itemsCompared} identical items: median ${Math.abs(category.listPriceCheck.medianPct)}% ${category.listPriceCheck.medianPct > 0 ? "lower" : category.listPriceCheck.medianPct < 0 ? "higher" : "difference"} here${category.listPriceCheck.itemsCheaper ? `, ${category.listPriceCheck.itemsCheaper} at least 5% cheaper` : ", so the brand itself charges about the same"}.`
+        : "") +
       (products.some((p) => p.evidence.source === "Open Prices")
         ? " Shelf products are real Open Prices sightings; their home prices are estimates."
         : ""),

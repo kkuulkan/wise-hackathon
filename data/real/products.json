@@ -1,6 +1,6 @@
 {
   "_source": "Open Prices (prices.openfoodfacts.org), crowdsourced shelf prices with receipt or price-tag proof. Only records that passed every gate in verification-report.json. ODbL licence.",
-  "fetchedAt": "2026-10-17T07:04:42.459Z",
+  "fetchedAt": "2026-10-17T07:59:46.973Z",
   "window": {
     "from": "2025-10-17",
     "to": "2026-10-17"

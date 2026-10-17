@@ -9,13 +9,22 @@ import {
   FX_PER_EUR,
   MAX_PRICE_AGE_DAYS,
   MAX_PRODUCTS_PER_CATEGORY,
+  MIN_LIST_PRICE_SAVING_PCT,
 } from "./config";
-import { getCategoryDef, getLocalStats, getPriceLevels, getRealProducts, getReferenceItems } from "./seed";
+import {
+  getBrandListItems,
+  getCategoryDef,
+  getLocalStats,
+  getPriceLevels,
+  getRealProducts,
+  getReferenceItems,
+} from "./seed";
 import { readCatalogCache, readStaleCatalogCache, writeCatalogCache } from "./store";
 import type {
   CatalogResponse,
   CategoryComparison,
   ComparedProduct,
+  ListPriceCheck,
   LocalComparison,
   Price,
   RealProduct,
@@ -156,6 +165,57 @@ function compareReferenceItems(query: CatalogQuery): ComparedProduct[] {
     });
 }
 
+/** The same brand SKUs priced in both countries, home and here. */
+function brandPairs(query: CatalogQuery) {
+  return getBrandListItems()
+    .filter((item) => item.category === query.category)
+    .flatMap((item) => {
+      const home = item.prices[query.from];
+      const local = item.prices[query.to];
+      return home && local ? [{ item, home, local, pct: ((home.priceEur - local.priceEur) / home.priceEur) * 100 }] : [];
+    });
+}
+
+function median(values: number[]): number {
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** Summary of how a brand's official prices compare for this pair. */
+export function checkListPrices(query: CatalogQuery): ListPriceCheck | null {
+  const pairs = brandPairs(query);
+  if (pairs.length === 0) return null;
+
+  return {
+    brand: pairs[0].item.brand,
+    itemsCompared: pairs.length,
+    medianPct: Math.round(median(pairs.map((pair) => pair.pct)) * 10) / 10,
+    itemsCheaper: pairs.filter((pair) => pair.pct >= MIN_LIST_PRICE_SAVING_PCT).length,
+    source: "Microsoft Store official list prices (MSRP), new items, identical SKUs",
+  };
+}
+
+/** Brand SKUs whose official price is meaningfully lower here. */
+function compareBrandItems(query: CatalogQuery): ComparedProduct[] {
+  return brandPairs(query)
+    .filter((pair) => pair.pct >= MIN_LIST_PRICE_SAVING_PCT)
+    .map(({ item, home, local, pct }) => ({
+      id: item.id,
+      name: item.name,
+      description: `${item.brand} official list price`,
+      homePrice: toPrice(home.priceEur, query.from, home.currency === "EUR" ? undefined : home.price),
+      homePriceBasis: "observed" as const,
+      localPrice: toPrice(local.priceEur, query.to, local.currency === "EUR" ? undefined : local.price),
+      savingPct: Math.round(pct),
+      localComparison: null,
+      approximate: true as const,
+      priceUpdatedAt: DEMO_TODAY,
+      evidence: { source: "Manufacturer list price" as const, brand: item.brand },
+      url: local.url,
+    }));
+}
+
 /** Per kg/L against similar verified products in the same country, or null. */
 function localComparisonFor(product: RealProduct): LocalComparison | null {
   const stat = product.type ? getLocalStats()[product.country]?.[product.type] : undefined;
@@ -245,7 +305,7 @@ function variety(subIndexOf: Map<string, string>) {
 }
 
 const evidenceRank = (product: ComparedProduct) =>
-  product.evidence.source === "National statistics" ? Number.MAX_SAFE_INTEGER : product.evidence.observations;
+  product.evidence.source === "Open Prices" ? product.evidence.observations : Number.MAX_SAFE_INTEGER;
 
 /** FR-12: biggest saving first, then the best-evidenced, then by id so the order never wobbles. */
 function bySaving(a: ComparedProduct, b: ComparedProduct): number {
@@ -254,7 +314,10 @@ function bySaving(a: ComparedProduct, b: ComparedProduct): number {
 
 /** Observed-on-both-sides items lead; shelf products fill the rest. */
 function compareAll(products: RealProduct[], query: CatalogQuery): ComparedProduct[] {
-  return [...compareReferenceItems(query).sort(bySaving), ...compareProducts(products, query)].slice(
+  return [
+    ...[...compareReferenceItems(query), ...compareBrandItems(query)].sort(bySaving),
+    ...compareProducts(products, query),
+  ].slice(
     0,
     MAX_PRODUCTS_PER_CATEGORY,
   );
@@ -309,6 +372,7 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
     const response: CatalogResponse = {
       ...query,
       comparison,
+      listPriceCheck: checkListPrices(query),
       products: compareAll(validProducts(raw), query),
       source: "live",
       fetchedAt: new Date(now).toISOString(),
@@ -324,6 +388,7 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
     return {
       ...query,
       comparison,
+      listPriceCheck: checkListPrices(query),
       products: compareAll(validProducts(getRealProducts()), query),
       source: "fallback",
       fetchedAt: new Date(now).toISOString(),

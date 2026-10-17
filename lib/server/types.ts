@@ -80,6 +80,30 @@ export type ReferenceItem = {
   >;
 };
 
+/** One manufacturer SKU's official list price (MSRP, incl. VAT) per market. */
+export type BrandListItem = {
+  id: string;
+  category: string;
+  brand: string;
+  name: string;
+  prices: Record<string, { price: number; currency: string; priceEur: number; url: string }>;
+};
+
+/**
+ * Category-level check of a brand's official prices for the same SKUs in
+ * both countries. Usually shows they are about the same: brands set one
+ * euro-area price and differ mainly by VAT.
+ */
+export type ListPriceCheck = {
+  brand: string;
+  itemsCompared: number;
+  /** Median of (home − here) / home × 100. Positive = cheaper here. */
+  medianPct: number;
+  /** Items at least MIN_LIST_PRICE_SAVING_PCT cheaper here; these are shown as products. */
+  itemsCheaper: number;
+  source: string;
+};
+
 /** Median unit price of a product type in one country, from ≥5 verified products. */
 export type LocalTypeStat = {
   label: string;
@@ -155,7 +179,8 @@ export type ComparedProduct = {
    */
   evidence:
     | { source: "Open Prices"; observations: number; shops: string[]; proofs: string[] }
-    | { source: "National statistics"; home: string; local: string; note: string | null };
+    | { source: "National statistics"; home: string; local: string; note: string | null }
+    | { source: "Manufacturer list price"; brand: string };
   /** The product's public Open Prices page, or the destination's statistics table. */
   url: string;
 };
@@ -169,6 +194,8 @@ export type CatalogResponse = {
   to: string;
   /** Null when either country has no price level for this category. */
   comparison: CategoryComparison | null;
+  /** Null when no brand list prices exist for this category and pair. */
+  listPriceCheck: ListPriceCheck | null;
   products: ComparedProduct[];
   source: CatalogSource;
   fetchedAt: string;
@@ -260,6 +287,7 @@ export type RecommendationCategory = {
    * suggestions, which have no spending behind them.
    */
   typicalPurchase: { home: Price; local: Price } | null;
+  listPriceCheck: ListPriceCheck | null;
   /** Real shelf products. May be empty: services have no product data. */
   products: ComparedProduct[];
 };

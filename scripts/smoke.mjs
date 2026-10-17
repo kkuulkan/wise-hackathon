@@ -39,6 +39,7 @@ function client() {
 }
 
 const anon = client();
+const saoirse = client();
 const aoife = client();
 const jonas = client();
 
@@ -46,7 +47,7 @@ await anon.call("POST", "/api/dev/reset");
 
 // Sessions
 let r = await anon.call("GET", "/api/users");
-check("two demo users listed", r.json.users?.length === 2 && r.json.users.map((u) => u.id).join() === "aoife,jonas");
+check("three demo users listed", r.json.users?.length === 3 && r.json.users.map((u) => u.id).join() === "aoife,jonas,saoirse");
 r = await anon.call("GET", "/api/recommendations?country=PT");
 check("signed out -> 401 not_signed_in", r.status === 401 && r.json.error?.code === "not_signed_in");
 r = await anon.call("GET", "/api/session");
@@ -147,6 +148,25 @@ r = await jonas.arrive("ES");
 r = await jonas.call("GET", "/api/recommendations");
 check("Jonas in ES: electronics still hidden (under 5% cheaper)", !r.json.categories.some((c) => c.slug === "electronics"),
   r.json.categories.map((c) => c.slug).join());
+
+// Saoirse: gamer from Dublin. Electronics is her top spend.
+await saoirse.signIn("saoirse");
+r = await saoirse.arrive("ES");
+r = await saoirse.call("GET", "/api/recommendations");
+const elec = r.json.categories?.find((c) => c.slug === "electronics");
+check("Saoirse in ES: electronics first, from Eurostat (>=5% cheaper)", r.json.categories?.[0]?.slug === "electronics" && elec.savingPct >= 5);
+check("Saoirse: digital games never recommended", !r.json.categories.some((c) => c.slug === "digital-games"));
+check("Saoirse: Microsoft list-price check present with identical SKUs",
+  elec?.listPriceCheck?.brand === "Microsoft" && elec.listPriceCheck.itemsCompared > 0 && Number.isFinite(elec.listPriceCheck.medianPct));
+check("any brand product shown is >=5% cheaper by official list price",
+  r.json.categories.flatMap((c) => c.products).filter((p) => p.evidence.source === "Manufacturer list price")
+    .every((p) => p.savingPct >= 5 && p.homePriceBasis === "observed" && p.url.startsWith("https://www.microsoft.com/")));
+r = await anon.call("GET", "/api/catalog?category=electronics&from=IE&to=DE");
+check("catalog exposes the list-price check", r.status === 200 && r.json.listPriceCheck?.itemsCompared > 0);
+r = await saoirse.call("GET", "/api/recommendations?country=HU");
+check("Saoirse in HU: electronics hidden (under 5% cheaper)", !r.json.categories.some((c) => c.slug === "electronics"));
+r = await aoife.call("GET", "/api/account");
+check("Saoirse's trip is not on Aoife's account", r.json.activeTrip?.country.code !== "ES");
 
 // FR-15: catalog API boundary
 r = await anon.call("GET", "/api/catalog?category=groceries&from=IE&to=PT");

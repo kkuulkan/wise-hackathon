@@ -11,6 +11,7 @@
     {"slug": "sneakers-clothing", "label": "Sneakers & clothing", "icon": "shoe", "kind": "everyday", "isDefault": true, "priceLevel": "A0103", "buyWhere": "take-home"},
     {"slug": "electronics", "label": "Electronics", "icon": "headphones", "kind": "everyday", "isDefault": false, "priceLevel": "A010901", "buyWhere": "take-home"},
     {"slug": "personal-care", "label": "Hair & personal care", "icon": "scissors", "kind": "everyday", "isDefault": false, "priceLevel": "A0112", "buyWhere": "timeable"},
+    {"slug": "digital-games", "label": "Digital games", "icon": "gamepad", "kind": "non-actionable", "isDefault": false, "priceLevel": null, "buyWhere": null},
     {"slug": "pharmacy", "label": "Pharmacy", "icon": "pill", "kind": "sensitive", "isDefault": false, "priceLevel": null, "buyWhere": null},
     {"slug": "gambling", "label": "Gambling", "icon": "dice", "kind": "sensitive", "isDefault": false, "priceLevel": null, "buyWhere": null},
     {"slug": "rent", "label": "Rent", "icon": "house", "kind": "non-actionable", "isDefault": false, "priceLevel": null, "buyWhere": null},

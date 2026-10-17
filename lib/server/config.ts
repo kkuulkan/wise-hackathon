@@ -33,6 +33,12 @@ export const MAX_PRICE_AGE_DAYS = 365;
  */
 export const MIN_CATEGORY_SAVING_PCT = 5;
 
+/**
+ * A manufacturer's own list price must be at least this much lower to be
+ * shown as a product. Smaller gaps are VAT, not a reason to buy abroad.
+ */
+export const MIN_LIST_PRICE_SAVING_PCT = 5;
+
 /** NFR performance: fall back after this long (PRD says 3 s). */
 export const CATALOG_TIMEOUT_MS = 3000;
 

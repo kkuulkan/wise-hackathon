@@ -1,5 +1,5 @@
 {
-  "_source": "The two OtherWise demo users. Fictional people with mock balances; not real Wise accounts. Transactions for each are in transactions.json under the same id.",
+  "_source": "The three OtherWise demo users. Fictional people with mock balances; not real Wise accounts. Transactions for each are in transactions.json under the same id.",
   "users": [
     {
       "id": "aoife",
@@ -7,8 +7,16 @@
       "homeCity": "Dublin",
       "homeCountry": "IE",
       "balances": [
-        { "value": 2480.5, "currency": "EUR", "primary": true },
-        { "value": 184200, "currency": "HUF", "primary": false }
+        {
+          "value": 2480.5,
+          "currency": "EUR",
+          "primary": true
+        },
+        {
+          "value": 184200,
+          "currency": "HUF",
+          "primary": false
+        }
       ]
     },
     {
@@ -17,7 +25,24 @@
       "homeCity": "Berlin",
       "homeCountry": "DE",
       "balances": [
-        { "value": 1315.2, "currency": "EUR", "primary": true }
+        {
+          "value": 1315.2,
+          "currency": "EUR",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": "saoirse",
+      "holder": "Saoirse Nolan",
+      "homeCity": "Dublin",
+      "homeCountry": "IE",
+      "balances": [
+        {
+          "value": 1890.4,
+          "currency": "EUR",
+          "primary": true
+        }
       ]
     }
   ]

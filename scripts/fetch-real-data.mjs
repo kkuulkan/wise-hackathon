@@ -8,6 +8,8 @@
 //   ECB via Frankfurter    EUR exchange rates, cross-checked against Eurostat ert_bil_eur_d
 //   CSO Ireland CPM12      official national average prices of named items, monthly
 //   KSH Hungary ara0004    official national average prices of named items, annual
+//   Microsoft Store        manufacturer list prices (MSRP) per market, from the public
+//                          catalogue the store itself uses (undocumented; soft source)
 //
 // Every record passes through verification gates. Anything that fails is
 // dropped and counted in data/real/verification-report.json. If a source
@@ -483,6 +485,96 @@ async function fetchReferenceItems(fx) {
   return { items: kept, report: { cso: cso.label, ksh: ksh.year, candidates: REFERENCE_ITEMS.length, kept: kept.length, rejected } };
 }
 
+// 5. Manufacturer list prices (Microsoft Store catalogue)
+
+const MS_CATALOG = "https://displaycatalog.mp.microsoft.com/v7.0";
+const MS_MARKETS = { IE: "en-ie", DE: "de-de", PT: "pt-pt", ES: "es-es", HU: "hu-hu" };
+/** Standard VAT rates (European Commission, "VAT rates applied in the Member States"). */
+const VAT = { IE: 0.23, DE: 0.19, PT: 0.23, ES: 0.21, HU: 0.27 };
+/**
+ * Brands mostly set one pre-VAT price for the euro area, so a market whose
+ * pre-VAT price sits more than this far from the others' median is a stale or
+ * special listing (seen: Xbox consoles 25–33% "cheaper" on old 2020 SKUs).
+ */
+const MAX_NET_DEVIATION = 0.1;
+const REFURBISHED = /refurbish|generalüberholt|reacondicionad|recondicionad/i;
+
+async function fetchMicrosoftListPrices(fx) {
+  const ids = new Set();
+  for (const market of Object.keys(MS_MARKETS)) {
+    // Pages hold fewer items than `count` asks for, so advance by what came back.
+    for (let skip = 0; ; ) {
+      const data = await getJson(`${MS_CATALOG}/productFamilies/Devices/products?market=${market}&languages=en-US&count=25&%24skip=${skip}`);
+      const products = data.Products ?? [];
+      products.forEach((product) => ids.add(product.ProductId));
+      skip += products.length;
+      if (products.length === 0 || skip >= (data.TotalResultCount ?? 0)) break;
+      await sleep(200);
+    }
+  }
+
+  const bySku = new Map();
+  const gates = { "new, not refurbished": 0, "has an official list price (MSRP)": 0, "currency matches market": 0 };
+  for (const [country, locale] of Object.entries(MS_MARKETS)) {
+    const list = [...ids];
+    for (let i = 0; i < list.length; i += 20) {
+      const data = await getJson(`${MS_CATALOG}/products?bigIds=${list.slice(i, i + 20).join(",")}&market=${country}&languages=en-US`);
+      for (const product of data.Products ?? []) {
+        for (const entry of product.DisplaySkuAvailabilities ?? []) {
+          const title = entry.Sku?.LocalizedProperties?.[0]?.SkuTitle || product.LocalizedProperties?.[0]?.ProductTitle || "";
+          const buy = (entry.Availabilities ?? []).find((a) => a.Actions?.includes("Purchase") && a.OrderManagementData?.Price);
+          if (!buy) continue;
+          const price = buy.OrderManagementData.Price;
+          if (REFURBISHED.test(title) || REFURBISHED.test(product.LocalizedProperties?.[0]?.ProductTitle ?? "")) { gates["new, not refurbished"]++; continue; }
+          // MSRP, never ListPrice: ListPrice carries temporary sales.
+          if (!(price.MSRP > 0)) { gates["has an official list price (MSRP)"]++; continue; }
+          if (price.CurrencyCode !== COUNTRIES[country].currency) { gates["currency matches market"]++; continue; }
+
+          const key = `${product.ProductId}:${entry.Sku.SkuId}`;
+          if (!bySku.has(key)) bySku.set(key, { productId: product.ProductId, skuId: entry.Sku.SkuId, name: product.LocalizedProperties?.[0]?.ProductTitle ?? title, prices: {} });
+          bySku.get(key).prices[country] = {
+            price: price.MSRP,
+            currency: price.CurrencyCode,
+            priceEur: round2(price.MSRP / fx.perEur[price.CurrencyCode]),
+            url: `https://www.microsoft.com/${locale}/d/_/${product.ProductId.toLowerCase()}`,
+          };
+        }
+      }
+      await sleep(200);
+    }
+  }
+
+  const kept = [];
+  const rejected = { "sold in fewer than two of our markets": 0, "pre-VAT price inconsistent across markets": 0 };
+  const examples = [];
+  for (const sku of bySku.values()) {
+    if (Object.keys(sku.prices).length < 2) { rejected["sold in fewer than two of our markets"]++; continue; }
+    const net = Object.fromEntries(Object.entries(sku.prices).map(([c, p]) => [c, p.priceEur / (1 + VAT[c])]));
+    const mid = median(Object.values(net));
+    for (const [country, value] of Object.entries(net)) {
+      if (Math.abs(value / mid - 1) > MAX_NET_DEVIATION) {
+        if (examples.length < 8) examples.push({ name: sku.name, country, priceEur: sku.prices[country].priceEur, others: Object.fromEntries(Object.entries(sku.prices).map(([c, p]) => [c, p.priceEur])) });
+        delete sku.prices[country];
+      }
+    }
+    // With two markets that disagree, there is no telling which is right.
+    if (Object.keys(sku.prices).length < 2) { rejected["pre-VAT price inconsistent across markets"]++; continue; }
+    kept.push({
+      id: `ms-${sku.productId}-${sku.skuId}`.toLowerCase(),
+      category: "electronics",
+      brand: "Microsoft",
+      name: sku.name.trim(),
+      prices: sku.prices,
+    });
+  }
+
+  if (kept.length === 0) throw new Error("Microsoft gate failed: no list price survived");
+  return {
+    items: kept.sort((a, b) => a.id.localeCompare(b.id)),
+    report: { devices: ids.size, skus: bySku.size, kept: kept.length, skippedBy: gates, rejectedBy: rejected, inconsistentExamples: examples },
+  };
+}
+
 // Main
 
 async function writeJson(name, value) {
@@ -520,6 +612,17 @@ async function main() {
   console.log(`  ${referenceReport.kept}/${referenceReport.candidates} items passed (CSO ${referenceReport.cso}, KSH ${referenceReport.ksh})`);
   for (const miss of referenceReport.rejected) console.log(`  rejected ${miss.id}: ${miss.problems.join("; ")}`);
 
+  // Soft source: the catalogue is undocumented, so if it fails the last good
+  // brand-prices.json is kept and the rest of the snapshot still refreshes.
+  console.log("Microsoft Store list prices …");
+  let brand = null;
+  try {
+    brand = await fetchMicrosoftListPrices(fx);
+    console.log(`  ${brand.report.kept}/${brand.report.skus} SKUs kept from ${brand.report.devices} devices`);
+  } catch (error) {
+    console.warn(`  skipped, keeping the previous file: ${error.message}`);
+  }
+
   await mkdir(OUT_DIR, { recursive: true });
   const fetchedAt = new Date().toISOString();
   const files = [
@@ -539,7 +642,17 @@ async function main() {
       fetchedAt,
       items: referenceItems,
     }),
-    await writeJson("verification-report.json", { fetchedAt, today: TODAY, fx: fxReport, priceLevels: levelReport, openPrices: productReport, referenceItems: referenceReport }),
+    ...(brand
+      ? [
+          await writeJson("brand-prices.json", {
+            _source: "Microsoft Store catalogue (displaycatalog.mp.microsoft.com), official list prices (MSRP) incl. VAT, new items only. Undocumented public endpoint used by the store itself.",
+            fetchedAt,
+            vatRates: VAT,
+            items: brand.items,
+          }),
+        ]
+      : []),
+    await writeJson("verification-report.json", { fetchedAt, today: TODAY, fx: fxReport, priceLevels: levelReport, openPrices: productReport, referenceItems: referenceReport, microsoft: brand?.report ?? "skipped" }),
   ];
   // Swap all files in only once everything succeeded.
   for (const file of files) await rename(`${file}.tmp`, file);
