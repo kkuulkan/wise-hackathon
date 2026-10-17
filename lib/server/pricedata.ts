@@ -1,6 +1,7 @@
 import "server-only";
 
 import { desc, eq } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
 
 import brandPricesJson from "@/data/real/brand-prices.json";
 import fxJson from "@/data/real/fx.json";
@@ -29,26 +30,19 @@ export type PriceData = {
   brandItems: BrandListItem[];
 };
 
-/** Snapshots change only when someone runs db:load-prices, so a short cache is safe. */
-const CACHE_MS = 5 * 60 * 1000;
-let cached: { data: PriceData; at: number } | undefined;
-let inFlight: Promise<PriceData> | undefined;
-
+/**
+ * Prices change only when someone runs `db:load-prices`, so the snapshot is
+ * cached for days and shared by every server instance ('use cache: remote':
+ * the platform's cache on Vercel, so serverless cold starts don't refetch it;
+ * in-memory when self-hosted). A failed load throws and is not cached.
+ * A new deploy starts a fresh cache; locally, restart the server after
+ * `db:load-prices` to see the new snapshot.
+ */
 export async function getPriceData(): Promise<PriceData> {
-  if (cached && Date.now() - cached.at < CACHE_MS) return cached.data;
-  inFlight ??= loadCurrentSnapshot()
-    .then((data) => {
-      cached = { data, at: Date.now() };
-      return data;
-    })
-    .finally(() => {
-      inFlight = undefined;
-    });
-  return inFlight;
-}
-
-export function clearPriceDataCache(): void {
-  cached = undefined;
+  "use cache: remote";
+  cacheLife("days");
+  cacheTag("prices");
+  return loadCurrentSnapshot();
 }
 
 async function loadCurrentSnapshot(): Promise<PriceData> {

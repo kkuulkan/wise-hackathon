@@ -1,9 +1,9 @@
 import "server-only";
 
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
+import { cache } from "react";
 
 import { db, schema } from "./db";
-import { clearPriceDataCache } from "./pricedata";
 import type {
   AnalyticsEvent,
   CatalogResponse,
@@ -39,20 +39,26 @@ export async function resetState(): Promise<void> {
     await tx.delete(consent);
   });
   catalogCache().clear();
-  clearPriceDataCache();
 }
 
 // Trips
 
-export async function getActiveTrip(userId: string): Promise<Trip | undefined> {
-  const [trip] = await db()
-    .select()
+/**
+ * Trips change on every arrival, so they are never cached across requests.
+ * React's cache() only de-duplicates within one page render, where the page
+ * and the recommendations would otherwise each load the trip. One query: the
+ * active trip joined to its countries.
+ */
+export const getActiveTrip = cache(async (userId: string): Promise<Trip | undefined> => {
+  const rows = await db()
+    .select({ trip: schema.trips, country: schema.tripCountries })
     .from(schema.trips)
-    .where(and(eq(schema.trips.userId, userId), isNull(schema.trips.endedAt)))
-    .limit(1);
-  if (!trip) return undefined;
+    .leftJoin(schema.tripCountries, eq(schema.tripCountries.tripId, schema.trips.id))
+    .where(and(eq(schema.trips.userId, userId), isNull(schema.trips.endedAt)));
+  if (rows.length === 0) return undefined;
 
-  const countries = await db().select().from(schema.tripCountries).where(eq(schema.tripCountries.tripId, trip.id));
+  const trip = rows[0].trip;
+  const countries = rows.flatMap((row) => (row.country ? [row.country] : []));
   return {
     id: trip.id,
     startedAt: trip.startedAt.toISOString(),
@@ -69,7 +75,7 @@ export async function getActiveTrip(userId: string): Promise<Trip | undefined> {
       ]),
     ),
   };
-}
+});
 
 /** Upserts the trip and every country on it, atomically. */
 export async function saveTrip(userId: string, trip: Trip): Promise<void> {
@@ -147,7 +153,8 @@ const DEFAULT_CONSENT: Consent = {
   updatedAt: new Date(0).toISOString(),
 };
 
-export async function getConsent(userId: string): Promise<Consent> {
+/** Changes when the user answers, so only de-duplicated within one render. */
+export const getConsent = cache(async (userId: string): Promise<Consent> => {
   const [row] = await db().select().from(schema.consent).where(eq(schema.consent.userId, userId)).limit(1);
   if (!row) return DEFAULT_CONSENT;
   return {
@@ -156,7 +163,7 @@ export async function getConsent(userId: string): Promise<Consent> {
     decided: true,
     updatedAt: row.updatedAt.toISOString(),
   };
-}
+});
 
 export async function setConsent(userId: string, consent: Consent): Promise<void> {
   const values = {
