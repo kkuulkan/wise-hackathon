@@ -1,9 +1,16 @@
 import { connection } from "next/server";
 
-import { badRequest, fail, parseCountry, readObject, unknownKeys } from "@/lib/server/http";
-import { getCatalogProducts, getCategoryDef } from "@/lib/server/seed";
+import { badRequest, fail, parseCountry, readObject, unknownKeys, handle } from "@/lib/server/http";
+import { getPriceData } from "@/lib/server/pricedata";
+import { getCategoryDef } from "@/lib/server/seed";
 import { requireUser } from "@/lib/server/session";
 import { addFeedback, getActiveTrip, listAllFeedback, recordEvent } from "@/lib/server/store";
+
+/** Any product the catalog can show: shelf, official reference or brand list item. */
+async function isKnownProduct(id: string): Promise<boolean> {
+  const data = await getPriceData();
+  return [data.products, data.referenceItems, data.brandItems].some((items) => items.some((item) => item.id === id));
+}
 
 /**
  * POST { kind: "category" | "product", id: string, country: "PT" }
@@ -11,7 +18,7 @@ import { addFeedback, getActiveTrip, listAllFeedback, recordEvent } from "@/lib/
  * Thumbs-down (US-8). Hides the item for the rest of the signed-in user's
  * current trip.
  */
-export async function POST(request: Request) {
+async function post(request: Request) {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
@@ -30,17 +37,17 @@ export async function POST(request: Request) {
   const known =
     kind === "category"
       ? Boolean(getCategoryDef(id))
-      : getCatalogProducts().some((product) => product.id === id);
+      : await isKnownProduct(id);
   if (!known) return fail(404, "not_found", `No ${kind} with id "${id}".`);
 
-  const trip = getActiveTrip(profile.userId);
+  const trip = await getActiveTrip(profile.userId);
   if (!trip || !trip.countries[country]) {
     return fail(409, "no_active_trip", "Feedback is saved per trip, and there is no trip to that country.");
   }
 
   const createdAt = new Date().toISOString();
-  addFeedback(profile.userId, { tripId: trip.id, kind, id, country, createdAt });
-  recordEvent({
+  await addFeedback(profile.userId, { tripId: trip.id, kind, id, country, createdAt });
+  await recordEvent({
     type: "feedback",
     country,
     ...(kind === "category" ? { category: id } : { productId: id }),
@@ -51,7 +58,10 @@ export async function POST(request: Request) {
 }
 
 /** For the team: every thumbs-down, analysable by kind, country and id (US-8.3). No user ids. */
-export async function GET() {
+async function get() {
   await connection();
-  return Response.json({ feedback: listAllFeedback() });
+  return Response.json({ feedback: await listAllFeedback() });
 }
+
+export const POST = handle(post);
+export const GET = handle(get);

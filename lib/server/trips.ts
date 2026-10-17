@@ -43,20 +43,20 @@ export function isEligiblePair(home: string, destination: string): boolean {
  * `signal` records whether GPS or a card payment abroad told us (PRD open
  * question 1); both are treated the same.
  */
-export function handleLocation(
+export async function handleLocation(
   profile: Profile,
   country: string,
   signal: LocationSignal,
-): LocationResult {
+): Promise<LocationResult> {
   const { userId } = profile;
   const now = new Date().toISOString();
-  const active = getActiveTrip(userId);
+  const active = await getActiveTrip(userId);
 
   if (country === profile.homeCountry) {
     if (active) {
       active.endedAt = now;
       active.currentCountry = country;
-      saveTrip(userId, active);
+      await saveTrip(userId, active);
     }
     return { status: "home", country, trip: null, notification: null };
   }
@@ -74,7 +74,7 @@ export function handleLocation(
   trip.currentCountry = country;
 
   if (trip.countries[country]) {
-    saveTrip(userId, trip);
+    await saveTrip(userId, trip);
     return { status: "already-seen", country, trip, notification: null };
   }
 
@@ -82,8 +82,8 @@ export function handleLocation(
 
   // US-6.2: no notification without consent. The trip is still recorded so
   // the in-app entry point (FR-7) works if they open the app themselves.
-  if (!getConsent(userId).notifications) {
-    saveTrip(userId, trip);
+  if (!(await getConsent(userId)).notifications) {
+    await saveTrip(userId, trip);
     return {
       status: "arrived",
       country,
@@ -105,9 +105,9 @@ export function handleLocation(
   };
 
   trip.countries[country].notifiedAt = now;
-  saveTrip(userId, trip);
-  pushNotification(userId, notification);
-  recordEvent({ type: "notification_sent", country, at: now });
+  await saveTrip(userId, trip);
+  await pushNotification(userId, notification);
+  await recordEvent({ type: "notification_sent", country, at: now });
 
   return { status: "arrived", country, trip, notification };
 }

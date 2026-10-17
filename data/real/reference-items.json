@@ -1,0 +1,106 @@
+{
+  "_source": "Official national average prices: CSO Ireland table CPM12 (CC BY 4.0) and KSH Hungary STADAT ara0004. Matched by hand to the same item; prices normalised to `unit`.",
+  "fetchedAt": "2026-10-17T07:59:46.973Z",
+  "items": [
+    {
+      "id": "ref-mens-haircut",
+      "category": "personal-care",
+      "name": "Men's haircut",
+      "unit": "per cut",
+      "note": "Ireland's figure is a dry cut; Hungary's includes washing and drying, so the gap is if anything larger.",
+      "prices": {
+        "IE": {
+          "price": 21.46,
+          "currency": "EUR",
+          "period": "2026-09-28",
+          "source": "CSO Ireland CPM12, 2026 September",
+          "url": "https://data.cso.ie/table/CPM12",
+          "priceEur": 21.46
+        },
+        "HU": {
+          "price": 4010,
+          "currency": "HUF",
+          "period": "2025-12-31",
+          "source": "KSH Hungary ara0004, 2025 average",
+          "url": "https://www.ksh.hu/stadat_files/ara/en/ara0004.html",
+          "priceEur": 11.04
+        }
+      }
+    },
+    {
+      "id": "ref-womens-haircut",
+      "category": "personal-care",
+      "name": "Women's wash, cut and blow-dry",
+      "unit": "per visit",
+      "note": null,
+      "prices": {
+        "IE": {
+          "price": 58.32,
+          "currency": "EUR",
+          "period": "2026-09-28",
+          "source": "CSO Ireland CPM12, 2026 September",
+          "url": "https://data.cso.ie/table/CPM12",
+          "priceEur": 58.32
+        },
+        "HU": {
+          "price": 7600,
+          "currency": "HUF",
+          "period": "2025-12-31",
+          "source": "KSH Hungary ara0004, 2025 average",
+          "url": "https://www.ksh.hu/stadat_files/ara/en/ara0004.html",
+          "priceEur": 20.93
+        }
+      }
+    },
+    {
+      "id": "ref-butter",
+      "category": "groceries",
+      "name": "Butter",
+      "unit": "per kg",
+      "note": null,
+      "prices": {
+        "IE": {
+          "price": 9.34,
+          "currency": "EUR",
+          "period": "2026-09-28",
+          "source": "CSO Ireland CPM12, 2026 September",
+          "url": "https://data.cso.ie/table/CPM12",
+          "priceEur": 9.34
+        },
+        "HU": {
+          "price": 5640,
+          "currency": "HUF",
+          "period": "2025-12-31",
+          "source": "KSH Hungary ara0004, 2025 average",
+          "url": "https://www.ksh.hu/stadat_files/ara/en/ara0004.html",
+          "priceEur": 15.53
+        }
+      }
+    },
+    {
+      "id": "ref-sugar",
+      "category": "groceries",
+      "name": "Granulated sugar",
+      "unit": "per kg",
+      "note": null,
+      "prices": {
+        "IE": {
+          "price": 1.83,
+          "currency": "EUR",
+          "period": "2026-09-28",
+          "source": "CSO Ireland CPM12, 2026 September",
+          "url": "https://data.cso.ie/table/CPM12",
+          "priceEur": 1.83
+        },
+        "HU": {
+          "price": 365,
+          "currency": "HUF",
+          "period": "2025-12-31",
+          "source": "KSH Hungary ara0004, 2025 average",
+          "url": "https://www.ksh.hu/stadat_files/ara/en/ara0004.html",
+          "priceEur": 1.01
+        }
+      }
+    }
+  ]
+}

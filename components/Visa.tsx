@@ -1,35 +1,67 @@
-import { IconMapPin } from "@tabler/icons-react";
+import {
+  IconBottle,
+  IconCup,
+  IconDeviceMobile,
+  IconDice,
+  IconDots,
+  IconExternalLink,
+  IconHeadphones,
+  IconHome,
+  IconPill,
+  IconScissors,
+  IconShield,
+  IconShoe,
+  IconShoppingCart,
+  IconTag,
+  IconToolsKitchen2,
+  IconTrain,
+} from "@tabler/icons-react";
 
-import type { Category, Product } from "@/lib/types";
-import { mapsUrl } from "@/lib/data";
-import { formatEur, formatHuf, formatPct } from "@/lib/format";
+import type { Category } from "@/lib/types";
+import { formatEur, formatMoney, formatPct } from "@/lib/format";
+import { ProductLink } from "./live/ProductLink";
 import styles from "./Visa.module.css";
 
-/** How this place's price reads against the local average for its category. */
-function localAverage(product: Product, city: string) {
-  if (product.vsLocalAvgPct >= 1) {
-    return { text: `${formatPct(product.vsLocalAvgPct)} under ${city} avg`, tone: "below" as const };
-  }
+/** How many products each card lists. */
+const PLACES = 3;
 
-  if (product.vsLocalAvgPct <= -1) {
-    return { text: `${formatPct(product.vsLocalAvgPct)} over ${city} avg`, tone: "above" as const };
-  }
-
-  return { text: `At ${city} avg`, tone: "level" as const };
-}
+/**
+ * The bank's taxonomy names an icon per category (US-3.2); this maps those
+ * names onto glyphs. An unknown name falls back to a plain tag rather than
+ * leaving the heading bare.
+ */
+const ICONS = {
+  cart: IconShoppingCart,
+  cup: IconCup,
+  plate: IconToolsKitchen2,
+  train: IconTrain,
+  phone: IconDeviceMobile,
+  bottle: IconBottle,
+  shoe: IconShoe,
+  headphones: IconHeadphones,
+  scissors: IconScissors,
+  pill: IconPill,
+  dice: IconDice,
+  house: IconHome,
+  shield: IconShield,
+  dots: IconDots,
+} as const;
 
 type Props = {
   category: Category;
   city: string;
   homeCity: string;
+  /** Destination country code, for the product_tapped event. */
+  countryCode: string;
   /** Drives the stamp's rotation so the page looks hand-stamped, not generated. */
   index: number;
 };
 
 const STAMP_ANGLES = [-7, 5, -4, 8, -6, 4];
 
-export function Visa({ category, city, homeCity, index }: Props) {
+export function Visa({ category, city, homeCity, countryCode, index }: Props) {
   const angle = STAMP_ANGLES[index % STAMP_ANGLES.length];
+  const Icon = ICONS[category.icon as keyof typeof ICONS] ?? IconTag;
 
   return (
     <article className={styles.visa}>
@@ -47,36 +79,41 @@ export function Visa({ category, city, homeCity, index }: Props) {
 
       <header className={styles.head}>
         <p className="fieldLabel">Category / Catégorie</p>
-        <h2 className={styles.label}>{category.label}</h2>
+        <h2 className={styles.label}>
+          <Icon size={22} stroke={2} className={styles.labelIcon} aria-hidden="true" />
+          {category.label}
+        </h2>
         <p className={styles.unit}>{category.unit}</p>
       </header>
 
       <dl className={styles.rates}>
         <div>
           <dt className="fieldLabel">{homeCity}</dt>
-          <dd className={`${styles.rateWas} tabular`}>{formatEur(category.homeAvgEur)}</dd>
+          <dd className={`${styles.rateWas} tabular`}>
+            {formatEur(category.homeAvgEur)}
+          </dd>
         </div>
         <div>
           <dt className="fieldLabel">{city} average</dt>
-          <dd className={`${styles.rateNow} tabular`}>{formatEur(category.localAvgEur)}</dd>
-        </div>
-        <div>
-          <dt className="fieldLabel">Kept per year</dt>
-          <dd className={`${styles.rateKept} tabular`}>
-            {formatEur(category.annualSavingEur, true)}
+          <dd className={`${styles.rateNow} tabular`}>
+            {formatEur(category.localAvgEur)}
           </dd>
         </div>
       </dl>
 
       <div className={styles.endorsements}>
-        <p className="fieldLabel">Endorsements / Mentions</p>
+        <p className="fieldLabel">Recommended Products</p>
 
+        {/* Already ranked by saving, biggest first, by the catalog (FR-12). */}
         <ul className={styles.places}>
-          {category.products.map((product) => {
-            const average = localAverage(product, city);
-
-            return (
-              <li key={product.name} className={styles.place}>
+          {category.products.slice(0, PLACES).map((product) => (
+            <li key={product.id}>
+              <ProductLink
+                href={product.url}
+                productId={product.id}
+                countryCode={countryCode}
+                className={styles.place}
+              >
                 <span className={styles.placeName}>
                   {product.name}
                   {product.visited && <span className={styles.visited}>visited</span>}
@@ -84,28 +121,28 @@ export function Visa({ category, city, homeCity, index }: Props) {
 
                 <span className={styles.placeMeta}>
                   {product.area} ·{" "}
-                  <span className={styles[average.tone]}>{average.text}</span>
+                  <span className={styles.below}>
+                    {formatPct(product.savingPct)} cheaper than {homeCity}
+                  </span>
                 </span>
 
                 <span className={`${styles.placePrice} tabular`}>
                   {formatEur(product.priceEur)}
-                  <span className={styles.placeLocal}>{formatHuf(product.priceHuf)}</span>
+                  {product.priceLocal && (
+                    <span className={styles.placeLocal}>
+                      {formatMoney(product.priceLocal.amount, product.priceLocal.currency)}
+                    </span>
+                  )}
                 </span>
 
-                <a
-                  className={styles.placeMap}
-                  href={mapsUrl(product.mapsQuery)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <IconMapPin size={14} stroke={2} aria-hidden="true" />
-                  <span className="srOnly">
-                    Open {product.mapsQuery} in Google Maps in a new tab
-                  </span>
-                </a>
-              </li>
-            );
-          })}
+                <span className={styles.placeGo} aria-hidden="true">
+                  <IconExternalLink size={14} stroke={2} />
+                </span>
+
+                <span className="srOnly">Opens in a new tab</span>
+              </ProductLink>
+            </li>
+          ))}
         </ul>
       </div>
 

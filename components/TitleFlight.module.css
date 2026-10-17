@@ -1,0 +1,53 @@
+.wrap {
+  position: relative;
+  /*
+   * Hugs the word, so the plane parks against the end of the title itself
+   * rather than against the far edge of the page.
+   */
+  display: inline-block;
+  /* Room for the plane to cross without clipping against the heading box. */
+  padding: var(--space-2) 0;
+}
+
+/* Above the trail, below the plane: the flight passes through the word. */
+.title {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(64px, 16vw, 96px);
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.trail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 14%;
+  z-index: 0;
+  height: 0;
+  transform-origin: left center;
+  /* currentColor: the header sets the ink, so the trail follows it. */
+  border-top: 2px dashed currentColor;
+  pointer-events: none;
+}
+
+/*
+ * Parked: just above the end of the word, which is where the flight ends and
+ * the plane then stays. The tilt comes from the animation, so that the nose
+ * can settle from its climb.
+ */
+.plane {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  z-index: 2;
+  display: block;
+  margin-top: -16px;
+  opacity: 0;
+  pointer-events: none;
+}

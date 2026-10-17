@@ -1,10 +1,14 @@
+import { connection } from "next/server";
+
 import { COUNTRIES } from "@/lib/server/config";
 import { getProfiles } from "@/lib/server/seed";
+import { handle } from "@/lib/server/http";
 
-/** The demo users, for the sign-in picker. Static seed, so prerendered. */
-export async function GET() {
+/** The demo users, for the sign-in picker. Read from the database per request. */
+async function get() {
+  await connection();
   return Response.json({
-    users: getProfiles().map((profile) => ({
+    users: (await getProfiles()).map((profile) => ({
       id: profile.userId,
       holder: profile.holder,
       homeCity: profile.homeCity,
@@ -12,3 +16,5 @@ export async function GET() {
     })),
   });
 }
+
+export const GET = handle(get);

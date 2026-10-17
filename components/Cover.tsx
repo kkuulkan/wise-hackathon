@@ -94,7 +94,6 @@ export function Cover() {
 
         <p className={styles.label}>
           <b>Travel account</b>
-          <i>Compte de voyage</i>
         </p>
 
         <p className={styles.title}>OtherWise</p>

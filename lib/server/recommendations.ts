@@ -4,14 +4,14 @@ import {
   COUNTRIES,
   DEMO_TODAY,
   DISCLOSURE,
-  FX_AS_OF,
-  FX_PER_EUR,
   HISTORY_WINDOW_DAYS,
   MAX_CATEGORIES,
+  MIN_CATEGORY_SAVING_PCT,
 } from "./config";
-import { queryCatalog } from "./catalog";
+import { queryCatalog, toPrice } from "./catalog";
 import { rankCategories } from "./personalize";
-import { getCategoryDef, getCategoryDefs, getSeedTransactions, type Profile } from "./seed";
+import { getFx } from "./pricedata";
+import { getCategoryDef, getCategoryDefs, getTransactions, type Profile } from "./seed";
 import { getActiveTrip, getConsent, hiddenIds } from "./store";
 import type {
   CatalogSource,
@@ -37,7 +37,11 @@ function overallSource(sources: CatalogSource[]): CatalogSource {
  *   3. Ask the catalog about each, by category and country pair only (FR-15).
  *      The pair is this user's home country and the destination, so two
  *      users in the same city can see different comparisons.
- *   4. Keep the first five that have at least one cheaper product (US-3.3).
+ *   4. Keep the first five that official price levels say are at least
+ *      MIN_CATEGORY_SAVING_PCT cheaper. A personalised category is kept even
+ *      without shelf products (services have none), because the user's own
+ *      spending gives it something concrete to show. A general suggestion
+ *      with no products has nothing to show, so it is skipped (US-3.3).
  *
  * Anything the user thumbed down on this trip is removed (US-8).
  */
@@ -46,17 +50,18 @@ export async function buildRecommendations(
   country: string,
 ): Promise<RecommendationsResponse> {
   const { userId, homeCountry: home } = profile;
-  const trip = getActiveTrip(userId);
+  const [trip, consent, fx] = await Promise.all([getActiveTrip(userId), getConsent(userId), getFx()]);
   // Feedback is per trip. Browsing another country outside a trip has none.
   const tripId = trip && trip.countries[country] ? trip.id : null;
-  const consent = getConsent(userId);
 
   const ranked = consent.personalisation
-    ? rankCategories(getSeedTransactions(userId), getCategoryDefs(), DEMO_TODAY)
+    ? rankCategories(await getTransactions(userId), getCategoryDefs(), DEMO_TODAY)
     : [];
 
-  const hiddenCategories = hiddenIds(userId, tripId, "category");
-  const hiddenProducts = hiddenIds(userId, tripId, "product");
+  const [hiddenCategories, hiddenProducts] = await Promise.all([
+    hiddenIds(userId, tripId, "category"),
+    hiddenIds(userId, tripId, "product"),
+  ]);
 
   const candidates: Candidate[] = ranked.map((entry) => ({ slug: entry.slug, ranked: entry }));
   for (const category of getCategoryDefs()) {
@@ -79,8 +84,22 @@ export async function buildRecommendations(
     if (categories.length >= MAX_CATEGORIES) return;
 
     const answer = answers[index];
+    const { comparison } = answer;
+    if (!comparison || comparison.savingPct < MIN_CATEGORY_SAVING_PCT) return;
+
     const products = answer.products.filter((product) => !hiddenProducts.has(product.id));
-    if (products.length === 0) return;
+    const { ranked } = candidate;
+    if (products.length === 0 && !ranked) return;
+
+    // Their own average purchase at home, and the same spend here at the
+    // official price ratio.
+    const averageEur = ranked ? ranked.spentEur / ranked.transactionCount : 0;
+    const typicalPurchase = ranked
+      ? {
+          home: toPrice(averageEur, home, fx.perEur),
+          local: toPrice(averageEur * (comparison.localIndex / comparison.homeIndex), country, fx.perEur),
+        }
+      : null;
 
     const def = getCategoryDef(candidate.slug);
     sources.push(answer.source);
@@ -88,23 +107,24 @@ export async function buildRecommendations(
       slug: candidate.slug,
       label: def?.label ?? candidate.slug,
       icon: def?.icon ?? "dots",
-      personalised: candidate.ranked !== null,
-      reason: candidate.ranked
+      personalised: ranked !== null,
+      reason: ranked
         ? {
-            spentEur: candidate.ranked.spentEur,
-            transactionCount: candidate.ranked.transactionCount,
+            spentEur: ranked.spentEur,
+            transactionCount: ranked.transactionCount,
             windowDays: HISTORY_WINDOW_DAYS,
           }
         : null,
-      savingPct: Math.round(
-        products.reduce((total, product) => total + product.savingPct, 0) / products.length,
-      ),
+      savingPct: comparison.savingPct,
+      comparison,
+      typicalPurchase,
+      listPriceCheck: answer.listPriceCheck,
       products,
     });
   });
 
   const localCurrency = COUNTRIES[country].currency;
-  const rate = FX_PER_EUR[localCurrency];
+  const rate = fx.perEur[localCurrency];
 
   return {
     country: { code: country, name: COUNTRIES[country].name },
@@ -113,7 +133,7 @@ export async function buildRecommendations(
     personalised: categories.some((category) => category.personalised),
     categories,
     disclosure: DISCLOSURE,
-    fx: localCurrency !== "EUR" && rate ? { pair: `EUR/${localCurrency}`, rate, asOf: FX_AS_OF } : null,
+    fx: localCurrency !== "EUR" && rate ? { pair: `EUR/${localCurrency}`, rate, asOf: fx.asOf } : null,
     source: sources.length > 0 ? overallSource(sources) : "live",
     generatedAt: new Date().toISOString(),
   };

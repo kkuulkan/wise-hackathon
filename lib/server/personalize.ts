@@ -21,8 +21,10 @@ function dayNumber(isoDate: string): number {
  * daily €4 coffee comparable. Where the purchase happened is ignored (US-3.4):
  * a coffee bought in Barcelona still says "this person buys coffee".
  *
- * Sensitive and non-actionable categories never enter the ranking, so rent
- * cannot crowd out groceries and pharmacy spend is never surfaced.
+ * Only everyday categories a traveller can act on enter the ranking:
+ * sensitive and non-actionable ones never do (rent cannot crowd out
+ * groceries, pharmacy spend is never surfaced), and neither do local-only
+ * ones, because a cheaper metro ticket or café is bought either way.
  */
 export function rankCategories(
   transactions: SeedTransaction[],
@@ -30,7 +32,9 @@ export function rankCategories(
   today: string,
 ): RankedCategory[] {
   const eligible = new Set(
-    categories.filter((category) => category.kind === "everyday").map((category) => category.slug),
+    categories
+      .filter((category) => category.kind === "everyday" && category.buyWhere !== "local-only")
+      .map((category) => category.slug),
   );
   const end = dayNumber(today);
   const start = end - HISTORY_WINDOW_DAYS;

@@ -36,48 +36,35 @@ export type FxRate = {
   asOf: string;
 };
 
-/** A specific place to go, as it sits in the seed data. */
-export type RawProduct = {
+/** One recommended product, as the catalog compared it for this country pair. */
+export type Product = {
+  /** Catalog id. Needed to report the product back, as feedback does. */
+  id: string;
   name: string;
   area: string;
   priceEur: number;
-  priceHuf: number;
-  mapsQuery: string;
+  /** The same price in the destination's own currency, or null in the euro area. */
+  priceLocal: { amount: number; currency: CurrencyCode } | null;
+  /** Percent cheaper here than at home. Always positive: dearer items are dropped. */
+  savingPct: number;
+  /** Where tapping it goes. Built by the catalog and free of personal data. */
+  url: string;
   /** True when the account already has a transaction here. */
   visited?: boolean;
 };
 
-/** A spending category, as it sits in the seed data. */
-export type RawCategory = {
+/** A spending category with its products and savings. */
+export type Category = {
   slug: string;
   label: string;
+  /** Icon name from the bank's taxonomy, mapped to a glyph at render time. */
+  icon: string;
   unit: string;
   homeAvgEur: number;
   localAvgEur: number;
   purchasesPerYear: number;
   source: string;
-  products: RawProduct[];
-};
-
-export type RecommendationData = {
-  city: string;
-  countryCode: string;
-  comparedTo: { city: string; countryCode: string };
-  fxRate: FxRate;
-  categories: RawCategory[];
-};
-
-/** A product with its comparison against the local average computed. */
-export type Product = RawProduct & {
-  /** Percent below the local average. Negative means above it. */
-  vsLocalAvgPct: number;
-};
-
-/** A category with its savings and ranking weight computed. */
-export type Category = Omit<RawCategory, "products"> & {
   products: Product[];
   /** Percent cheaper here than at home. */
   savingPct: number;
-  /** Money not spent over a year at the user's own purchase frequency. */
-  annualSavingEur: number;
 };

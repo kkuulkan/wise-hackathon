@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 
 import { queryCatalog } from "@/lib/server/catalog";
-import { badRequest, parseCountry } from "@/lib/server/http";
+import { badRequest, parseCountry, handle } from "@/lib/server/http";
 import { getCategoryDef } from "@/lib/server/seed";
 
 /**
@@ -13,7 +13,7 @@ import { getCategoryDef } from "@/lib/server/seed";
  */
 const ALLOWED = ["category", "from", "to"];
 
-export async function GET(request: NextRequest) {
+async function get(request: NextRequest) {
   const params = request.nextUrl.searchParams;
 
   const extra = [...params.keys()].filter((key) => !ALLOWED.includes(key));
@@ -30,3 +30,5 @@ export async function GET(request: NextRequest) {
 
   return Response.json(await queryCatalog({ category, from, to }));
 }
+
+export const GET = handle(get);

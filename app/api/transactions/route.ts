@@ -1,13 +1,13 @@
-import { getSeedTransactions } from "@/lib/server/seed";
+import { getTransactions } from "@/lib/server/seed";
 import { requireUser } from "@/lib/server/session";
+import { handle } from "@/lib/server/http";
 
-/** The signed-in user's statement, newest first. */
-export async function GET() {
+/** The signed-in user's statement, newest first (ordered by the database). */
+async function get() {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
-  const transactions = [...getSeedTransactions(profile.userId)].sort((a, b) =>
-    b.date.localeCompare(a.date),
-  );
-  return Response.json({ transactions });
+  return Response.json({ transactions: await getTransactions(profile.userId) });
 }
+
+export const GET = handle(get);

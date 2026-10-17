@@ -1,5 +1,5 @@
 {
-  "_source": "Illustrative 90-day statements for the two demo users, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Each includes rows the backend must ignore (rent, insurance, pharmacy, gambling) so the exclusions are visible.",
+  "_source": "Illustrative 90-day statements for the three demo users, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Each includes rows the backend must ignore (rent, insurance, pharmacy, gambling) so the exclusions are visible. Café visits are categorised 'cafe' (bought locally either way), distinct from 'coffee' bought to take home.",
   "transactions": {
     "aoife": [
       {
@@ -32,7 +32,7 @@
         "id": "ab-060",
         "date": "2026-10-08",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -58,7 +58,7 @@
         "id": "ab-058",
         "date": "2026-10-05",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -110,7 +110,7 @@
         "id": "ab-054",
         "date": "2026-10-01",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -136,7 +136,7 @@
         "id": "ab-052",
         "date": "2026-09-28",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -188,7 +188,7 @@
         "id": "ab-048",
         "date": "2026-09-24",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -214,7 +214,7 @@
         "id": "ab-046",
         "date": "2026-09-21",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -253,7 +253,7 @@
         "id": "ab-043",
         "date": "2026-09-17",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -266,7 +266,7 @@
         "id": "ab-042",
         "date": "2026-09-14",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -305,7 +305,7 @@
         "id": "ab-039",
         "date": "2026-09-10",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -318,7 +318,7 @@
         "id": "ab-038",
         "date": "2026-09-07",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -383,7 +383,7 @@
         "id": "ab-033",
         "date": "2026-09-03",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -409,7 +409,7 @@
         "id": "ab-031",
         "date": "2026-08-31",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -448,7 +448,7 @@
         "id": "ab-028",
         "date": "2026-08-27",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -461,7 +461,7 @@
         "id": "ab-027",
         "date": "2026-08-24",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -500,7 +500,7 @@
         "id": "ab-024",
         "date": "2026-08-20",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -526,7 +526,7 @@
         "id": "ab-022",
         "date": "2026-08-17",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -565,7 +565,7 @@
         "id": "ab-019",
         "date": "2026-08-13",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -578,7 +578,7 @@
         "id": "ab-018",
         "date": "2026-08-10",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -617,7 +617,7 @@
         "id": "ab-015",
         "date": "2026-08-06",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -656,7 +656,7 @@
         "id": "ab-012",
         "date": "2026-08-03",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -721,7 +721,7 @@
         "id": "ab-007",
         "date": "2026-07-30",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -734,7 +734,7 @@
         "id": "ab-006",
         "date": "2026-07-27",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -773,7 +773,7 @@
         "id": "ab-003",
         "date": "2026-07-23",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -786,7 +786,7 @@
         "id": "ab-002",
         "date": "2026-07-20",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -811,420 +811,17 @@
     ],
     "jonas": [
       {
-        "id": "jk-034",
-        "date": "2026-10-16",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
-      },
-      {
-        "id": "jk-033",
-        "date": "2026-10-11",
-        "merchant": "Uniqlo Tauentzienstraße",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 49.9,
-          "currency": "EUR"
-        },
-        "amountEur": 49.9
-      },
-      {
-        "id": "jk-032",
-        "date": "2026-10-09",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 24,
-          "currency": "EUR"
-        },
-        "amountEur": 24
-      },
-      {
-        "id": "jk-031",
-        "date": "2026-10-08",
-        "merchant": "Saturn Berlin",
-        "category": "electronics",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 59,
-          "currency": "EUR"
-        },
-        "amountEur": 59
-      },
-      {
-        "id": "jk-030",
-        "date": "2026-10-04",
-        "merchant": "Lidl Neukölln",
-        "category": "groceries",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 19.8,
-          "currency": "EUR"
-        },
-        "amountEur": 19.8
-      },
-      {
-        "id": "jk-029",
-        "date": "2026-10-01",
-        "merchant": "BVG Deutschlandticket",
-        "category": "transport",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 58,
-          "currency": "EUR"
-        },
-        "amountEur": 58
-      },
-      {
-        "id": "jk-028",
-        "date": "2026-10-01",
-        "merchant": "Hausverwaltung Neukölln",
-        "category": "rent",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 780,
-          "currency": "EUR"
-        },
-        "amountEur": 780
-      },
-      {
-        "id": "jk-027",
-        "date": "2026-09-28",
-        "merchant": "Mustafa's Gemüse Kebap",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 14.5,
-          "currency": "EUR"
-        },
-        "amountEur": 14.5
-      },
-      {
-        "id": "jk-026",
-        "date": "2026-09-28",
-        "merchant": "Telekom Prepaid",
-        "category": "telecom",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-025",
-        "date": "2026-09-24",
-        "merchant": "Cyberport Berlin",
-        "category": "electronics",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 34.99,
-          "currency": "EUR"
-        },
-        "amountEur": 34.99
-      },
-      {
-        "id": "jk-024",
-        "date": "2026-09-20",
-        "merchant": "Tipico Sportwetten",
-        "category": "gambling",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 15,
-          "currency": "EUR"
-        },
-        "amountEur": 15
-      },
-      {
-        "id": "jk-023",
-        "date": "2026-09-19",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
-      },
-      {
-        "id": "jk-022",
-        "date": "2026-09-17",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 31,
-          "currency": "EUR"
-        },
-        "amountEur": 31
-      },
-      {
-        "id": "jk-021",
-        "date": "2026-09-14",
-        "merchant": "Snipes Friedrichstraße",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 120,
-          "currency": "EUR"
-        },
-        "amountEur": 120
-      },
-      {
-        "id": "jk-020",
-        "date": "2026-09-06",
-        "merchant": "Mustafa's Gemüse Kebap",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 18,
-          "currency": "EUR"
-        },
-        "amountEur": 18
-      },
-      {
-        "id": "jk-019",
-        "date": "2026-09-03",
+        "id": "jk-001",
+        "date": "2026-07-22",
         "merchant": "MediaMarkt Alexanderplatz",
         "category": "electronics",
         "city": "Berlin",
         "countryCode": "DE",
         "amount": {
-          "value": 129,
+          "value": 89,
           "currency": "EUR"
         },
-        "amountEur": 129
-      },
-      {
-        "id": "jk-018",
-        "date": "2026-09-01",
-        "merchant": "BVG Deutschlandticket",
-        "category": "transport",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 58,
-          "currency": "EUR"
-        },
-        "amountEur": 58
-      },
-      {
-        "id": "jk-017",
-        "date": "2026-09-01",
-        "merchant": "Hausverwaltung Neukölln",
-        "category": "rent",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 780,
-          "currency": "EUR"
-        },
-        "amountEur": 780
-      },
-      {
-        "id": "jk-016",
-        "date": "2026-08-30",
-        "merchant": "Lidl Neukölln",
-        "category": "groceries",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 23.4,
-          "currency": "EUR"
-        },
-        "amountEur": 23.4
-      },
-      {
-        "id": "jk-015",
-        "date": "2026-08-28",
-        "merchant": "Telekom Prepaid",
-        "category": "telecom",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-014",
-        "date": "2026-08-26",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 27.5,
-          "currency": "EUR"
-        },
-        "amountEur": 27.5
-      },
-      {
-        "id": "jk-013",
-        "date": "2026-08-23",
-        "merchant": "Zalando",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 79.95,
-          "currency": "EUR"
-        },
-        "amountEur": 79.95
-      },
-      {
-        "id": "jk-012",
-        "date": "2026-08-22",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
-      },
-      {
-        "id": "jk-011",
-        "date": "2026-08-16",
-        "merchant": "Tipico Sportwetten",
-        "category": "gambling",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-010",
-        "date": "2026-08-15",
-        "merchant": "Mustafa's Gemüse Kebap",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 13.9,
-          "currency": "EUR"
-        },
-        "amountEur": 13.9
-      },
-      {
-        "id": "jk-009",
-        "date": "2026-08-11",
-        "merchant": "Saturn Berlin",
-        "category": "electronics",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 42,
-          "currency": "EUR"
-        },
-        "amountEur": 42
-      },
-      {
-        "id": "jk-008",
-        "date": "2026-08-04",
-        "merchant": "Burgermeister",
-        "category": "dining-out",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 22,
-          "currency": "EUR"
-        },
-        "amountEur": 22
-      },
-      {
-        "id": "jk-007",
-        "date": "2026-08-01",
-        "merchant": "BVG Deutschlandticket",
-        "category": "transport",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 58,
-          "currency": "EUR"
-        },
-        "amountEur": 58
-      },
-      {
-        "id": "jk-006",
-        "date": "2026-08-01",
-        "merchant": "Hausverwaltung Neukölln",
-        "category": "rent",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 780,
-          "currency": "EUR"
-        },
-        "amountEur": 780
-      },
-      {
-        "id": "jk-005",
-        "date": "2026-07-29",
-        "merchant": "Snipes Friedrichstraße",
-        "category": "sneakers-clothing",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 100,
-          "currency": "EUR"
-        },
-        "amountEur": 100
-      },
-      {
-        "id": "jk-004",
-        "date": "2026-07-28",
-        "merchant": "Telekom Prepaid",
-        "category": "telecom",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 20,
-          "currency": "EUR"
-        },
-        "amountEur": 20
-      },
-      {
-        "id": "jk-003",
-        "date": "2026-07-25",
-        "merchant": "Barber Shop Kreuzberg",
-        "category": "personal-care",
-        "city": "Berlin",
-        "countryCode": "DE",
-        "amount": {
-          "value": 28,
-          "currency": "EUR"
-        },
-        "amountEur": 28
+        "amountEur": 89
       },
       {
         "id": "jk-002",
@@ -1240,17 +837,968 @@
         "amountEur": 16.5
       },
       {
-        "id": "jk-001",
-        "date": "2026-07-22",
+        "id": "jk-003",
+        "date": "2026-07-25",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-004",
+        "date": "2026-07-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-005",
+        "date": "2026-07-29",
+        "merchant": "Snipes Friedrichstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 100,
+          "currency": "EUR"
+        },
+        "amountEur": 100
+      },
+      {
+        "id": "jk-006",
+        "date": "2026-08-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-007",
+        "date": "2026-08-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-008",
+        "date": "2026-08-04",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 22,
+          "currency": "EUR"
+        },
+        "amountEur": 22
+      },
+      {
+        "id": "jk-009",
+        "date": "2026-08-11",
+        "merchant": "Saturn Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 42,
+          "currency": "EUR"
+        },
+        "amountEur": 42
+      },
+      {
+        "id": "jk-010",
+        "date": "2026-08-15",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 13.9,
+          "currency": "EUR"
+        },
+        "amountEur": 13.9
+      },
+      {
+        "id": "jk-011",
+        "date": "2026-08-16",
+        "merchant": "Tipico Sportwetten",
+        "category": "gambling",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-012",
+        "date": "2026-08-22",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-013",
+        "date": "2026-08-23",
+        "merchant": "Zalando",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 79.95,
+          "currency": "EUR"
+        },
+        "amountEur": 79.95
+      },
+      {
+        "id": "jk-014",
+        "date": "2026-08-26",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 27.5,
+          "currency": "EUR"
+        },
+        "amountEur": 27.5
+      },
+      {
+        "id": "jk-015",
+        "date": "2026-08-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-016",
+        "date": "2026-08-30",
+        "merchant": "Lidl Neukölln",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 23.4,
+          "currency": "EUR"
+        },
+        "amountEur": 23.4
+      },
+      {
+        "id": "jk-017",
+        "date": "2026-09-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-018",
+        "date": "2026-09-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-019",
+        "date": "2026-09-03",
         "merchant": "MediaMarkt Alexanderplatz",
         "category": "electronics",
         "city": "Berlin",
         "countryCode": "DE",
         "amount": {
-          "value": 89,
+          "value": 129,
           "currency": "EUR"
         },
-        "amountEur": 89
+        "amountEur": 129
+      },
+      {
+        "id": "jk-020",
+        "date": "2026-09-06",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 18,
+          "currency": "EUR"
+        },
+        "amountEur": 18
+      },
+      {
+        "id": "jk-021",
+        "date": "2026-09-14",
+        "merchant": "Snipes Friedrichstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 120,
+          "currency": "EUR"
+        },
+        "amountEur": 120
+      },
+      {
+        "id": "jk-022",
+        "date": "2026-09-17",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 31,
+          "currency": "EUR"
+        },
+        "amountEur": 31
+      },
+      {
+        "id": "jk-023",
+        "date": "2026-09-19",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-024",
+        "date": "2026-09-20",
+        "merchant": "Tipico Sportwetten",
+        "category": "gambling",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 15,
+          "currency": "EUR"
+        },
+        "amountEur": 15
+      },
+      {
+        "id": "jk-025",
+        "date": "2026-09-24",
+        "merchant": "Cyberport Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 34.99,
+          "currency": "EUR"
+        },
+        "amountEur": 34.99
+      },
+      {
+        "id": "jk-026",
+        "date": "2026-09-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-027",
+        "date": "2026-09-28",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 14.5,
+          "currency": "EUR"
+        },
+        "amountEur": 14.5
+      },
+      {
+        "id": "jk-028",
+        "date": "2026-10-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-029",
+        "date": "2026-10-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-030",
+        "date": "2026-10-04",
+        "merchant": "Lidl Neukölln",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 19.8,
+          "currency": "EUR"
+        },
+        "amountEur": 19.8
+      },
+      {
+        "id": "jk-038",
+        "date": "2026-10-06",
+        "merchant": "BVG Tageskarte",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 9.9,
+          "currency": "EUR"
+        },
+        "amountEur": 9.9
+      },
+      {
+        "id": "jk-037",
+        "date": "2026-10-07",
+        "merchant": "The Barn Kaffeerösterei",
+        "category": "coffee",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 10.8,
+          "currency": "EUR"
+        },
+        "amountEur": 10.8
+      },
+      {
+        "id": "jk-031",
+        "date": "2026-10-08",
+        "merchant": "Saturn Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 59,
+          "currency": "EUR"
+        },
+        "amountEur": 59
+      },
+      {
+        "id": "jk-032",
+        "date": "2026-10-09",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 24,
+          "currency": "EUR"
+        },
+        "amountEur": 24
+      },
+      {
+        "id": "jk-033",
+        "date": "2026-10-11",
+        "merchant": "Uniqlo Tauentzienstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 49.9,
+          "currency": "EUR"
+        },
+        "amountEur": 49.9
+      },
+      {
+        "id": "jk-035",
+        "date": "2026-10-12",
+        "merchant": "REWE Warschauer Straße",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 31.8,
+          "currency": "EUR"
+        },
+        "amountEur": 31.8
+      },
+      {
+        "id": "jk-036",
+        "date": "2026-10-13",
+        "merchant": "Mustafas Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 18.5,
+          "currency": "EUR"
+        },
+        "amountEur": 18.5
+      },
+      {
+        "id": "jk-034",
+        "date": "2026-10-16",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      }
+    ],
+    "saoirse": [
+      {
+        "id": "sn-038",
+        "date": "2026-10-14",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-037",
+        "date": "2026-10-12",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-036",
+        "date": "2026-10-11",
+        "merchant": "GAME Stephen's Green",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 69.99,
+          "currency": "EUR"
+        },
+        "amountEur": 69.99
+      },
+      {
+        "id": "sn-035",
+        "date": "2026-10-08",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-034",
+        "date": "2026-10-06",
+        "merchant": "Steam",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 19.99,
+          "currency": "EUR"
+        },
+        "amountEur": 19.99
+      },
+      {
+        "id": "sn-033",
+        "date": "2026-10-03",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 29.3,
+          "currency": "EUR"
+        },
+        "amountEur": 29.3
+      },
+      {
+        "id": "sn-032",
+        "date": "2026-10-02",
+        "merchant": "Amazon.ie",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 49.99,
+          "currency": "EUR"
+        },
+        "amountEur": 49.99
+      },
+      {
+        "id": "sn-031",
+        "date": "2026-10-01",
+        "merchant": "Xbox Game Pass",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 14.99,
+          "currency": "EUR"
+        },
+        "amountEur": 14.99
+      },
+      {
+        "id": "sn-030",
+        "date": "2026-10-01",
+        "merchant": "Phibsborough Flatshare",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1200.0,
+          "currency": "EUR"
+        },
+        "amountEur": 1200.0
+      },
+      {
+        "id": "sn-029",
+        "date": "2026-09-28",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-028",
+        "date": "2026-09-28",
+        "merchant": "GoMo",
+        "category": "telecom",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 15.0,
+          "currency": "EUR"
+        },
+        "amountEur": 15.0
+      },
+      {
+        "id": "sn-027",
+        "date": "2026-09-23",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 27.6,
+          "currency": "EUR"
+        },
+        "amountEur": 27.6
+      },
+      {
+        "id": "sn-026",
+        "date": "2026-09-22",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-025",
+        "date": "2026-09-19",
+        "merchant": "JD Sports Henry St",
+        "category": "sneakers-clothing",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 79.99,
+          "currency": "EUR"
+        },
+        "amountEur": 79.99
+      },
+      {
+        "id": "sn-024",
+        "date": "2026-09-15",
+        "merchant": "Currys Blanchardstown",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 119.0,
+          "currency": "EUR"
+        },
+        "amountEur": 119.0
+      },
+      {
+        "id": "sn-023",
+        "date": "2026-09-13",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 33.8,
+          "currency": "EUR"
+        },
+        "amountEur": 33.8
+      },
+      {
+        "id": "sn-022",
+        "date": "2026-09-09",
+        "merchant": "Steam",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 29.99,
+          "currency": "EUR"
+        },
+        "amountEur": 29.99
+      },
+      {
+        "id": "sn-021",
+        "date": "2026-09-03",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 30.1,
+          "currency": "EUR"
+        },
+        "amountEur": 30.1
+      },
+      {
+        "id": "sn-020",
+        "date": "2026-09-03",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-019",
+        "date": "2026-09-01",
+        "merchant": "Xbox Game Pass",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 14.99,
+          "currency": "EUR"
+        },
+        "amountEur": 14.99
+      },
+      {
+        "id": "sn-018",
+        "date": "2026-09-01",
+        "merchant": "Phibsborough Flatshare",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1200.0,
+          "currency": "EUR"
+        },
+        "amountEur": 1200.0
+      },
+      {
+        "id": "sn-017",
+        "date": "2026-08-31",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-016",
+        "date": "2026-08-29",
+        "merchant": "Amazon.ie",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 89.99,
+          "currency": "EUR"
+        },
+        "amountEur": 89.99
+      },
+      {
+        "id": "sn-015",
+        "date": "2026-08-28",
+        "merchant": "GoMo",
+        "category": "telecom",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 15.0,
+          "currency": "EUR"
+        },
+        "amountEur": 15.0
+      },
+      {
+        "id": "sn-014",
+        "date": "2026-08-24",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 26.5,
+          "currency": "EUR"
+        },
+        "amountEur": 26.5
+      },
+      {
+        "id": "sn-013",
+        "date": "2026-08-20",
+        "merchant": "PlayStation Store",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 59.99,
+          "currency": "EUR"
+        },
+        "amountEur": 59.99
+      },
+      {
+        "id": "sn-012",
+        "date": "2026-08-14",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 34.2,
+          "currency": "EUR"
+        },
+        "amountEur": 34.2
+      },
+      {
+        "id": "sn-011",
+        "date": "2026-08-14",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-010",
+        "date": "2026-08-12",
+        "merchant": "Smyths Toys Jervis",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 64.99,
+          "currency": "EUR"
+        },
+        "amountEur": 64.99
+      },
+      {
+        "id": "sn-009",
+        "date": "2026-08-04",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 28.9,
+          "currency": "EUR"
+        },
+        "amountEur": 28.9
+      },
+      {
+        "id": "sn-008",
+        "date": "2026-08-03",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 20.0,
+          "currency": "EUR"
+        },
+        "amountEur": 20.0
+      },
+      {
+        "id": "sn-007",
+        "date": "2026-08-01",
+        "merchant": "Xbox Game Pass",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 14.99,
+          "currency": "EUR"
+        },
+        "amountEur": 14.99
+      },
+      {
+        "id": "sn-006",
+        "date": "2026-08-01",
+        "merchant": "Phibsborough Flatshare",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1200.0,
+          "currency": "EUR"
+        },
+        "amountEur": 1200.0
+      },
+      {
+        "id": "sn-005",
+        "date": "2026-07-30",
+        "merchant": "Steam",
+        "category": "digital-games",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 19.99,
+          "currency": "EUR"
+        },
+        "amountEur": 19.99
+      },
+      {
+        "id": "sn-004",
+        "date": "2026-07-28",
+        "merchant": "GoMo",
+        "category": "telecom",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 15.0,
+          "currency": "EUR"
+        },
+        "amountEur": 15.0
+      },
+      {
+        "id": "sn-003",
+        "date": "2026-07-27",
+        "merchant": "3fe Coffee",
+        "category": "cafe",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.5,
+          "currency": "EUR"
+        },
+        "amountEur": 4.5
+      },
+      {
+        "id": "sn-002",
+        "date": "2026-07-25",
+        "merchant": "Tesco Phibsborough",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 31.4,
+          "currency": "EUR"
+        },
+        "amountEur": 31.4
+      },
+      {
+        "id": "sn-001",
+        "date": "2026-07-24",
+        "merchant": "Currys Blanchardstown",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 129.99,
+          "currency": "EUR"
+        },
+        "amountEur": 129.99
       }
     ]
   }

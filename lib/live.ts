@@ -2,13 +2,17 @@ import "server-only";
 
 import { connection } from "next/server";
 
-import { COUNTRIES, DEMO_TODAY, FX_PER_EUR, HISTORY_WINDOW_DAYS } from "@/lib/server/config";
+import { COUNTRIES, DEMO_TODAY, HISTORY_WINDOW_DAYS } from "@/lib/server/config";
 import { buildRecommendations } from "@/lib/server/recommendations";
-import { getCategoryDef, getSeedTransactions, type Profile } from "@/lib/server/seed";
+import { getCategoryDef, getTransactions, type Profile } from "@/lib/server/seed";
 import { currentUser } from "@/lib/server/session";
-import { getActiveTrip } from "@/lib/server/store";
+import { getActiveTrip, getConsent } from "@/lib/server/store";
 import { isEligiblePair } from "@/lib/server/trips";
-import type { RecommendationCategory, RecommendationsResponse } from "@/lib/server/types";
+import type {
+  Consent,
+  RecommendationCategory,
+  RecommendationsResponse,
+} from "@/lib/server/types";
 
 import type { Account, Category, CurrencyCode, Transaction } from "./types";
 
@@ -33,6 +37,8 @@ export type LiveSession = {
   account: Account;
   /** Country of the active trip, or null at home. */
   tripCountry: string | null;
+  /** Their answer to the consent question, and whether they have given one. */
+  consent: Consent;
 };
 
 /** The signed-in user as the frontend's Account, or null when signed out. */
@@ -43,7 +49,7 @@ export async function getLiveSession(): Promise<LiveSession | null> {
   const profile = await currentUser();
   if (!profile) return null;
 
-  const trip = getActiveTrip(profile.userId);
+  const trip = await getActiveTrip(profile.userId);
   const here = trip?.currentCountry ?? profile.homeCountry;
   const away = Boolean(trip) && here !== profile.homeCountry;
 
@@ -63,7 +69,12 @@ export async function getLiveSession(): Promise<LiveSession | null> {
     })),
   };
 
-  return { profile, account, tripCountry: away ? here : null };
+  return {
+    profile,
+    account,
+    tripCountry: away ? here : null,
+    consent: await getConsent(profile.userId),
+  };
 }
 
 /**
@@ -71,54 +82,59 @@ export async function getLiveSession(): Promise<LiveSession | null> {
  * the existing payments list, which looks labels up in the old seed, shows
  * "Skincare & beauty" rather than "skincare-beauty".
  */
-export function getLiveTransactions(profile: Profile): Transaction[] {
-  return [...getSeedTransactions(profile.userId)]
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .map((transaction) => ({
+export async function getLiveTransactions(profile: Profile): Promise<Transaction[]> {
+  return (await getTransactions(profile.userId)).map((transaction) => ({
       ...transaction,
       category: getCategoryDef(transaction.category)?.label ?? transaction.category,
       amount: { ...transaction.amount, currency: transaction.amount.currency as CurrencyCode },
     }));
 }
 
-function toCategory(
-  category: RecommendationCategory,
-  country: string,
-  homeCity: string,
-): Category {
-  const { products } = category;
-  const mean = (values: number[]) => values.reduce((total, value) => total + value, 0) / values.length;
-  const updated = products.map((product) => product.priceUpdatedAt).sort().at(-1);
-  const hufPerEur = FX_PER_EUR.HUF;
-
-  // Annualised: what this user spent here in 90 days, scaled to a year, at
-  // the category's saving. Default-set categories have no spend, so no claim.
-  const annualSavingEur = category.reason
-    ? round2(category.reason.spentEur * YEAR_OVER_WINDOW * (category.savingPct / 100))
-    : 0;
+function toCategory(category: RecommendationCategory, homeCity: string): Category {
+  const { products, comparison, typicalPurchase } = category;
+  const mean = (values: number[]) =>
+    values.length ? values.reduce((total, value) => total + value, 0) / values.length : 0;
 
   return {
     slug: category.slug,
     label: category.label,
-    unit: category.personalised ? "From your own spending" : "General suggestion",
-    homeAvgEur: round2(mean(products.map((product) => product.homePrice.amount))),
-    localAvgEur: round2(mean(products.map((product) => product.localPrice.amount))),
+    icon: category.icon,
+    unit: typicalPurchase ? "Your average purchase" : "Typical shelf prices",
+    // The visa's two rates: the user's own average purchase when there is one
+    // (categories such as haircuts have no shelf products), otherwise the mean
+    // of the real products shown.
+    homeAvgEur: round2(typicalPurchase?.home.amount ?? mean(products.map((p) => p.homePrice.amount))),
+    localAvgEur: round2(typicalPurchase?.local.amount ?? mean(products.map((p) => p.localPrice.amount))),
     purchasesPerYear: category.reason
       ? Math.round(category.reason.transactionCount * YEAR_OVER_WINDOW)
       : 0,
-    source: `Approximate prices compared with ${homeCity}, last updated ${updated}.`,
+    source:
+      `${comparison.indexLabel}: price level ${comparison.localIndex} here vs ${comparison.homeIndex} in ${homeCity} (Eurostat ${comparison.year}, EU = 100).` +
+      (products.some((p) => p.evidence.source === "National statistics")
+        ? " Named items are official national averages in both countries."
+        : "") +
+      (category.listPriceCheck
+        ? ` ${category.listPriceCheck.brand}'s official prices for ${category.listPriceCheck.itemsCompared} identical items: median ${Math.abs(category.listPriceCheck.medianPct)}% ${category.listPriceCheck.medianPct > 0 ? "lower" : category.listPriceCheck.medianPct < 0 ? "higher" : "difference"} here${category.listPriceCheck.itemsCheaper ? `, ${category.listPriceCheck.itemsCheaper} at least 5% cheaper` : ", so the brand itself charges about the same"}.`
+        : "") +
+      (products.some((p) => p.evidence.source === "Open Prices")
+        ? " Shelf products are real Open Prices sightings; their home prices are estimates."
+        : ""),
     savingPct: category.savingPct,
-    annualSavingEur,
     products: products.map((product) => ({
+      id: product.id,
       name: product.name,
       area: product.description,
       priceEur: product.localPrice.amount,
-      // The visa always prints a forint line; outside Hungary it is the
-      // converted figure at the seeded rate.
-      priceHuf: product.localPrice.local?.amount ?? Math.round(product.localPrice.amount * hufPerEur),
-      mapsQuery: `${product.name} ${countryName(country)}`,
-      // Catalog prices are typical local prices, so each one is the local average.
-      vsLocalAvgPct: 0,
+      // Present only where the destination does not use the euro, so a
+      // Portuguese price is one figure and a Hungarian one is two.
+      priceLocal: product.localPrice.local
+        ? {
+            amount: product.localPrice.local.amount,
+            currency: product.localPrice.local.currency as CurrencyCode,
+          }
+        : null,
+      savingPct: product.savingPct,
+      url: product.url,
     })),
   };
 }
@@ -149,7 +165,7 @@ export async function getLiveRecommendations(
     ok: true,
     response,
     categories: response.categories.map((category) =>
-      toCategory(category, country, session.profile.homeCity),
+      toCategory(category, session.profile.homeCity),
     ),
   };
 }

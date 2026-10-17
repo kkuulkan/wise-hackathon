@@ -48,7 +48,7 @@
 .turningCity {
   margin-top: var(--space-2);
   font-family: var(--font-display);
-  font-size: clamp(36px, 11vw, 48px);
+  font-size: clamp(48px, 13vw, 62px);
   font-weight: 700;
   font-stretch: 112%;
   line-height: 1;
@@ -70,10 +70,49 @@
   );
 }
 
+/*
+ * The binding, immediately left of the cards and running the whole height of
+ * the stack so it reads as one booklet holding every card.
+ */
 .visas {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  padding-left: var(--space-8);
+}
+
+.visas::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 6px;
+  width: 3px;
+  border-radius: 2px;
+  /* Beige: the stack sits on the navy body, so a navy board would vanish. */
+  background: var(--page);
+}
+
+/* Stitching, threaded just inside the board. */
+.visas::after {
+  content: "";
+  position: absolute;
+  inset: var(--space-2) auto var(--space-2) 14px;
+  width: 1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(240, 240, 182, 0.5) 0 7px,
+    transparent 7px 14px
+  );
+}
+
+@media (max-width: 560px) {
+  .visas {
+    padding-left: var(--space-6);
+  }
+
+  .visas::after {
+    left: 12px;
+  }
 }
 
 .visa {
@@ -86,7 +125,8 @@
   border: 2px solid var(--ink);
   border-radius: var(--radius-card);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 17px;
+  font-weight: 600;
   color: var(--muted);
 }
 

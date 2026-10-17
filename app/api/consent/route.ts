@@ -1,12 +1,12 @@
-import { badRequest, readObject, unknownKeys } from "@/lib/server/http";
+import { badRequest, readObject, unknownKeys, handle } from "@/lib/server/http";
 import { requireUser } from "@/lib/server/session";
 import { getConsent, recordEvent, setConsent } from "@/lib/server/store";
 
 /** GET the signed-in user's consent (US-6.3). */
-export async function GET() {
+async function get() {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
-  return Response.json(getConsent(profile.userId));
+  return Response.json(await getConsent(profile.userId));
 }
 
 /**
@@ -16,7 +16,7 @@ export async function GET() {
  * Withdrawing personalisation means the next recommendations response uses
  * no transaction data at all (US-6.2).
  */
-export async function PUT(request: Request) {
+async function put(request: Request) {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
@@ -30,17 +30,26 @@ export async function PUT(request: Request) {
     if (key in body && typeof body[key] !== "boolean") return badRequest(`${key} must be true or false.`);
   }
 
-  const before = getConsent(profile.userId);
+  const before = await getConsent(profile.userId);
   const after = {
     personalisation: (body.personalisation as boolean | undefined) ?? before.personalisation,
     notifications: (body.notifications as boolean | undefined) ?? before.notifications,
+    // Writing here at all means they have answered, whichever way (US-6.1).
+    decided: true,
     updatedAt: new Date().toISOString(),
   };
-  setConsent(profile.userId, after);
+  await setConsent(profile.userId, after);
 
   const wasOn = before.personalisation && before.notifications;
   const isOn = after.personalisation && after.notifications;
-  if (wasOn !== isOn) recordEvent({ type: isOn ? "opt_in" : "opt_out", at: after.updatedAt });
+  // The first answer is always worth logging, even when it grants exactly what
+  // the defaults already allowed and so changes no value (FR-23).
+  if (!before.decided || wasOn !== isOn) {
+    await recordEvent({ type: isOn ? "opt_in" : "opt_out", at: after.updatedAt });
+  }
 
   return Response.json({ ...after, confirmation: "Your choice is saved and applies right away." });
 }
+
+export const GET = handle(get);
+export const PUT = handle(put);

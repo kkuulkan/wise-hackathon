@@ -1,168 +1,269 @@
 import "server-only";
 
+import { and, asc, eq, isNull, sql } from "drizzle-orm";
+import { cache } from "react";
+
+import { db, schema } from "./db";
 import type {
   AnalyticsEvent,
   CatalogResponse,
   Consent,
   FeedbackItem,
+  LocationSignal,
   Notification,
   Trip,
 } from "./types";
 
 /**
- * In-memory state. It resets when the server restarts, which is what a demo
- * wants. Kept on globalThis so dev-mode hot reloads do not wipe it between
- * requests.
+ * Mutable state, in Neon Postgres: trips, notifications, consent, feedback
+ * and analytics events. Survives restarts and is shared by every server
+ * instance. Callers only use these accessors; none touches tables directly.
  *
- * Trips, notifications, consent and feedback belong to one user and are kept
- * apart per user id. Analytics events and the catalog cache hold no personal
- * data (FR-15, FR-23), so they are shared.
- *
- * Swapping this for a database means reimplementing these accessors; no
- * caller touches the State object directly.
+ * The catalog cache stays in memory: it is a per-instance speed-up holding no
+ * user data, so losing it costs one recomputation.
  */
-type UserState = {
-  trips: Trip[];
-  notifications: Notification[];
-  consent: Consent;
-  feedback: FeedbackItem[];
-};
-
-type State = {
-  users: Map<string, UserState>;
-  events: AnalyticsEvent[];
-  catalogCache: Map<string, { value: CatalogResponse; expiresAt: number }>;
-  sequence: number;
-};
-
-function initialUserState(): UserState {
-  return {
-    trips: [],
-    notifications: [],
-    // PRD open question 5: consent is covered by existing T&Cs, so demo users
-    // start opted in. PUT /api/consent withdraws it.
-    consent: { personalisation: true, notifications: true, updatedAt: new Date(0).toISOString() },
-    feedback: [],
-  };
-}
-
-function initialState(): State {
-  return { users: new Map(), events: [], catalogCache: new Map(), sequence: 0 };
-}
-
-const globalStore = globalThis as typeof globalThis & { __otherwiseState?: State };
-
-function state(): State {
-  globalStore.__otherwiseState ??= initialState();
-  return globalStore.__otherwiseState;
-}
-
-function user(userId: string): UserState {
-  const users = state().users;
-  let entry = users.get(userId);
-  if (!entry) {
-    entry = initialUserState();
-    users.set(userId, entry);
-  }
-  return entry;
-}
 
 export function nextId(prefix: string): string {
-  const s = state();
-  s.sequence += 1;
-  return `${prefix}-${s.sequence}`;
+  return `${prefix}-${crypto.randomUUID()}`;
 }
 
-export function resetState(): void {
-  globalStore.__otherwiseState = initialState();
+/** Demo reset: clears app state. Users, transactions and price snapshots stay. */
+export async function resetState(): Promise<void> {
+  const { events, feedback, notifications, tripCountries, trips, consent } = schema;
+  await db().transaction(async (tx) => {
+    await tx.delete(events);
+    await tx.delete(feedback);
+    await tx.delete(notifications);
+    await tx.delete(tripCountries);
+    await tx.delete(trips);
+    await tx.delete(consent);
+  });
+  catalogCache().clear();
 }
 
 // Trips
 
-export function getActiveTrip(userId: string): Trip | undefined {
-  return user(userId).trips.find((trip) => !trip.endedAt);
-}
+/**
+ * Trips change on every arrival, so they are never cached across requests.
+ * React's cache() only de-duplicates within one page render, where the page
+ * and the recommendations would otherwise each load the trip. One query: the
+ * active trip joined to its countries.
+ */
+export const getActiveTrip = cache(async (userId: string): Promise<Trip | undefined> => {
+  const rows = await db()
+    .select({ trip: schema.trips, country: schema.tripCountries })
+    .from(schema.trips)
+    .leftJoin(schema.tripCountries, eq(schema.tripCountries.tripId, schema.trips.id))
+    .where(and(eq(schema.trips.userId, userId), isNull(schema.trips.endedAt)));
+  if (rows.length === 0) return undefined;
 
-export function saveTrip(userId: string, trip: Trip): void {
-  const trips = user(userId).trips;
-  const index = trips.findIndex((existing) => existing.id === trip.id);
-  if (index === -1) trips.push(trip);
-  else trips[index] = trip;
+  const trip = rows[0].trip;
+  const countries = rows.flatMap((row) => (row.country ? [row.country] : []));
+  return {
+    id: trip.id,
+    startedAt: trip.startedAt.toISOString(),
+    endedAt: trip.endedAt?.toISOString(),
+    currentCountry: trip.currentCountry,
+    countries: Object.fromEntries(
+      countries.map((row) => [
+        row.country,
+        {
+          arrivedAt: row.arrivedAt.toISOString(),
+          signal: row.signal as LocationSignal,
+          ...(row.notifiedAt ? { notifiedAt: row.notifiedAt.toISOString() } : {}),
+        },
+      ]),
+    ),
+  };
+});
+
+/** Upserts the trip and every country on it, atomically. */
+export async function saveTrip(userId: string, trip: Trip): Promise<void> {
+  const tripRow = {
+    id: trip.id,
+    userId,
+    startedAt: new Date(trip.startedAt),
+    endedAt: trip.endedAt ? new Date(trip.endedAt) : null,
+    currentCountry: trip.currentCountry,
+  };
+  const countryRows = Object.entries(trip.countries).map(([country, entry]) => ({
+    tripId: trip.id,
+    country,
+    arrivedAt: new Date(entry.arrivedAt),
+    signal: entry.signal,
+    notifiedAt: entry.notifiedAt ? new Date(entry.notifiedAt) : null,
+  }));
+
+  await db().transaction(async (tx) => {
+    await tx
+      .insert(schema.trips)
+      .values(tripRow)
+      .onConflictDoUpdate({
+        target: schema.trips.id,
+        set: { endedAt: tripRow.endedAt, currentCountry: tripRow.currentCountry },
+      });
+    if (countryRows.length === 0) return;
+    await tx
+      .insert(schema.tripCountries)
+      .values(countryRows)
+      .onConflictDoUpdate({
+        target: [schema.tripCountries.tripId, schema.tripCountries.country],
+        set: { notifiedAt: sql`excluded.notified_at` },
+      });
+  });
 }
 
 // Notifications
 
-export function pushNotification(userId: string, notification: Notification): void {
-  user(userId).notifications.push(notification);
+export async function pushNotification(userId: string, notification: Notification): Promise<void> {
+  await db()
+    .insert(schema.notifications)
+    .values({ ...notification, userId, createdAt: new Date(notification.createdAt) });
 }
 
-export function listNotifications(userId: string): Notification[] {
-  return user(userId).notifications;
+export async function listNotifications(userId: string): Promise<Notification[]> {
+  const rows = await db()
+    .select()
+    .from(schema.notifications)
+    .where(eq(schema.notifications.userId, userId))
+    .orderBy(asc(schema.notifications.createdAt));
+  return rows.map((row) => ({
+    id: row.id,
+    tripId: row.tripId,
+    country: row.country,
+    title: row.title,
+    body: row.body,
+    deepLink: row.deepLink,
+    createdAt: row.createdAt.toISOString(),
+  }));
 }
 
 // Consent
 
-export function getConsent(userId: string): Consent {
-  return user(userId).consent;
-}
+/**
+ * PRD open question 5: consent is covered by existing T&Cs, so with no row the
+ * permissions start granted and an API-only caller behaves as before. A row
+ * exists only once the user has answered, which is what `decided` reports and
+ * what the UI goes by: until then the app asks before it shows anything (US-6.1).
+ */
+const DEFAULT_CONSENT: Consent = {
+  personalisation: true,
+  notifications: true,
+  decided: false,
+  updatedAt: new Date(0).toISOString(),
+};
 
-export function setConsent(userId: string, consent: Consent): void {
-  user(userId).consent = consent;
+/** Changes when the user answers, so only de-duplicated within one render. */
+export const getConsent = cache(async (userId: string): Promise<Consent> => {
+  const [row] = await db().select().from(schema.consent).where(eq(schema.consent.userId, userId)).limit(1);
+  if (!row) return DEFAULT_CONSENT;
+  return {
+    personalisation: row.personalisation,
+    notifications: row.notifications,
+    decided: true,
+    updatedAt: row.updatedAt.toISOString(),
+  };
+});
+
+export async function setConsent(userId: string, consent: Consent): Promise<void> {
+  const values = {
+    userId,
+    personalisation: consent.personalisation,
+    notifications: consent.notifications,
+    updatedAt: new Date(consent.updatedAt),
+  };
+  await db()
+    .insert(schema.consent)
+    .values(values)
+    .onConflictDoUpdate({ target: schema.consent.userId, set: values });
 }
 
 // Feedback
 
-export function addFeedback(userId: string, item: FeedbackItem): void {
-  const list = user(userId).feedback;
-  const duplicate = list.some(
-    (existing) =>
-      existing.tripId === item.tripId && existing.kind === item.kind && existing.id === item.id,
-  );
-  if (!duplicate) list.push(item);
+export async function addFeedback(userId: string, item: FeedbackItem): Promise<void> {
+  // The unique index makes a repeated thumbs-down a no-op.
+  await db()
+    .insert(schema.feedback)
+    .values({
+      userId,
+      tripId: item.tripId,
+      kind: item.kind,
+      itemId: item.id,
+      country: item.country,
+      createdAt: new Date(item.createdAt),
+    })
+    .onConflictDoNothing();
 }
 
 /** For the team (US-8.3): every user's feedback, without saying whose. */
-export function listAllFeedback(): FeedbackItem[] {
-  return [...state().users.values()].flatMap((entry) => entry.feedback);
+export async function listAllFeedback(): Promise<FeedbackItem[]> {
+  const rows = await db()
+    .select({
+      tripId: schema.feedback.tripId,
+      kind: schema.feedback.kind,
+      id: schema.feedback.itemId,
+      country: schema.feedback.country,
+      createdAt: schema.feedback.createdAt,
+    })
+    .from(schema.feedback)
+    .orderBy(asc(schema.feedback.id));
+  return rows.map((row) => ({ ...row, kind: row.kind as FeedbackItem["kind"], createdAt: row.createdAt.toISOString() }));
 }
 
 /** US-8.1: hidden for the rest of the trip, so scoped by trip id. */
-export function hiddenIds(
+export async function hiddenIds(
   userId: string,
   tripId: string | null,
   kind: FeedbackItem["kind"],
-): Set<string> {
+): Promise<Set<string>> {
   if (!tripId) return new Set();
-  return new Set(
-    user(userId)
-      .feedback.filter((item) => item.tripId === tripId && item.kind === kind)
-      .map((item) => item.id),
-  );
+  const rows = await db()
+    .select({ id: schema.feedback.itemId })
+    .from(schema.feedback)
+    .where(and(eq(schema.feedback.userId, userId), eq(schema.feedback.tripId, tripId), eq(schema.feedback.kind, kind)));
+  return new Set(rows.map((row) => row.id));
 }
 
 // Analytics
 
-export function recordEvent(event: AnalyticsEvent): void {
-  state().events.push(event);
+export async function recordEvent(event: AnalyticsEvent): Promise<void> {
+  await db()
+    .insert(schema.events)
+    .values({ ...event, at: new Date(event.at) });
 }
 
-export function listEvents(): AnalyticsEvent[] {
-  return state().events;
+export async function listEvents(): Promise<AnalyticsEvent[]> {
+  const rows = await db().select().from(schema.events).orderBy(asc(schema.events.id));
+  return rows.map((row) => ({
+    type: row.type as AnalyticsEvent["type"],
+    at: row.at.toISOString(),
+    ...(row.country ? { country: row.country } : {}),
+    ...(row.category ? { category: row.category } : {}),
+    ...(row.productId ? { productId: row.productId } : {}),
+  }));
 }
 
-// Catalog cache (FR-16)
+// Catalog cache (FR-16), in memory
+
+type CacheEntry = { value: CatalogResponse; expiresAt: number };
+const globalStore = globalThis as typeof globalThis & { __otherwiseCatalogCache?: Map<string, CacheEntry> };
+
+function catalogCache(): Map<string, CacheEntry> {
+  globalStore.__otherwiseCatalogCache ??= new Map();
+  return globalStore.__otherwiseCatalogCache;
+}
 
 export function readCatalogCache(key: string, now: number): CatalogResponse | undefined {
-  const entry = state().catalogCache.get(key);
+  const entry = catalogCache().get(key);
   if (!entry || entry.expiresAt <= now) return undefined;
   return entry.value;
 }
 
 /** An expired entry is still better than nothing when the catalog is down. */
 export function readStaleCatalogCache(key: string): CatalogResponse | undefined {
-  return state().catalogCache.get(key)?.value;
+  return catalogCache().get(key)?.value;
 }
 
 export function writeCatalogCache(key: string, value: CatalogResponse, expiresAt: number): void {
-  state().catalogCache.set(key, { value, expiresAt });
+  catalogCache().set(key, { value, expiresAt });
 }

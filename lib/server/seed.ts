@@ -1,16 +1,22 @@
 import "server-only";
 
-import catalogJson from "@/data/seed/catalog.json";
-import categoriesJson from "@/data/seed/categories.json";
-import transactionsJson from "@/data/seed/transactions.json";
-import usersJson from "@/data/seed/users.json";
+import { asc, desc, eq } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
 
-import type { CatalogProduct, CategoryDef, SeedTransaction } from "./types";
+import categoriesJson from "@/data/seed/categories.json";
+
+import { db, schema } from "./db";
+import type { CategoryDef, SeedTransaction } from "./types";
 
 /**
- * Read-only seed data. Mutable state (trips, consent, feedback) lives in
- * store.ts; this file is what a real deployment would replace with the
- * profile, transaction and catalog services.
+ * Read-only data about people: users and their transactions come from the
+ * database (loaded by `npm run db:seed`), standing in for the bank's own
+ * profile and transaction services. The category taxonomy is configuration,
+ * so it stays a file. Prices live in pricedata.ts; mutable state in store.ts.
+ *
+ * Users and transactions only change when `db:seed` runs, so they are cached
+ * for hours ('use cache', keyed by user id). Restart the server after
+ * reseeding, or redeploy, to drop the cache.
  */
 
 export type Profile = {
@@ -22,24 +28,54 @@ export type Profile = {
   balances: { value: number; currency: string; primary: boolean }[];
 };
 
-export function getProfiles(): Profile[] {
-  return usersJson.users.map((user) => ({
-    userId: user.id,
-    holder: user.holder,
-    firstName: user.holder.split(" ")[0],
-    homeCity: user.homeCity,
-    homeCountry: user.homeCountry,
-    balances: user.balances,
+function toProfile(row: typeof schema.users.$inferSelect): Profile {
+  return {
+    userId: row.id,
+    holder: row.holder,
+    firstName: row.holder.split(" ")[0],
+    homeCity: row.homeCity,
+    homeCountry: row.homeCountry,
+    balances: row.balances,
+  };
+}
+
+export async function getProfiles(): Promise<Profile[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("users");
+  const rows = await db().select().from(schema.users).orderBy(asc(schema.users.id));
+  return rows.map(toProfile);
+}
+
+export async function getProfile(userId: string): Promise<Profile | undefined> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("users");
+  const [row] = await db().select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+  return row ? toProfile(row) : undefined;
+}
+
+/** The user's statement, newest first. */
+export async function getTransactions(userId: string): Promise<SeedTransaction[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("transactions");
+  const rows = await db()
+    .select()
+    .from(schema.transactions)
+    .where(eq(schema.transactions.userId, userId))
+    .orderBy(desc(schema.transactions.date), asc(schema.transactions.id));
+
+  return rows.map((row) => ({
+    id: row.id,
+    date: row.date,
+    merchant: row.merchant,
+    category: row.category,
+    city: row.city,
+    countryCode: row.countryCode,
+    amount: { value: row.amount, currency: row.currency },
+    amountEur: row.amountEur,
   }));
-}
-
-export function getProfile(userId: string): Profile | undefined {
-  return getProfiles().find((profile) => profile.userId === userId);
-}
-
-export function getSeedTransactions(userId: string): SeedTransaction[] {
-  const byUser = transactionsJson.transactions as Record<string, SeedTransaction[]>;
-  return byUser[userId] ?? [];
 }
 
 export function getCategoryDefs(): CategoryDef[] {
@@ -48,8 +84,4 @@ export function getCategoryDefs(): CategoryDef[] {
 
 export function getCategoryDef(slug: string): CategoryDef | undefined {
   return getCategoryDefs().find((category) => category.slug === slug);
-}
-
-export function getCatalogProducts(): CatalogProduct[] {
-  return catalogJson.products as CatalogProduct[];
 }

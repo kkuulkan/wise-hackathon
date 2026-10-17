@@ -13,11 +13,11 @@
 |---|---|
 | Branch | **`main` now contains everything** (fast-forwarded to `integration` at `7eb6e85` on 2026-10-17): backend + frontend + wiring. Start new work from `main`. `backend` and `integration` are kept for history |
 | Last updated | 2026-10-17 |
-| Phase | **Backend API complete for the comparison feature with two demo users. Frontend not wired yet.** |
+| Phase | **Real data.** Prices come from Eurostat, Open Prices and the ECB through a verified snapshot (§12). Two demo users, frontend wired |
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
-| New dependencies | None (`import "server-only"` is resolved by Next itself) |
-| Env vars | None required. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE` (see §6) |
-| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **58/58** against `next start` |
+| New dependencies | `pg`, `drizzle-orm`, `@vercel/functions`, `@neon/config`, `@neon/env`; dev: `drizzle-kit`, `@types/pg` (§16). Runtime `npm audit`: 0 vulnerabilities |
+| Env vars | **Required:** `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED` (direct), written by `neon env pull`/`neon deploy`. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE`, `OTHERWISE_ALLOW_RESET` (§16) |
+| Verification | `npm run build` passes (with or without a database), `eslint` is clean, `npm run smoke` passes **78/78 against Neon**; restart persistence, DB integrity rules and DB-down fallback verified (§16) |
 
 ### Scope decisions (from aim-t, 2026-10-17)
 
@@ -30,6 +30,15 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | **Caching** (§17): price snapshot `'use cache: remote'` + `cacheLife("days")` (shared across instances, survives Vercel cold starts); users and transactions `'use cache'` + `cacheLife("hours")`; trip and consent de-duplicated per render with React `cache()`; active trip loaded in one JOIN query | After `db:seed` or `db:load-prices`, restart the server (or redeploy) to drop cached data |
+| 2026-10-17 | **`integration` = `backend` + `origin/frontend` (`7e31248`, Linh Vu's UI).** Conflicts resolved keeping both intents: frontend's consent `decided` flag (US-6.1) now lives in the database (no consent row = undecided; any answer stores a row; first answer always logged); frontend's product shape (`id`, `priceLocal`, `savingPct`, `url`, category `icon`) kept, with the backend's category averages (user's typical purchase, so no `NaN` for categories without shelf products) and Eurostat/list-price source text; Aoife's HUF balance removed; Jonas's 4 new transactions kept alongside Saoirse. Smoke 82/82 on Neon `dev` | Run `npm run db:seed` after pulling (138 transactions) |
+| 2026-10-17 | Neon `dev` branch for local work and smoke tests; `/api/dev/reset` refuses on the `production` branch (§16) | Run `neon checkout dev` locally |
+| 2026-10-17 | All API routes wrapped in `handle()`: clean JSON 503 when the database is down, JSON 500 otherwise (§16). Route handlers are now `export const GET = handle(get)` | If you add a route, wrap it the same way |
+| 2026-10-17 | **Neon Postgres database** (§16). Users, transactions, trips, notifications, consent, feedback, events and verified price snapshots now live in 13 tables (Drizzle schema + migration). `lib/server/store.ts` and `seed.ts` are DB-backed and async; new `pricedata.ts`, `db.ts`; `neon.ts` added by `neon init`. `app/page.tsx` gains one `await`. `/api/dev/reset` is blocked in production unless `OTHERWISE_ALLOW_RESET=true` | **After pulling: run `neon env pull` (or set `DATABASE_URL`), then `npm run db:migrate && npm run db:seed && npm run db:load-prices`** |
+| 2026-10-17 | **Third user `saoirse`** (Dublin gamer) + Microsoft Store official list prices for electronics with a VAT-normalised consistency gate (§15). New `listPriceCheck` on categories; new `digital-games` category (never recommended). `data/real/brand-prices.json` added | Additive. The user picker now lists 3 users |
+| 2026-10-17 | `products[].localComparison`: national average, per-kg/L vs the median of ≥5 similar verified products in the same country, or `null` (§14). Fetch script computes per-type medians (`products.json` → `localStats`) | Additive. **Frontend action needed in `Visa`** (§14) |
+| 2026-10-17 | **Only recommend what a traveller can buy here instead of at home** (§13). Categories gain `buyWhere`; transport, mobile, dining and the new `cafe` category are never recommended. Coffee means coffee to take home. Groceries are shelf-stable take-home goods only. New official matched items from CSO Ireland + KSH Hungary (haircuts, sugar). Product lists vary across sub-categories. Café transactions re-tagged `cafe` | Additive API (`evidence` is now a union, see §13). `categories.json` and `transactions.json` changed |
+| 2026-10-17 | **Real data replaces the mock catalog.** New `scripts/fetch-real-data.mjs` (`npm run fetch-data`) builds `data/real/` from Eurostat, Open Prices and the ECB through verification gates. `data/seed/catalog.json` deleted. Category savings now come from official price levels; products are real shelf prices; FX is the real ECB rate (363 HUF, was a hard-coded 395). `categories.json` gains `priceLevel`. API responses gain fields (none removed); `products` may now be empty. `lib/live.ts` adapted | Additive API. Frontend reading `products[0]` must handle empty lists (§12) |
 | 2026-10-17 | `main` fast-forwarded to `integration` and pushed. Build passes on `main` | Pull `main` before branching |
 | 2026-10-17 | `integration`: wired the frontend pages to the backend through `lib/live.ts` and `components/live/*`; only `app/page.tsx` and `app/cheaper/page.tsx` edited | See §11 |
 | 2026-10-17 | Created branch `integration` from `backend` and merged `origin/frontend` (`790d2e8`). Clean merge, build + lint pass, smoke 58/58, `/` and `/cheaper` render | See §11 |
@@ -227,17 +236,20 @@ curl -b jar localhost:3000/api/recommendations
 
 ---
 
-## 7. Seed data (`data/seed/`)
+## 7. Seed data (`data/seed/`) and real data (`data/real/`)
+
+**Prices are real data now. See §12.** `data/seed/catalog.json` has been deleted. Users and transactions are still demo seed.
 
 | File | Contents |
 |---|---|
 | `users.json` | The two demo profiles: id, name, home city and country, balances |
 | `transactions.json` | `{ transactions: { aoife: [...62], jonas: [...34] } }`, keyed by user id. Each row has the same shape as `data/transactions.json`. Deliberately includes rows that must be ignored (rent, insurance, pharmacy, gambling, one electronics row outside the window). **Generated** once by a script; edit the JSON directly |
 | `categories.json` | 14-category taxonomy with `kind` and `isDefault` |
-| `catalog.json` | 35 products, each priced in EUR for IE, DE, PT, HU, ES. Deliberate traps: dearer-abroad electronics, age-restricted wine, stale-priced Levi's |
+| `categories.json` `priceLevel` | The Eurostat category that prices each everyday category (coffee uses restaurants, because the users' coffee is café spending) |
+| `data/real/*.json` | **Generated** by `npm run fetch-data`. Do not edit by hand. See §12 |
 
 **To add a user:** add a profile to `users.json` and a key with their transactions to `transactions.json`. Their home country must have prices in the catalog.
-**To add a country:** add it to `COUNTRIES` in `lib/server/config.ts` (plus `FX_PER_EUR` if it isn't on EUR) and add its code to each product's `prices`. No logic changes are needed.
+**To add a country:** add it to `COUNTRIES` in `lib/server/config.ts` and to `COUNTRIES` in `scripts/fetch-real-data.mjs` (with its OSM country name and currency), then run `npm run fetch-data`.
 
 `data/account.json`, `data/transactions.json` and `data/recommendations.json` on `main` are **untouched**, and the current `/` and `/cheaper` pages still use them.
 
@@ -259,8 +271,8 @@ curl -b jar localhost:3000/api/recommendations
 
 - Sign-in is a demo picker with no password. The cookie holds a plain user id, so anyone can sign in as either user. `/api/dev/reset` is open.
 - State is in memory and lost on restart. Not safe with multiple server instances.
-- The "catalog service" is in-process. Its static fallback reads the same seed file, so the fallback path is real but not a different data source.
-- Prices are mock EUR snapshots; FX is a fixed 395 HUF/EUR. No real push delivery, no quiet hours, no VPN/spoof detection.
+- The "catalog service" is in-process and reads the verified snapshot. Its fallback reads the same snapshot, so the fallback path is real but not a different data source.
+- Real-data limits are listed in §12 (product coverage, estimated home prices, coarse personal-care index). No real push delivery, no quiet hours, no VPN/spoof detection.
 - Notification copy and API messages are English only (the PRD wants EN/ES/DE).
 
 ## 10. Open decisions (need team input)
@@ -320,3 +332,217 @@ Known rough edges that need a **frontend** change (left alone on purpose):
 - `Visa` always prints a forint line (`formatHuf`), so Portugal and Spain show a converted HUF price. Better to hide it when `fx` is null.
 - `Visa`'s map pin always opens Google Maps. The backend's own `products[].url` (shop or maps search) is more accurate.
 - `Hero`'s "Welcome to …" uses `currentCity`, which is the country name now (the backend has no city).
+
+## 12. Real data (2026-10-17)
+
+### Why a hybrid
+Before any code was written, the candidate sources were measured. Free APIs cannot give the *same product* priced in both home and destination for our users:
+
+| Source | Coverage for IE / DE / PT / HU / ES (prices since 2025) | Verdict |
+|---|---|---|
+| Open Prices, product level | 47 / 12,691 / 364 / 29 / 721. **No barcode priced in Ireland is priced in any destination**; DE shares 9 with ES and 4 with PT | Real and proven, but too sparse to compare the same product. Used for **destination shelf prices** |
+| Eurostat `prc_ppp_ind`, category level | All 5 countries × every category we need, official, 2024 | Used for the **category comparison** and to **estimate home prices** |
+| ECB rate (Frankfurter) vs Eurostat `ert_bil_eur_d` | 363.08 vs 363.6 HUF/EUR, a 0.14% gap | Agree, so used. The old hard-coded 395 was about 9% off |
+
+aim-t chose the hybrid: Eurostat decides how much cheaper a **category** is; under it, real Open Prices products seen in the destination; their home price is
+`observed` (same barcode verified at home) or `estimated` (local price × Eurostat sub-index ratio, e.g. bread, dairy, oils), and the response says which.
+
+### Pipeline: `npm run fetch-data` → `scripts/fetch-real-data.mjs` → `data/real/`
+PRD open questions 3 and 4 ("prebuilt catalog… preprocessing", "validation pipeline with gates and filters"). It runs in about 30 s. If any hard gate fails,
+it writes **nothing** and exits non-zero, so the app keeps the last good snapshot. Files: `fx.json`, `price-levels.json`, `products.json`,
+`verification-report.json` (counts per gate and rejected examples, per country).
+
+| Gates | Rule |
+|---|---|
+| FX (hard) | ECB and Eurostat rates agree within 1% |
+| Eurostat (hard) | Every needed category × country has a value; values within 20–300; year-on-year change ≤ 30% |
+| Open Prices, per price | Has barcode and name · shop is in that country · currency matches the country · seen in the last 365 days · **not discounted** · backed by a **receipt or price-tag photo** · maps to an OtherWise category and isn't excluded (alcohol, baby milk, supplements, coffee drinks) · **coffee sold by weight (g)**, which catches mis-tagged milk and ready-to-drink coffee · €0.05–€200 |
+| Open Prices, per product | Observations outside ½×–2× of the product's median are dropped; the price is the median of the rest; top 10 per sub-category by number of observations, then recency |
+
+The 2026-10-17 run kept **190 products** (DE 80, ES 56, PT 42, IE 11, HU 1). The biggest rejection was discounted prices (757 in DE). A manual review then found
+ready-to-drink coffee and a milk carton tagged as coffee capsules, which is why the unit gate exists. Spot checks matched each country's price levels
+(Emmental 150 g €1.69 in Porto, milk €1.59 in Spain, brown bread €3.00 at Tesco Swords, whole milk €0.95 in Munich).
+
+Category → Eurostat index: groceries `A010101` Food (products use their sub-index: bread `A01010101`, meat `…02`, fish `…03`, dairy `…04`, oils `…05`, fruit and veg `…06`) ·
+coffee and dining out `A0111` Restaurants (coffee products use `A010102` Non-alcoholic beverages) · clothing `A0103` · transport `A010703` · telecom `A0108` ·
+electronics `A010901` · skincare and personal care `A0112` Miscellaneous goods and services.
+
+### What changed in the API (all additive, nothing removed)
+- `categories[].savingPct` now = `round((1 − localIndex/homeIndex) × 100)` from Eurostat. A category needs **≥ 5%** (`MIN_CATEGORY_SAVING_PCT`).
+- `categories[].comparison`: `{ savingPct, homeIndex, localIndex, index, indexLabel, year, source: "Eurostat prc_ppp_ind" }`.
+- `categories[].typicalPurchase`: the user's own average purchase at home and the same spend here at the official ratio. `null` for general suggestions.
+- **`categories[].products` may be empty.** Services and clothing have no shelf data. A personalised category still shows (its comparison and typical purchase are real);
+  a general suggestion with no products is skipped.
+- Products: `homePriceBasis: "observed" | "estimated"`, `evidence: { observations, shops, proofs, source: "Open Prices" }`, `url` = the product's public Open Prices page,
+  `description` = quantity and shop, `priceUpdatedAt` = last verified sighting. For HU, `localPrice.local` is the real HUF shelf price.
+- `GET /api/catalog` gains `comparison`. `fx.rate` is the verified ECB rate. `disclosure` credits Eurostat and Open Prices (ODbL attribution).
+
+### What the demo shows now
+| | Portugal | Spain | Hungary |
+|---|---|---|---|
+| Aoife (vs IE) | Groceries 10% (5 products), Coffee 42% (3 products), Dining 42%, Clothing 7%, Skincare 38% | Groceries 15%, Coffee 35%, Dining 35%, Clothing 9%, Skincare 35% | Groceries 16% (1 product), Coffee 44%, Dining 44%, Clothing 14%, Skincare 54% |
+| Jonas (vs DE) | Clothing 8%, Dining 33%, Transport 32%, Personal care 18%, Mobile 15%. No products (all services) | similar, Mobile 30% | Transport 48%, Personal care 39% |
+
+Jonas's top category, electronics, never shows: Eurostat has PT 2% dearer and ES only 1% cheaper than DE. The real data contradicts the old mock, which had ES electronics cheaper.
+
+### Limitations (put these in the report)
+- Product rows exist only for groceries, packaged coffee and a few toiletries, and are thin in IE (11) and HU (1). Restaurants, transport, mobile, haircuts, clothing and electronics are category-level only.
+- Product home prices are mostly **estimates** (sub-index ratio), labelled as such. Eurostat indices are national annual averages (2024), not city- or shop-level.
+- Skincare and personal care use Eurostat's broad "Miscellaneous goods and services" index, which also covers e.g. insurance.
+- Crowdsourced prices come from a few shops per country, so they aren't a national average.
+- **Frontend `Visa`** still prints "At {country} avg" for each product (`vsLocalAvgPct: 0` from `lib/live.ts`). With real shelf prices that line is no longer accurate.
+  The component should show `description` (quantity and shop) and `homePriceBasis` instead. It also prints a forint line outside Hungary, and its map pin should open `url`.
+
+## 13. Take-home and timeable only (2026-10-17)
+
+**Decision (aim-t):** a lower price only helps if the traveller *chooses where to buy*. Every category now has `buyWhere`:
+
+| `buyWhere` | Meaning | Categories | Recommended? |
+|---|---|---|---|
+| `take-home` | Buy here instead of at home (no customs limits within the EU for personal use) | groceries (shelf-stable), coffee (beans, ground, capsules), skincare & beauty, sneakers & clothing, electronics | ✅ |
+| `timeable` | Needed anyway, can be done while here | personal care (haircuts) | ✅ |
+| `local-only` | Bought here either way | `cafe`, dining-out, transport, telecom (and EU roam-like-at-home makes a local SIM rarely worth it) | ❌ never ranked or shown |
+
+- `personalize.ts` skips local-only spend, so it can't push take-home categories down. Aoife's café visits are now `cafe` transactions, separate from `coffee` (bought to take home).
+- The default set for thin history is take-home staples: groceries, coffee, skincare, clothing. A general suggestion still needs at least one real product.
+- Long-stay users (Erasmus, foreign workers) would benefit from a separate "living costs here" view for transport, mobile and rent. That's not built.
+
+**Data changes in `scripts/fetch-real-data.mjs`:**
+- Groceries are limited to take-home shelf goods: olive and vegetable oils, canned fish, cheese, chocolate, honey, jam, pasta, rice, cereals, biscuits. Fresh produce, meat, milk and bread were dropped. New Eurostat sub-index `A01010199` (other food).
+- **Official matched items (`data/real/reference-items.json`):** named items priced by both CSO Ireland (CPM12, monthly) and KSH Hungary (ara0004, 2025 annual average), matched by hand and normalised per unit.
+  Kept: men's haircut (note: Ireland's figure is a dry cut), women's wash-cut-blow-dry, butter, sugar. Rejected after review: jam (KSH requires ≥50% fruit), spaghetti (egg pasta),
+  cheese (trappist vs cheddar), flour (plain vs self-raising). Gates: both values published, CSO ≤ 550 days old, IE/HU ratio within 5×, and **at least one item must survive** (this
+  caught a period-parsing bug that had silently rejected everything). Germany, Portugal and Spain publish no comparable averages, so only Ireland ↔ Hungary has these.
+- For Aoife in Budapest: women's wash-cut-blow-dry €58.32 → €20.93 (64%), men's haircut €21.46 → €11.04 (49%), sugar 45%. Butter is left out because it's dearer in Hungary (€15.53 vs €9.34 per kg).
+
+**API changes (additive):**
+- `products[].evidence` is now either `{ source: "Open Prices", observations, shops, proofs }` or `{ source: "National statistics", home, local, note }`.
+  The second kind has `homePriceBasis: "observed"`, `url` pointing to the destination's statistics table, and `description` = "per cut · national average". **Show `evidence.note` when present.**
+- Official items come first in a category, then shelf products ranked by saving, with at most 2 per Eurostat sub-category and no duplicate names.
+- Categories may now include general (`personalised: false`) take-home suggestions after the personal ones, e.g. "Coffee to take home" for Aoife in Portugal.
+
+## 14. "vs local average" on each product (2026-10-17)
+
+**Problem:** the frontend `Visa` card prints a "vs {country} avg" line for every product from `vsLocalAvgPct`. The adapter used to send `0` ("At {country} avg"),
+which is false for a single shop's shelf price.
+
+**Backend (done):** every product now has `localComparison`:
+
+| Value | When | Honest wording |
+|---|---|---|
+| `{ basis: "national-average", pct: 0 }` | CSO/KSH official items | "National average" |
+| `{ basis: "similar-products", pct, typeLabel, sampleSize, unit }` | Shelf products whose type has ≥5 distinct verified products in that country; per kg or L | "8% below the median of 14 canned tuna seen in Portugal (per kg)". Negative `pct` = above |
+| `null` | No honest comparison: all of IE and HU, and thin types elsewhere | Say nothing about the average |
+
+Coverage on the 2026-10-17 snapshot: 18 types in DE, 7 in ES, 4 in PT, 0 in IE and HU; 106 of 151 shown products have one.
+These are medians of crowdsourced products (often branded or specialty), **not national averages**, so the wording must say "similar products seen here".
+
+**Frontend (handoff to the frontend owner), `components/Visa.tsx`:**
+1. Read `localComparison` instead of `vsLocalAvgPct`. Today `lib/live.ts` maps it to `vsLocalAvgPct` (`null` → `0`) only because `Visa` requires a number.
+2. `null` → **hide** the average line and show where and when it was seen instead. The API already has `evidence.shops[0]`, `evidence.proofs` and `priceUpdatedAt`,
+   e.g. "Lidl, Porto · receipt · Sep 2026". For official items show `evidence.note` when present (e.g. Ireland's haircut is a dry cut).
+3. Word the line from `basis` (table above). Don't call a similar-products median an "average".
+4. Also outstanding: show `homePriceBasis` ("estimated" vs "observed"); hide the forint line when `fx` is null; let the map pin open `url`.
+Once `Visa` takes these, `lib/live.ts` can pass the fields straight through and drop `vsLocalAvgPct`.
+
+## 15. Third user and electronics (2026-10-17)
+
+**Saoirse Nolan** (`saoirse`, Dublin, IE): a gamer whose biggest spend is electronics (Currys, Smyths, Amazon.ie, GAME), plus Steam, PlayStation Store and Game Pass.
+Those last three are the new `digital-games` category (`non-actionable`, never recommended).
+
+### Research summary (what was checked before building)
+| Source | Result |
+|---|---|
+| Digital games (Steam, Microsoft Store), tested live | **Identical prices** in all 5 countries (Steam €17.99/€59.99 everywhere) and tied to the account's country, so nothing to save |
+| Apple (apple.de/.hu…) | ❌ Apple's terms forbid scraping **and "any similar or equivalent manual process"** to copy or monitor prices. Not used |
+| Alza | ❌ No public or partner price API (supplier feeds only); also only HU and DE among our countries |
+| eBay Browse API | Official and free, covers IE/DE/ES. aim-t's developer account is still under review |
+| Keepa (Amazon) | Covers IE/DE/ES; €49/month, which the team can't pay |
+| SerpApi (Google Shopping) | Free tier, needs a sign-up key. **Not yet evaluated.** Use only if it shows real shop offers |
+| **Microsoft Store catalogue** | ✅ Used. Public, undocumented endpoint the store itself uses; official MSRP per market; hardware sold in IE, DE, PT, ES (not HU) |
+
+### Microsoft list prices (`npm run fetch-data` → `data/real/brand-prices.json`)
+Gates: new only (not refurbished) · **MSRP, never ListPrice** (ListPrice carries temporary sales; controllers looked cheaper in DE and ES only because of a 16–19 Oct sale) ·
+currency matches the market · same SKU in ≥2 of our markets · **pre-VAT consistency**: each market's price ÷ (1 + VAT) must be within 10% of the others' median.
+That gate removed the stale Xbox Series S/X listings (DE €599.99/€749.99 vs PT/ES €399.99/€549.99 on old 2020 SKUs) and a mouse priced €53 vs €79 in two markets.
+It's a **soft** source: if the endpoint fails, the previous file is kept and the rest of the snapshot still refreshes.
+
+Result (2026-10-17): 361 devices, 365 SKUs kept. From Ireland: **median 0% difference** in DE (174 items), ES (86), PT (86); largest gap 3.7%; **0 items ≥5% cheaper**.
+Brands set one euro-area price and differ only by VAT.
+
+### API (additive)
+- `categories[].listPriceCheck` / catalog `listPriceCheck`: `{ brand, itemsCompared, medianPct, itemsCheaper, source }` or `null`.
+- Brand SKUs appear as products only when ≥5% cheaper (`MIN_LIST_PRICE_SAVING_PCT`), with `evidence: { source: "Manufacturer list price", brand }`,
+  `homePriceBasis: "observed"` and `url` = the local Microsoft Store page (checked: `microsoft.com/{locale}/d/_/{productId}` returns 200).
+- **What Saoirse sees in Spain:** Electronics 8% cheaper (Eurostat: what shops charge) **and** "Microsoft's official prices for 86 identical items: median 0% difference",
+  i.e. the saving comes from shop prices, not the brand. In Hungary, electronics doesn't show (only 4% cheaper).
+- `lib/live.ts` puts the list-price sentence into the card's `source` line, so the current UI already shows it.
+
+### To get product-level shop prices for electronics later
+eBay (when approved) or a free SerpApi key. Either would plug in as another source behind `queryCatalog`, with the same gates (new, fixed price, seller located in that country, outlier and VAT consistency).
+
+## 16. Database: Neon Postgres (2026-10-17)
+
+### Setup (one-off per machine)
+```bash
+npm i -g neon && neon login             # Neon CLI, signed in
+neon env pull                           # writes DATABASE_URL (+ _UNPOOLED, NEON_BRANCH) to .env.local; the repo is linked via .neon (git-ignored)
+npm run db:migrate                      # create the 13 tables (drizzle/0000_init.sql)
+npm run db:seed                         # 3 demo users + 134 transactions (idempotent)
+npm run db:load-prices                  # data/real/*.json → a new current price snapshot (one transaction)
+```
+Neon project `wispy-field-62093327`, region **aws-us-east-2**. Two branches:
+
+| Branch | Used by | Notes |
+|---|---|---|
+| `production` (default) | **Vercel / the live demo** | Set Vercel's `DATABASE_URL` to this branch's pooled URL; function region `iad1` |
+| `dev` | **local development and `npm run smoke`** | Copy-on-write clone of production. `neon checkout dev` points `.env.local` at it. The `neon.ts` policy gives new branches a 7-day TTL (current `dev` expires 2026-10-24); `neon checkout dev --create` recreates it |
+
+`neon checkout production` switches local back to production if ever needed. **`/api/dev/reset` refuses to run when `NEON_BRANCH` is `production` or `main`**, so a smoke run can't wipe the live demo, even with `OTHERWISE_ALLOW_RESET=true`.
+
+### Driver (per the installed Neon agent skill and Neon's Vercel guide)
+`pg` (node-postgres) Pool + `attachDatabasePool` from `@vercel/functions` + Drizzle (`drizzle-orm/node-postgres`), on the **pooled** `DATABASE_URL`.
+Migrations and seed scripts use the **direct** `DATABASE_URL_UNPOOLED`. Connections request `sslmode=verify-full` explicitly.
+The client is created lazily, so `next build` needs no database; every DB-reading route is dynamic.
+
+### Schema (`lib/db/schema.ts`, 13 tables)
+| Group | Tables | Integrity enforced by Postgres |
+|---|---|---|
+| People | `users`, `transactions` (index on user+date) | FK user → transactions |
+| App state | `trips`, `trip_countries`, `notifications`, `consent`, `feedback`, `events` | **one active trip per user** (partial unique index); **one thumbs-down per item per trip**; FKs with cascade; `events` has no user/amount/merchant columns (FR-23) |
+| Prices | `snapshots`, `price_levels`, `products`, `reference_items`, `brand_prices` | every price row belongs to a snapshot; **exactly one current snapshot** (partial unique index); a load inserts rows and flips "current" in **one transaction** |
+
+`data/real/*.json` stays in git as the audit trail; the database holds the same snapshot, plus its verification report, in `snapshots.verification_report`.
+The category taxonomy stays a config file. The catalog cache stays in memory (no user data).
+
+### Runtime behaviour
+- `store.ts` (trips, consent, feedback, events, notifications) and `seed.ts` (users, transactions) are DB-backed and async. Trip upserts and resets run in transactions.
+- `pricedata.ts` reads the current snapshot (5-minute in-process cache). **If the database is unreachable, the catalog serves the bundled verified files** with `source: "fallback"`; it switches back to `live` automatically.
+- Every route is wrapped in `handle()` (`lib/server/http.ts`): database unreachable → **`503 {error:{code:"unavailable"}}`**, anything else unexpected → `500 {error:{code:"internal"}}`. Details go to the server log only. `unstable_rethrow` is called first so Next's own signals (`cookies()`, `searchParams`, redirects) are never swallowed.
+- `/api/dev/reset` clears app state only (never users, transactions or prices) and is **disabled in production** unless `OTHERWISE_ALLOW_RESET=true`.
+
+### Verified on 2026-10-17 (first on `production` while it was empty, then on `dev`)
+| Check | Result |
+|---|---|
+| `npm run build` | passes, with and without `DATABASE_URL` |
+| `npm run smoke` | **78/78**, 0 server errors (~28 s; DB in us-east-2) |
+| Restart persistence | killed the server mid-trip, started a new process: active trip, `notifications: false` consent, thumbs-down (coffee hidden) and the stored notification all survived; re-arriving gave `already-seen`, no duplicate notification |
+| DB integrity | Postgres rejected: a second current snapshot, a second active trip, a transaction for an unknown user, a duplicate thumbs-down (all attempts rolled back) |
+| DB unreachable | catalog answered from the bundled snapshot (`source: "fallback"`, 200); user endpoints return JSON `503 unavailable`; home page 200; back to `live` when the DB returned |
+| Smoke on `dev` | **78/78**; an app write landed on `dev` (trips 1, events 1) while `production` stayed at 0, checked by branch id |
+| Reset guard | with `NEON_BRANCH=production`, reset returns 403 and the smoke test stops with that message |
+
+## 17. Caching (2026-10-17)
+
+| Data | Changes when | Cache | Where |
+|---|---|---|---|
+| Price snapshot | `db:load-prices` | `'use cache: remote'`, `cacheLife("days")`, tag `prices`: the platform's shared cache on Vercel, in-memory when self-hosted | `lib/server/pricedata.ts` |
+| Catalog answer per (from, to, category) | price snapshot changes | in-memory, 6 h (unchanged) | `lib/server/catalog.ts` |
+| Users, profiles | `db:seed` | `'use cache'`, `cacheLife("hours")`, tag `users` | `lib/server/seed.ts` |
+| Transactions | `db:seed` | `'use cache'`, `cacheLife("hours")`, tag `transactions` | `lib/server/seed.ts` |
+| Active trip, consent | every arrival / answer | **not cached across requests**; React `cache()` de-duplicates within one render only | `lib/server/store.ts` |
+| Feedback, notifications, events | every action | not cached | `lib/server/store.ts` |
+
+Trip, consent and feedback are deliberately fresh on every request: caching them would show a stale trip or ignore a consent answer.
+Cache entries are dropped by a new deploy (the build id is part of the key). Locally, restart the server after `db:seed` / `db:load-prices`.
+

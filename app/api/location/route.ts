@@ -1,4 +1,4 @@
-import { badRequest, parseCountry, readObject } from "@/lib/server/http";
+import { badRequest, parseCountry, readObject, handle } from "@/lib/server/http";
 import { requireUser } from "@/lib/server/session";
 import { handleLocation } from "@/lib/server/trips";
 import type { LocationSignal } from "@/lib/server/types";
@@ -10,7 +10,7 @@ import type { LocationSignal } from "@/lib/server/types";
  * Returns the trip status and, the first time in a country on this trip, the
  * notification to show. The demo's "Simulate arrival" button calls this.
  */
-export async function POST(request: Request) {
+async function post(request: Request) {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
@@ -23,5 +23,7 @@ export async function POST(request: Request) {
   const signal = body.signal ?? "gps";
   if (signal !== "gps" && signal !== "card") return badRequest('signal must be "gps" or "card".');
 
-  return Response.json(handleLocation(profile, country, signal as LocationSignal));
+  return Response.json(await handleLocation(profile, country, signal as LocationSignal));
 }
+
+export const POST = handle(post);

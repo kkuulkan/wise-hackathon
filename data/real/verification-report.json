@@ -1,0 +1,355 @@
+{
+  "fetchedAt": "2026-10-17T07:59:46.973Z",
+  "today": "2026-10-17",
+  "fx": {
+    "ecb": {
+      "rate": 363.08,
+      "date": "2026-10-16"
+    },
+    "eurostat": {
+      "rate": 363.6,
+      "date": "2026-10-15"
+    },
+    "gapPct": 0.14
+  },
+  "priceLevels": {
+    "year": "2024",
+    "previousYear": "2023",
+    "codes": 15,
+    "countries": 5,
+    "checkedValues": 75
+  },
+  "openPrices": {
+    "IE": {
+      "candidates": 9,
+      "passedRecordGates": 9,
+      "rejectedBy": {
+        "has barcode and name": 0,
+        "shop is in this country": 0,
+        "currency matches country": 0,
+        "observed in the last 365 days": 0,
+        "not a discounted price": 0,
+        "backed by receipt or price-tag photo": 0,
+        "maps to an OtherWise category": 0,
+        "sold in the unit its type needs": 0,
+        "price within plausible bounds": 0,
+        "within 2x of the product's median": 0
+      },
+      "distinctProducts": 9,
+      "keptProducts": 9,
+      "typesWithLocalComparison": 0,
+      "rejectedExamples": []
+    },
+    "DE": {
+      "candidates": 1536,
+      "passedRecordGates": 1031,
+      "rejectedBy": {
+        "has barcode and name": 26,
+        "shop is in this country": 0,
+        "currency matches country": 0,
+        "observed in the last 365 days": 0,
+        "not a discounted price": 464,
+        "backed by receipt or price-tag photo": 0,
+        "maps to an OtherWise category": 12,
+        "sold in the unit its type needs": 3,
+        "price within plausible bounds": 0,
+        "within 2x of the product's median": 0
+      },
+      "distinctProducts": 883,
+      "keptProducts": 70,
+      "typesWithLocalComparison": 18,
+      "rejectedExamples": [
+        {
+          "gate": "not a discounted price",
+          "product": "Quark nach russischer Art",
+          "price": 1.39,
+          "currency": "EUR",
+          "date": "2025-11-05"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Grillkäse Honey-BBQ",
+          "price": 1.49,
+          "currency": "EUR",
+          "date": "2025-11-05"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Choco Crisp",
+          "price": 2.55,
+          "currency": "EUR",
+          "date": "2025-11-05"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Parmigiano Reggiano, aged 30 months",
+          "price": 4.29,
+          "currency": "EUR",
+          "date": "2025-11-13"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Paprika",
+          "price": 1.29,
+          "currency": "EUR",
+          "date": "2025-11-13"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "BIO Organic COTTAGE CHEESE",
+          "price": 1.15,
+          "currency": "EUR",
+          "date": "2025-12-13"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Bio Speisequark Magerstufe",
+          "price": 0.99,
+          "currency": "EUR",
+          "date": "2025-12-13"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Green pea penne",
+          "price": 1.39,
+          "currency": "EUR",
+          "date": "2026-01-08"
+        }
+      ]
+    },
+    "PT": {
+      "candidates": 88,
+      "passedRecordGates": 74,
+      "rejectedBy": {
+        "has barcode and name": 4,
+        "shop is in this country": 0,
+        "currency matches country": 0,
+        "observed in the last 365 days": 0,
+        "not a discounted price": 9,
+        "backed by receipt or price-tag photo": 0,
+        "maps to an OtherWise category": 1,
+        "sold in the unit its type needs": 0,
+        "price within plausible bounds": 0,
+        "within 2x of the product's median": 0
+      },
+      "distinctProducts": 60,
+      "keptProducts": 31,
+      "typesWithLocalComparison": 4,
+      "rejectedExamples": [
+        {
+          "gate": "not a discounted price",
+          "product": "Atum posta ao natural",
+          "price": 0.69,
+          "currency": "EUR",
+          "date": "2026-05-29"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Posta de Atum",
+          "price": 1.99,
+          "currency": "EUR",
+          "date": "2026-03-23"
+        },
+        {
+          "gate": "has barcode and name",
+          "product": "5601159000412",
+          "price": 2.1,
+          "currency": "EUR",
+          "date": "2026-03-23"
+        },
+        {
+          "gate": "has barcode and name",
+          "product": "4335619058491",
+          "price": 1.29,
+          "currency": "EUR",
+          "date": "2026-03-31"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Copos de avena suaves XXL",
+          "price": 1.29,
+          "currency": "EUR",
+          "date": "2026-04-12"
+        },
+        {
+          "gate": "has barcode and name",
+          "product": "",
+          "price": 1.99,
+          "currency": "EUR",
+          "date": "2026-04-12"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Atum Posta ao Natural",
+          "price": 1.29,
+          "currency": "EUR",
+          "date": "2026-05-07"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Queijo flamengo em fatias da bola",
+          "price": 2.09,
+          "currency": "EUR",
+          "date": "2026-06-06"
+        }
+      ]
+    },
+    "HU": {
+      "candidates": 0,
+      "passedRecordGates": 0,
+      "rejectedBy": {
+        "has barcode and name": 0,
+        "shop is in this country": 0,
+        "currency matches country": 0,
+        "observed in the last 365 days": 0,
+        "not a discounted price": 0,
+        "backed by receipt or price-tag photo": 0,
+        "maps to an OtherWise category": 0,
+        "sold in the unit its type needs": 0,
+        "price within plausible bounds": 0,
+        "within 2x of the product's median": 0
+      },
+      "distinctProducts": 0,
+      "keptProducts": 0,
+      "typesWithLocalComparison": 0,
+      "rejectedExamples": []
+    },
+    "ES": {
+      "candidates": 123,
+      "passedRecordGates": 114,
+      "rejectedBy": {
+        "has barcode and name": 2,
+        "shop is in this country": 0,
+        "currency matches country": 0,
+        "observed in the last 365 days": 0,
+        "not a discounted price": 4,
+        "backed by receipt or price-tag photo": 0,
+        "maps to an OtherWise category": 0,
+        "sold in the unit its type needs": 2,
+        "price within plausible bounds": 1,
+        "within 2x of the product's median": 0
+      },
+      "distinctProducts": 113,
+      "keptProducts": 41,
+      "typesWithLocalComparison": 7,
+      "rejectedExamples": [
+        {
+          "gate": "has barcode and name",
+          "product": "",
+          "price": 3.07,
+          "currency": "EUR",
+          "date": "2025-11-06"
+        },
+        {
+          "gate": "sold in the unit its type needs",
+          "product": "Espresso macchiato chilled coffee drink",
+          "price": 2.49,
+          "currency": "EUR",
+          "date": "2026-04-10"
+        },
+        {
+          "gate": "sold in the unit its type needs",
+          "product": "Leche Sin lactosa Entera",
+          "price": 6.18,
+          "currency": "EUR",
+          "date": "2026-04-10"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Copos de Avena Suaves",
+          "price": 0.75,
+          "currency": "EUR",
+          "date": "2026-06-06"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Muesli crunch dos chocolates",
+          "price": 2.35,
+          "currency": "EUR",
+          "date": "2026-06-09"
+        },
+        {
+          "gate": "has barcode and name",
+          "product": "8480010245424",
+          "price": 1.35,
+          "currency": "EUR",
+          "date": "2026-06-09"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Chocolate Extrafino Negro",
+          "price": 1.65,
+          "currency": "EUR",
+          "date": "2026-06-09"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Flocs de civada",
+          "price": 0.75,
+          "currency": "EUR",
+          "date": "2026-06-17"
+        }
+      ]
+    }
+  },
+  "referenceItems": {
+    "cso": "2026 September",
+    "ksh": "2025",
+    "candidates": 4,
+    "kept": 4,
+    "rejected": []
+  },
+  "microsoft": {
+    "devices": 361,
+    "skus": 1737,
+    "kept": 365,
+    "skippedBy": {
+      "new, not refurbished": 59,
+      "has an official list price (MSRP)": 428,
+      "currency matches market": 0
+    },
+    "rejectedBy": {
+      "sold in fewer than two of our markets": 1371,
+      "pre-VAT price inconsistent across markets": 1
+    },
+    "inconsistentExamples": [
+      {
+        "name": "Microsoft Adaptive Mouse",
+        "country": "IE",
+        "priceEur": 53,
+        "others": {
+          "IE": 53,
+          "DE": 79
+        }
+      },
+      {
+        "name": "Microsoft Adaptive Mouse",
+        "country": "DE",
+        "priceEur": 79,
+        "others": {
+          "DE": 79
+        }
+      },
+      {
+        "name": "Xbox Series X – 1TB Digital Edition (White)",
+        "country": "DE",
+        "priceEur": 749.99,
+        "others": {
+          "DE": 749.99,
+          "PT": 549.99,
+          "ES": 549.99
+        }
+      },
+      {
+        "name": "Xbox Series S – 1TB (White)",
+        "country": "DE",
+        "priceEur": 599.99,
+        "others": {
+          "DE": 599.99,
+          "PT": 399.99,
+          "ES": 399.99
+        }
+      }
+    ]
+  }
+}

@@ -1,17 +1,22 @@
 import { Suspense } from "react";
 
-import { Benefits } from "@/components/Benefits";
 import { Hero } from "@/components/Hero";
-import { Payments } from "@/components/Payments";
+import { ConsentGate } from "@/components/live/ConsentGate";
 import { DemoBar } from "@/components/live/DemoBar";
-import { getTotalAnnualSaving } from "@/lib/data";
-import { formatEur, formatPct } from "@/lib/format";
 import { getLiveRecommendations, getLiveSession, getLiveTransactions } from "@/lib/live";
 
 export default function Home() {
   return (
-    <main className="page">
-      <Suspense fallback={<p className="fieldLabel">Opening your account…</p>}>
+    /* No container here: each block below spans the full width and holds its
+       own inner container, so backgrounds reach the viewport edges. */
+    <main>
+      <Suspense
+        fallback={
+          <p className="page fieldLabel" style={{ paddingTop: "var(--space-8)" }}>
+            Opening your account…
+          </p>
+        }
+      >
         <HomeContent />
       </Suspense>
     </main>
@@ -25,7 +30,12 @@ async function HomeContent() {
   if (!session) {
     return (
       <>
-        <DemoBar userId={null} homeCountryCode={null} tripCountry={null} />
+        <DemoBar
+          userId={null}
+          homeCountryCode={null}
+          tripCountry={null}
+          notificationsAllowed={false}
+        />
         <p className="fieldLabel" style={{ margin: "var(--space-6) var(--page-gutter)" }}>
           Choose a traveller above to open their account.
         </p>
@@ -33,50 +43,37 @@ async function HomeContent() {
     );
   }
 
-  const { account, profile, tripCountry } = session;
-  const transactions = getLiveTransactions(profile);
+  const { account, consent, profile, tripCountry } = session;
+  const transactions = await getLiveTransactions(profile);
   const recommendations = tripCountry ? await getLiveRecommendations(session) : null;
   const categories = recommendations?.ok ? recommendations.categories : [];
-  const total = getTotalAnnualSaving(categories);
-
   const away = categories.length > 0;
-  const top = categories[0];
-
-  // Every figure here is read off the backend's answer, so none of it can drift.
-  const tiles = [
-    {
-      figure: formatEur(total, true),
-      caption: "Could keep per year",
-      title: "Priced against your home prices",
-      body: `Each item is priced in ${account.homeCountry} and here, and the yearly figure scales what you actually spent in the last 90 days.`,
-    },
-    {
-      figure: String(categories.length),
-      caption: "Categories you buy",
-      title: "Picked from your own payments",
-      body: "Ranked by how much and how often you spend. Rent, insurance and sensitive spending such as pharmacy or gambling never count.",
-    },
-    {
-      figure: top ? formatPct(top.savingPct) : "—",
-      caption: top ? `On ${top.label.toLowerCase()}` : "Not travelling",
-      title: "Only real savings",
-      body: "Every item shown costs less here than at home. A category where nothing is cheaper is left out, however much you spend on it.",
-    },
-  ];
 
   return (
     <>
+      {/*
+        US-6.1: asked once, before any of their own data is on screen. The
+        answer is stored server-side, and it is the backend that then decides
+        what may be computed, so there is nothing to enforce out here.
+      */}
+      {!consent.decided && <ConsentGate />}
+
       <DemoBar
         userId={profile.userId}
         homeCountryCode={profile.homeCountry}
         tripCountry={tripCountry}
+        notificationsAllowed={consent.notifications}
       />
 
-      <Hero account={account} categories={categories} away={away} />
-
-      <Payments transactions={transactions} homeCountryCode={account.homeCountryCode} />
-
-      <Benefits tiles={tiles} />
+      <Hero
+        /* Keyed to the trip: a new arrival remounts the hero, so a dismissed
+           ticket comes back and its entrance plays again. */
+        key={`${account.currentCountryCode}-${away}`}
+        account={account}
+        categories={categories}
+        transactions={transactions}
+        away={away}
+      />
     </>
   );
 }

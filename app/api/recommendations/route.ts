@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 
-import { fail, parseCountry } from "@/lib/server/http";
+import { fail, parseCountry, handle } from "@/lib/server/http";
 import { buildRecommendations } from "@/lib/server/recommendations";
 import { requireUser } from "@/lib/server/session";
 import { getActiveTrip } from "@/lib/server/store";
@@ -14,14 +14,14 @@ import { isEligiblePair } from "@/lib/server/trips";
  * notification deep link does, so an old notification still opens the
  * country it was about (edge case 10).
  */
-export async function GET(request: NextRequest) {
+async function get(request: NextRequest) {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
   const param = request.nextUrl.searchParams.get("country");
   const country = param
     ? parseCountry(param)
-    : (getActiveTrip(profile.userId)?.currentCountry ?? null);
+    : ((await getActiveTrip(profile.userId))?.currentCountry ?? null);
 
   if (param && !country) {
     return fail(400, "bad_request", "country must be a known two-letter country code.");
@@ -35,3 +35,5 @@ export async function GET(request: NextRequest) {
 
   return Response.json(await buildRecommendations(profile, country));
 }
+
+export const GET = handle(get);

@@ -15,7 +15,7 @@ export const SESSION_COOKIE = "otherwise_user";
 
 export async function currentUser(): Promise<Profile | undefined> {
   const id = (await cookies()).get(SESSION_COOKIE)?.value;
-  return id ? getProfile(id) : undefined;
+  return id ? await getProfile(id) : undefined;
 }
 
 /** The signed-in profile, or a 401 Response to return as-is. */
