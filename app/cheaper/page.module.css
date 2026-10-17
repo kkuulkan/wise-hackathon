@@ -13,8 +13,11 @@
   z-index: 5;
 }
 
+/* Centred in roughly the space the header and the first card would fill, so
+   the spinner does not sit jammed under the back link. */
 .loading {
-  padding-top: var(--space-16);
+  min-height: 60svh;
+  color: var(--ink);
 }
 
 .body {

@@ -1,0 +1,46 @@
+/*
+ * The transition between the account and the comparison. Navy wash over a
+ * blurred page, so the account is still recognisable underneath while the
+ * next page is fetched.
+ */
+.scrim {
+  position: fixed;
+  inset: 0;
+  /* Over the demo bar (60) and the ticket tab (50), under the consent card
+     (200), which must never be covered while it waits for an answer. */
+  z-index: 150;
+
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-4);
+
+  background: rgba(15, 44, 92, 0.42);
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  color: var(--ink-invert);
+
+  /*
+   * Swallows every click while it is up, so nothing underneath can be
+   * started twice. React portals bubble events through the tree they were
+   * declared in, so the component also stops propagation: without that, a
+   * click landing here would reach the very link that opened it.
+   */
+  pointer-events: auto;
+  cursor: progress;
+
+  animation: scrimIn 180ms ease-out both;
+}
+
+@keyframes scrimIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Still says the page is loading, without anything moving to say it. */
+@media (prefers-reduced-motion: reduce) {
+  .scrim {
+    animation: none;
+  }
+}

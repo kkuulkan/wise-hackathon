@@ -19,6 +19,7 @@ import {
 
 import type { Category } from "@/lib/types";
 import { formatEur, formatMoney, formatPct } from "@/lib/format";
+import { categoryInk } from "@/lib/ink";
 import { ProductLink } from "./live/ProductLink";
 import styles from "./Visa.module.css";
 
@@ -80,7 +81,13 @@ export function Visa({ category, city, homeCity, countryCode, index }: Props) {
       <header className={styles.head}>
         <p className="fieldLabel">Category / Catégorie</p>
         <h2 className={styles.label}>
-          <Icon size={22} stroke={2} className={styles.labelIcon} aria-hidden="true" />
+          <Icon
+            size={22}
+            stroke={2}
+            className={styles.labelIcon}
+            style={{ color: categoryInk(category.label) }}
+            aria-hidden="true"
+          />
           {category.label}
         </h2>
         <p className={styles.unit}>{category.unit}</p>

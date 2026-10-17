@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { IconArrowRight } from "@tabler/icons-react";
 
+import { flagEmoji } from "@/lib/flag";
+import { Dropdown } from "./Dropdown";
+import { FlightScrim } from "./FlightScrim";
 import styles from "./CountryPicker.module.css";
 
 type Destination = { code: string; name: string; eligible: boolean };
@@ -25,6 +28,7 @@ type Props = {
  */
 export function CountryPicker({ tripCountry, homeCity }: Props) {
   const router = useRouter();
+  const [pending, startTransition] = useTransition();
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [choice, setChoice] = useState(tripCountry ?? "");
 
@@ -50,8 +54,11 @@ export function CountryPicker({ tripCountry, homeCity }: Props) {
     };
   }, []);
 
+  /* Inside a transition, so the same scrim covers this route into page 2 as
+     covers the ticket's. */
   const go = () => {
-    if (choice) router.push(`/cheaper?country=${choice}`);
+    if (!choice) return;
+    startTransition(() => router.push(`/cheaper?country=${choice}`));
   };
 
   return (
@@ -59,33 +66,34 @@ export function CountryPicker({ tripCountry, homeCity }: Props) {
       <p className="fieldLabel">Compare prices with {homeCity}</p>
 
       <div className={styles.row}>
-        <label className={styles.field}>
-          <span className="srOnly">Country to compare</span>
-          <select
-            value={choice}
-            onChange={(event) => setChoice(event.target.value)}
-            disabled={destinations.length === 0}
-          >
-            {destinations.length === 0 && <option value="">Loading countries…</option>}
-            {destinations.map((country) => (
-              <option key={country.code} value={country.code}>
-                {country.name}
-                {country.code === tripCountry ? " · you are here" : ""}
-              </option>
-            ))}
-          </select>
-        </label>
+        <Dropdown
+          srLabel="Country to compare"
+          className={styles.control}
+          wrapClassName={styles.field}
+          value={choice}
+          onChange={setChoice}
+          disabled={destinations.length === 0}
+          placeholder="Loading countries…"
+          options={destinations.map((country) => ({
+            value: country.code,
+            label: country.name,
+            glyph: flagEmoji(country.code),
+            note: country.code === tripCountry ? "you are here" : undefined,
+          }))}
+        />
 
         <button
           type="button"
           className={styles.go}
           onClick={go}
-          disabled={!choice}
+          disabled={!choice || pending}
         >
           See what&rsquo;s cheaper
           <IconArrowRight size={16} stroke={2} aria-hidden="true" />
         </button>
       </div>
+
+      <FlightScrim show={pending} />
     </section>
   );
 }

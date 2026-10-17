@@ -19,25 +19,18 @@
   margin-top: var(--space-2);
 }
 
+/* Takes the slack in the row, so the button keeps its own width. */
 .field {
-  display: flex;
-  min-width: 0;
-  /* Takes the slack, so the button keeps its own width. */
   flex: 1 1 160px;
+  min-width: 0;
 }
 
-.field select {
-  width: 100%;
-  min-width: 0;
+/* Look comes from the shared `.select`; this is its size here, matched to
+   the 44px button beside it. Room on the right for the chevron. */
+.control {
   height: 44px;
-  padding: 0 var(--space-2);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-btn);
-  background: rgba(255, 255, 255, 0.6);
-  font: inherit;
+  padding: 0 var(--space-8) 0 var(--space-3);
   font-size: 15px;
-  color: var(--ink);
-  cursor: pointer;
 }
 
 .go {
@@ -66,8 +59,7 @@
   transform: scale(0.98);
 }
 
-.go:disabled,
-.field select:disabled {
+.go:disabled {
   opacity: 0.6;
   cursor: default;
 }

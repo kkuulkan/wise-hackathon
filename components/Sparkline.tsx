@@ -4,6 +4,8 @@ type Props = {
   /** Oldest to newest. */
   series: number[];
   label: string;
+  /** Any CSS colour; defaults to the ink the trip itself is drawn in. */
+  stroke?: string;
 };
 
 const WIDTH = 300;
@@ -11,7 +13,7 @@ const HEIGHT = 64;
 const TOP = 6;
 
 /** Balance over time, drawn from the series with no client-side work. */
-export function Sparkline({ series, label }: Props) {
+export function Sparkline({ series, label, stroke = "var(--ink-getting-around)" }: Props) {
   if (series.length < 2) return null;
 
   const min = Math.min(...series);
@@ -45,7 +47,7 @@ export function Sparkline({ series, label }: Props) {
       <path
         d={line}
         fill="none"
-        stroke="var(--ink)"
+        stroke={stroke}
         strokeWidth="2"
         strokeLinejoin="round"
         vectorEffect="non-scaling-stroke"

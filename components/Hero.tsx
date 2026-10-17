@@ -8,6 +8,7 @@ import { IconMapPin, IconTicket } from "@tabler/icons-react";
 import type { Account, Category, Transaction } from "@/lib/types";
 import { balanceSeries, recentSpend } from "@/lib/balance";
 import { formatDayGroup, formatEur, formatMoney } from "@/lib/format";
+import { accountInk, categoryInk } from "@/lib/ink";
 import { CountryPicker } from "./live/CountryPicker";
 import { ArrivalTicket } from "./ArrivalTicket";
 import { CountUp } from "./CountUp";
@@ -16,19 +17,6 @@ import styles from "./Hero.module.css";
 
 /** How many payments sit under the weekly summary. */
 const RECENT = 3;
-
-/*
- * Tonal ramp for the weekly split, so the bar needs no second colour. Spread
- * across however many slices there are: a fixed step of 0.22 faded the fifth
- * slice to 0.12 and anything past it to nothing, which is what made a week
- * with six categories unreadable.
- */
-function shade(index: number, count: number): number {
-  const span = 0.72;
-  const step = count < 2 ? 0 : (index / (count - 1)) * span;
-  // Rounded, so the inline style is 0.568 rather than 0.5680000000000001.
-  return Math.round((1 - step) * 1000) / 1000;
-}
 
 function initials(name: string): string {
   return name
@@ -131,7 +119,11 @@ export function Hero({ account, categories, transactions, away }: Props) {
         <div className={showTicket ? styles.gridAway : styles.gridHome}>
           <div className={styles.account} ref={accountRef}>
             <div className={styles.who}>
-              <span className={styles.avatar} aria-hidden="true">
+              <span
+                className={styles.avatar}
+                style={{ background: accountInk(account.holder) }}
+                aria-hidden="true"
+              >
                 {initials(account.holder)}
               </span>
 
@@ -158,7 +150,12 @@ export function Hero({ account, categories, transactions, away }: Props) {
             <div className={styles.cols}>
               <div className={styles.main}>
                 <p className="fieldLabel">Balance</p>
-                <p className={`${styles.balance} tabular`}>
+                {/* The holder's own ink, the same as their initials and the
+                    line below: one account, one colour. */}
+                <p
+                  className={`${styles.balance} tabular`}
+                  style={{ color: accountInk(account.holder) }}
+                >
                   {primary ? (
                     <CountUp value={primary.value} currency={primary.currency} />
                   ) : (
@@ -177,6 +174,7 @@ export function Hero({ account, categories, transactions, away }: Props) {
 
                 <Sparkline
                   series={series}
+                  stroke={accountInk(account.holder)}
                   label={`Balance across the last ${series.length} payments, ending at ${formatEur(primary?.value ?? 0)}`}
                 />
 
@@ -224,21 +222,21 @@ export function Hero({ account, categories, transactions, away }: Props) {
                         )
                         .join(", ")}
                     >
-                      {week.slices.map((slice, index) => (
+                      {week.slices.map((slice) => (
                         <i
                           key={slice.category}
                           style={{
                             flexGrow: slice.share * 100,
-                            opacity: shade(index, week.slices.length),
+                            background: categoryInk(slice.category),
                           }}
                         />
                       ))}
                     </div>
 
                     <ul className={styles.legend}>
-                      {week.slices.map((slice, index) => (
+                      {week.slices.map((slice) => (
                         <li key={slice.category}>
-                          <i style={{ opacity: shade(index, week.slices.length) }} />
+                          <i style={{ background: categoryInk(slice.category) }} />
                           {slice.category}
                           <b className="tabular">{formatEur(slice.totalEur)}</b>
                         </li>
@@ -257,6 +255,11 @@ export function Hero({ account, categories, transactions, away }: Props) {
                           <span className={styles.recentMerchant}>
                             {transaction.merchant}
                             <span className={styles.recentMeta}>
+                              <i
+                                className={styles.dot}
+                                style={{ background: categoryInk(transaction.category) }}
+                                aria-hidden="true"
+                              />
                               {formatDayGroup(transaction.date, reference)} ·{" "}
                               {transaction.category}
                             </span>

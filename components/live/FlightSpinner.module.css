@@ -1,0 +1,65 @@
+/*
+ * Drawn in currentColor throughout, so the same spinner works on the navy
+ * scrim over the account and on the paper of the comparison page without
+ * either having to know about the other.
+ */
+.spinner {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-4);
+}
+
+/* The flight path: a dashed circle, as a map draws a route. */
+.dial {
+  position: relative;
+  display: block;
+  width: 92px;
+  height: 92px;
+  border: 2px dashed currentColor;
+  /*
+   * Faded on the border alone, not with `opacity`: that composites the whole
+   * element, the plane inside it included, and a child cannot opt back out.
+   */
+  border-color: color-mix(in srgb, currentColor 48%, transparent);
+  border-radius: 50%;
+}
+
+.orbit {
+  position: absolute;
+  inset: 0;
+  animation: orbit 1.6s linear infinite;
+}
+
+/*
+ * Parked at the top of the circle, where a clockwise orbit runs left to
+ * right, so the plane's own nose already points the way it is travelling.
+ */
+.orbit svg {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  margin-left: -13px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.86;
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Still says it is loading, without anything moving to say it. */
+@media (prefers-reduced-motion: reduce) {
+  .orbit {
+    animation: none;
+  }
+}

@@ -6,6 +6,7 @@ import { HeaderBackdrop } from "@/components/HeaderBackdrop";
 import { TitleFlight } from "@/components/TitleFlight";
 import { VisaSpread } from "@/components/VisaSpread";
 import { ConsentPanel } from "@/components/live/ConsentPanel";
+import { FlightSpinner } from "@/components/live/FlightSpinner";
 import { TrackView } from "@/components/live/TrackView";
 import { getLiveRecommendations, getLiveSession } from "@/lib/live";
 import styles from "./page.module.css";
@@ -22,13 +23,9 @@ export default function Cheaper({ searchParams }: PageProps<"/cheaper">) {
         </div>
       </div>
 
-      <Suspense
-        fallback={
-          <p className={`page ${styles.loading}`}>
-            <span className="fieldLabel">Checking prices…</span>
-          </p>
-        }
-      >
+      {/* The same plane that covered the account on the way here, so the
+          two halves of the wait are one movement. */}
+      <Suspense fallback={<FlightSpinner className={styles.loading} />}>
         <CheaperContent searchParams={searchParams} />
       </Suspense>
     </main>
@@ -99,7 +96,7 @@ async function CheaperContent({
       <header className={styles.head}>
         <HeaderBackdrop className={styles.headBg} />
         <div className={`page ${styles.headInner}`}>
-          <TitleFlight city={city} />
+          <TitleFlight city={city} countryCode={response.country.code} />
           <p className={styles.lede}>
             Set against prices in {account.homeCity}.{" "}
             {/* US-7.2: say so plainly when none of this came from their payments. */}

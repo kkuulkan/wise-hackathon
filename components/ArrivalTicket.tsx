@@ -7,6 +7,7 @@ import gsap from "gsap";
 import type { Category } from "@/lib/types";
 import { formatPct } from "@/lib/format";
 import { DISMISS_TICKET } from "@/lib/ticket";
+import { FlightLoader } from "./live/FlightLoader";
 import styles from "./ArrivalTicket.module.css";
 
 /** How many categories the ticket previews before the full list. */
@@ -90,13 +91,13 @@ export function ArrivalTicket({ country, homeCity, categories, onDismiss }: Prop
       ref={rootRef}
     >
       <div className={styles.body}>
-        <p className={`fieldLabel ${styles.eyebrow}`}>Arrival &middot; {country}</p>
-
         <h1 className={styles.title} id="arrival-title">
           Welcome to {country}
         </h1>
 
-        <p className={`fieldLabel ${styles.listLabel}`}>Cheaper than {homeCity}</p>
+        <p className={`fieldLabel ${styles.listLabel}`}>
+          Products are cheaper than {homeCity}:
+        </p>
 
         <ul className={styles.list}>
           {categories.slice(0, PREVIEW).map((category) => (
@@ -113,8 +114,13 @@ export function ArrivalTicket({ country, homeCity, categories, onDismiss }: Prop
 
       {/* The stub, below the perforation. */}
       <div className={styles.stub}>
-        <Link href="/cheaper" className={styles.cta}>
+        {/*
+          prefetch={false} so the navigation really does have a pending phase
+          for FlightLoader to show; a prefetched route commits immediately.
+        */}
+        <Link href="/cheaper" className={styles.cta} prefetch={false}>
           See full list
+          <FlightLoader />
         </Link>
 
         <button type="button" className={styles.later} onClick={dismiss}>
