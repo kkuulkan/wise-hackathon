@@ -1,6 +1,7 @@
 import "server-only";
 
 import { asc, desc, eq } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
 
 import categoriesJson from "@/data/seed/categories.json";
 
@@ -12,6 +13,10 @@ import type { CategoryDef, SeedTransaction } from "./types";
  * database (loaded by `npm run db:seed`), standing in for the bank's own
  * profile and transaction services. The category taxonomy is configuration,
  * so it stays a file. Prices live in pricedata.ts; mutable state in store.ts.
+ *
+ * Users and transactions only change when `db:seed` runs, so they are cached
+ * for hours ('use cache', keyed by user id). Restart the server after
+ * reseeding, or redeploy, to drop the cache.
  */
 
 export type Profile = {
@@ -35,17 +40,26 @@ function toProfile(row: typeof schema.users.$inferSelect): Profile {
 }
 
 export async function getProfiles(): Promise<Profile[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("users");
   const rows = await db().select().from(schema.users).orderBy(asc(schema.users.id));
   return rows.map(toProfile);
 }
 
 export async function getProfile(userId: string): Promise<Profile | undefined> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("users");
   const [row] = await db().select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
   return row ? toProfile(row) : undefined;
 }
 
 /** The user's statement, newest first. */
 export async function getTransactions(userId: string): Promise<SeedTransaction[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("transactions");
   const rows = await db()
     .select()
     .from(schema.transactions)

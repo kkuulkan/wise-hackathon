@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | **Caching** (§17): price snapshot `'use cache: remote'` + `cacheLife("days")` (shared across instances, survives Vercel cold starts); users and transactions `'use cache'` + `cacheLife("hours")`; trip and consent de-duplicated per render with React `cache()`; active trip loaded in one JOIN query | After `db:seed` or `db:load-prices`, restart the server (or redeploy) to drop cached data |
 | 2026-10-17 | Neon `dev` branch for local work and smoke tests; `/api/dev/reset` refuses on the `production` branch (§16) | Run `neon checkout dev` locally |
 | 2026-10-17 | All API routes wrapped in `handle()`: clean JSON 503 when the database is down, JSON 500 otherwise (§16). Route handlers are now `export const GET = handle(get)` | If you add a route, wrap it the same way |
 | 2026-10-17 | **Neon Postgres database** (§16). Users, transactions, trips, notifications, consent, feedback, events and verified price snapshots now live in 13 tables (Drizzle schema + migration). `lib/server/store.ts` and `seed.ts` are DB-backed and async; new `pricedata.ts`, `db.ts`; `neon.ts` added by `neon init`. `app/page.tsx` gains one `await`. `/api/dev/reset` is blocked in production unless `OTHERWISE_ALLOW_RESET=true` | **After pulling: run `neon env pull` (or set `DATABASE_URL`), then `npm run db:migrate && npm run db:seed && npm run db:load-prices`** |
@@ -529,4 +530,18 @@ The category taxonomy stays a config file. The catalog cache stays in memory (no
 | DB unreachable | catalog answered from the bundled snapshot (`source: "fallback"`, 200); user endpoints return JSON `503 unavailable`; home page 200; back to `live` when the DB returned |
 | Smoke on `dev` | **78/78**; an app write landed on `dev` (trips 1, events 1) while `production` stayed at 0, checked by branch id |
 | Reset guard | with `NEON_BRANCH=production`, reset returns 403 and the smoke test stops with that message |
+
+## 17. Caching (2026-10-17)
+
+| Data | Changes when | Cache | Where |
+|---|---|---|---|
+| Price snapshot | `db:load-prices` | `'use cache: remote'`, `cacheLife("days")`, tag `prices`: the platform's shared cache on Vercel, in-memory when self-hosted | `lib/server/pricedata.ts` |
+| Catalog answer per (from, to, category) | price snapshot changes | in-memory, 6 h (unchanged) | `lib/server/catalog.ts` |
+| Users, profiles | `db:seed` | `'use cache'`, `cacheLife("hours")`, tag `users` | `lib/server/seed.ts` |
+| Transactions | `db:seed` | `'use cache'`, `cacheLife("hours")`, tag `transactions` | `lib/server/seed.ts` |
+| Active trip, consent | every arrival / answer | **not cached across requests**; React `cache()` de-duplicates within one render only | `lib/server/store.ts` |
+| Feedback, notifications, events | every action | not cached | `lib/server/store.ts` |
+
+Trip, consent and feedback are deliberately fresh on every request: caching them would show a stale trip or ignore a consent answer.
+Cache entries are dropped by a new deploy (the build id is part of the key). Locally, restart the server after `db:seed` / `db:load-prices`.
 
