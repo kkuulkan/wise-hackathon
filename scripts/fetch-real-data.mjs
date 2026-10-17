@@ -91,6 +91,32 @@ const KSH_URL = "https://www.ksh.hu/stadat_files/ara/en/ara0004.csv";
 const MAX_REFERENCE_AGE_DAYS = 550; // KSH publishes annual averages, so last year's figure must still pass
 const MAX_REFERENCE_RATIO = 5; // a home/local price ratio beyond 5x (either way) means a unit or matching error
 
+/**
+ * Narrow product types, most specific first, for "how does this compare with
+ * similar products in this country?". Comparisons are per kg or per litre,
+ * and only made when MIN_TYPE_SAMPLE distinct products of the type exist.
+ */
+const PRODUCT_TYPES = [
+  ["en:extra-virgin-olive-oils", "extra virgin olive oil"], ["en:olive-oils", "olive oil"], ["en:vegetable-oils", "vegetable oil"],
+  ["en:canned-tunas", "canned tuna"], ["en:canned-sardines", "canned sardines"], ["en:canned-fishes", "canned fish"],
+  ["en:dark-chocolates", "dark chocolate"], ["en:milk-chocolates", "milk chocolate"], ["en:chocolates", "chocolate"],
+  ["en:honeys", "honey"], ["en:jams", "jam"], ["en:pastas", "pasta"], ["en:rices", "rice"],
+  ["en:breakfast-cereals", "breakfast cereal"], ["en:biscuits", "biscuits"], ["en:cheeses", "cheese"],
+  ["en:coffee-capsules", "coffee capsules"], ["en:ground-coffees", "ground coffee"], ["en:instant-coffees", "instant coffee"],
+  ["en:coffee-beans", "coffee beans"], ["en:coffees", "coffee"],
+  ["en:shampoos", "shampoo"], ["en:shower-gels", "shower gel"], ["en:toothpastes", "toothpaste"],
+  ["en:deodorants", "deodorant"], ["en:body-milks", "body lotion"],
+];
+const MIN_TYPE_SAMPLE = 5;
+
+/** Quantity → kg or litres, so prices of different pack sizes compare. */
+function unitAmount(quantity, unit) {
+  const value = Number(quantity);
+  if (!(value > 0)) return null;
+  const factor = { g: [0.001, "kg"], kg: [1, "kg"], ml: [0.001, "L"], cl: [0.01, "L"], l: [1, "L"] }[String(unit).toLowerCase()];
+  return factor ? { amount: value * factor[0], unit: factor[1] } : null;
+}
+
 /** Never recommended (PRD edge case 21 and sensitive goods). */
 const EXCLUDED_TAGS = [
   "en:alcoholic-beverages", "en:wines", "en:beers", "en:spirits", "en:baby-milks", "en:dietary-supplements",
@@ -313,6 +339,9 @@ function verifyPrices(country, { prices, currency }, fx) {
     const dates = kept.map((p) => p.date).sort();
     const quantity = product.product_quantity && product.product_quantity_unit
       ? `${product.product_quantity} ${product.product_quantity_unit}` : null;
+    const type = PRODUCT_TYPES.find(([tag]) => product.categories_tags.includes(tag)) ?? null;
+    const amount = unitAmount(product.product_quantity, product.product_quantity_unit);
+    const priceEur = round2(price / fx.perEur[currency]);
 
     products.push({
       id: `op-${country.toLowerCase()}-${code}`,
@@ -325,7 +354,10 @@ function verifyPrices(country, { prices, currency }, fx) {
       quantity,
       price,
       currency,
-      priceEur: round2(price / fx.perEur[currency]),
+      priceEur,
+      type: type?.[0] ?? null,
+      unit: amount?.unit ?? null,
+      unitPriceEur: amount ? round2(priceEur / amount.amount) : null,
       observations: kept.length,
       firstSeen: dates[0],
       lastSeen: dates.at(-1),
@@ -346,14 +378,28 @@ function verifyPrices(country, { prices, currency }, fx) {
     );
   }
 
+  // Per-type median unit price over every verified product, before the cap,
+  // so the comparison uses all the evidence rather than the ten shown.
+  const typeStats = {};
+  for (const [tag, label] of PRODUCT_TYPES) {
+    for (const unit of ["kg", "L"]) {
+      const unitPrices = products.filter((p) => p.type === tag && p.unit === unit).map((p) => p.unitPriceEur);
+      if (unitPrices.length >= MIN_TYPE_SAMPLE) {
+        typeStats[tag] = { label, unit, medianUnitPriceEur: round2(median(unitPrices)), sampleSize: unitPrices.length };
+      }
+    }
+  }
+
   return {
     products: selected,
+    typeStats,
     report: {
       candidates: prices.length,
       passedRecordGates: passed.length,
       rejectedBy: gates,
       distinctProducts: products.length,
       keptProducts: selected.length,
+      typesWithLocalComparison: Object.keys(typeStats).length,
       rejectedExamples,
     },
   };
@@ -458,13 +504,15 @@ async function main() {
 
   console.log("Open Prices …");
   const products = [];
+  const localStats = {};
   const productReport = {};
   for (const [country, info] of Object.entries(COUNTRIES)) {
     const raw = await fetchCountryPrices(country, info);
-    const { products: kept, report } = verifyPrices(country, raw, fx);
+    const { products: kept, typeStats, report } = verifyPrices(country, raw, fx);
     products.push(...kept);
+    localStats[country] = typeStats;
     productReport[country] = report;
-    console.log(`  ${country}: ${report.passedRecordGates}/${report.candidates} prices passed, ${report.keptProducts} products kept`);
+    console.log(`  ${country}: ${report.passedRecordGates}/${report.candidates} prices passed, ${report.keptProducts} products kept, ${report.typesWithLocalComparison} types with a local comparison`);
   }
 
   console.log("Official reference items …");
@@ -482,6 +530,9 @@ async function main() {
       fetchedAt,
       window: { from: new Date(Date.parse(`${TODAY}T00:00:00Z`) - MAX_AGE_DAYS * 86_400_000).toISOString().slice(0, 10), to: TODAY },
       products,
+      // Median price per kg or litre of each product type, by country, from at least
+      // MIN_TYPE_SAMPLE distinct verified products. Backs "vs similar products here".
+      localStats,
     }),
     await writeJson("reference-items.json", {
       _source: "Official national average prices: CSO Ireland table CPM12 (CC BY 4.0) and KSH Hungary STADAT ara0004. Matched by hand to the same item; prices normalised to `unit`.",

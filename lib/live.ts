@@ -126,9 +126,10 @@ function toCategory(
       // converted figure at the ECB rate.
       priceHuf: product.localPrice.local?.amount ?? Math.round(product.localPrice.amount * hufPerEur),
       mapsQuery: `${product.name} ${countryName(country)}`,
-      // The visa compares each place with a local average, which real shelf
-      // data does not give; 0 renders "At {country} avg". See BACKEND_PROGRESS §11.
-      vsLocalAvgPct: 0,
+      // Null means there is no honest local comparison. The visa has no way to
+      // hide its average line yet, so 0 ("At {country} avg") stands in until
+      // the frontend renders localComparison directly. See BACKEND_PROGRESS §14.
+      vsLocalAvgPct: product.localComparison?.pct ?? 0,
     })),
   };
 }

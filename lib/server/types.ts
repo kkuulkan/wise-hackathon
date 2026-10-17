@@ -52,6 +52,11 @@ export type RealProduct = {
   price: number;
   currency: string;
   priceEur: number;
+  /** Most specific Open Food Facts type tag, e.g. "en:canned-tunas". */
+  type: string | null;
+  unit: "kg" | "L" | null;
+  /** EUR per kg or per litre, when the pack size is known. */
+  unitPriceEur: number | null;
   observations: number;
   firstSeen: string;
   lastSeen: string;
@@ -74,6 +79,26 @@ export type ReferenceItem = {
     { price: number; currency: string; priceEur: number; period: string; source: string; url: string }
   >;
 };
+
+/** Median unit price of a product type in one country, from ≥5 verified products. */
+export type LocalTypeStat = {
+  label: string;
+  unit: "kg" | "L";
+  medianUnitPriceEur: number;
+  sampleSize: number;
+};
+
+/**
+ * How a product's price sits within its own country.
+ * national-average  it is the official national average (always 0%)
+ * similar-products  per kg/L against the median of ≥5 verified products of
+ *                   the same type seen in that country
+ * Null when neither exists: the UI must not claim anything about the local
+ * average then.
+ */
+export type LocalComparison =
+  | { basis: "national-average"; pct: 0 }
+  | { basis: "similar-products"; pct: number; typeLabel: string; sampleSize: number; unit: "kg" | "L" };
 
 export type PriceLevels = {
   year: string;
@@ -119,6 +144,8 @@ export type ComparedProduct = {
   localPrice: Price;
   /** Percent cheaper than home. Always positive: dearer items are dropped. */
   savingPct: number;
+  /** Positive pct = below the local comparison point. */
+  localComparison: LocalComparison | null;
   approximate: true;
   /** Date of the most recent verified observation. */
   priceUpdatedAt: string;

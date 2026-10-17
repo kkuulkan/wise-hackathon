@@ -17,7 +17,7 @@
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
 | New dependencies | None (`import "server-only"` is resolved by Next itself) |
 | Env vars | None required. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE` (see §6) |
-| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **68/68** against `next start` |
+| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **71/71** against `next start` |
 
 ### Scope decisions (from aim-t, 2026-10-17)
 
@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | `products[].localComparison`: national average, per-kg/L vs the median of ≥5 similar verified products in the same country, or `null` (§14). Fetch script computes per-type medians (`products.json` → `localStats`) | Additive. **Frontend action needed in `Visa`** (§14) |
 | 2026-10-17 | **Only recommend what a traveller can buy here instead of at home** (§13). Categories gain `buyWhere`; transport, mobile, dining and the new `cafe` category are never recommended. Coffee means coffee to take home. Groceries are shelf-stable take-home goods only. New official matched items from CSO Ireland + KSH Hungary (haircuts, sugar). Product lists vary across sub-categories. Café transactions re-tagged `cafe` | Additive API (`evidence` is now a union, see §13). `categories.json` and `transactions.json` changed |
 | 2026-10-17 | **Real data replaces the mock catalog.** New `scripts/fetch-real-data.mjs` (`npm run fetch-data`) builds `data/real/` from Eurostat, Open Prices and the ECB through verification gates. `data/seed/catalog.json` deleted. Category savings now come from official price levels; products are real shelf prices; FX is the real ECB rate (363 HUF, was a hard-coded 395). `categories.json` gains `priceLevel`. API responses gain fields (none removed); `products` may now be empty. `lib/live.ts` adapted | Additive API. Frontend reading `products[0]` must handle empty lists (§12) |
 | 2026-10-17 | `main` fast-forwarded to `integration` and pushed. Build passes on `main` | Pull `main` before branching |
@@ -413,4 +414,28 @@ Jonas's top category, electronics, never shows: Eurostat has PT 2% dearer and ES
   The second kind has `homePriceBasis: "observed"`, `url` pointing to the destination's statistics table, and `description` = "per cut · national average". **Show `evidence.note` when present.**
 - Official items come first in a category, then shelf products ranked by saving, with at most 2 per Eurostat sub-category and no duplicate names.
 - Categories may now include general (`personalised: false`) take-home suggestions after the personal ones, e.g. "Coffee to take home" for Aoife in Portugal.
+
+## 14. "vs local average" on each product (2026-10-17)
+
+**Problem:** the frontend `Visa` card prints a "vs {country} avg" line for every product from `vsLocalAvgPct`. The adapter used to send `0` ("At {country} avg"),
+which is false for a single shop's shelf price.
+
+**Backend (done):** every product now has `localComparison`:
+
+| Value | When | Honest wording |
+|---|---|---|
+| `{ basis: "national-average", pct: 0 }` | CSO/KSH official items | "National average" |
+| `{ basis: "similar-products", pct, typeLabel, sampleSize, unit }` | Shelf products whose type has ≥5 distinct verified products in that country; per kg or L | "8% below the median of 14 canned tuna seen in Portugal (per kg)". Negative `pct` = above |
+| `null` | No honest comparison: all of IE and HU, and thin types elsewhere | Say nothing about the average |
+
+Coverage on the 2026-10-17 snapshot: 18 types in DE, 7 in ES, 4 in PT, 0 in IE and HU; 106 of 151 shown products have one.
+These are medians of crowdsourced products (often branded or specialty), **not national averages**, so the wording must say "similar products seen here".
+
+**Frontend (handoff to the frontend owner), `components/Visa.tsx`:**
+1. Read `localComparison` instead of `vsLocalAvgPct`. Today `lib/live.ts` maps it to `vsLocalAvgPct` (`null` → `0`) only because `Visa` requires a number.
+2. `null` → **hide** the average line and show where and when it was seen instead. The API already has `evidence.shops[0]`, `evidence.proofs` and `priceUpdatedAt`,
+   e.g. "Lidl, Porto · receipt · Sep 2026". For official items show `evidence.note` when present (e.g. Ireland's haircut is a dry cut).
+3. Word the line from `basis` (table above). Don't call a similar-products median an "average".
+4. Also outstanding: show `homePriceBasis` ("estimated" vs "observed"); hide the forint line when `fx` is null; let the map pin open `url`.
+Once `Visa` takes these, `lib/live.ts` can pass the fields straight through and drop `vsLocalAvgPct`.
 

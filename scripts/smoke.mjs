@@ -113,6 +113,12 @@ check("every product is a verified shelf price or an official average",
     ? p.url.startsWith("https://prices.openfoodfacts.org/products/") && p.evidence.observations >= 1 &&
       p.evidence.proofs.every((x) => ["RECEIPT", "PRICE_TAG"].includes(x))
     : p.evidence.source === "National statistics" && p.homePriceBasis === "observed"));
+check("local comparison is national-average, a sized similar-products median, or null",
+  productsA.every((p) => p.localComparison === null ||
+    (p.localComparison.basis === "national-average" && p.localComparison.pct === 0 && p.evidence.source === "National statistics") ||
+    (p.localComparison.basis === "similar-products" && p.localComparison.sampleSize >= 5 && Number.isInteger(p.localComparison.pct))));
+check("some shelf products in PT have a similar-products comparison",
+  productsA.some((p) => p.localComparison?.basis === "similar-products"));
 check("no near-duplicate products within a category",
   recA.categories.every((c) => new Set(c.products.map((p) => p.name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim())).size === c.products.length));
 check("home prices are marked observed or estimated", productsA.every((p) => ["observed", "estimated"].includes(p.homePriceBasis)));
@@ -167,6 +173,7 @@ const haircut = r.json.categories.find((c) => c.slug === "personal-care")?.produ
 check("Aoife in HU: men's haircut from official statistics on both sides",
   haircut?.homePriceBasis === "observed" && haircut.evidence.source === "National statistics" &&
   haircut.homePrice.amount > haircut.localPrice.amount && haircut.localPrice.local?.currency === "HUF");
+check("official items compare as the national average", haircut?.localComparison?.basis === "national-average");
 check("Aoife in HU: butter left out (dearer in Hungary by official averages)",
   !r.json.categories.some((c) => c.products.some((p) => p.id === "ref-butter")));
 check("HU has HUF local prices at the verified ECB rate",

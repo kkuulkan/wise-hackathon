@@ -10,12 +10,13 @@ import {
   MAX_PRICE_AGE_DAYS,
   MAX_PRODUCTS_PER_CATEGORY,
 } from "./config";
-import { getCategoryDef, getPriceLevels, getRealProducts, getReferenceItems } from "./seed";
+import { getCategoryDef, getLocalStats, getPriceLevels, getRealProducts, getReferenceItems } from "./seed";
 import { readCatalogCache, readStaleCatalogCache, writeCatalogCache } from "./store";
 import type {
   CatalogResponse,
   CategoryComparison,
   ComparedProduct,
+  LocalComparison,
   Price,
   RealProduct,
 } from "./types";
@@ -144,6 +145,7 @@ function compareReferenceItems(query: CatalogQuery): ComparedProduct[] {
           homePriceBasis: "observed",
           localPrice: toPrice(local.priceEur, query.to, local.currency === "EUR" ? undefined : local.price),
           savingPct: Math.round(((home.priceEur - local.priceEur) / home.priceEur) * 100),
+          localComparison: { basis: "national-average", pct: 0 },
           approximate: true,
           // The older of the two sides, so the date never overstates freshness.
           priceUpdatedAt: [home.period, local.period].sort()[0],
@@ -152,6 +154,20 @@ function compareReferenceItems(query: CatalogQuery): ComparedProduct[] {
         },
       ];
     });
+}
+
+/** Per kg/L against similar verified products in the same country, or null. */
+function localComparisonFor(product: RealProduct): LocalComparison | null {
+  const stat = product.type ? getLocalStats()[product.country]?.[product.type] : undefined;
+  if (!stat || product.unitPriceEur === null || product.unit !== stat.unit) return null;
+
+  return {
+    basis: "similar-products",
+    pct: Math.round(((stat.medianUnitPriceEur - product.unitPriceEur) / stat.medianUnitPriceEur) * 100),
+    typeLabel: stat.label,
+    sampleSize: stat.sampleSize,
+    unit: stat.unit,
+  };
 }
 
 function compareProducts(products: RealProduct[], query: CatalogQuery): ComparedProduct[] {
@@ -191,6 +207,7 @@ function compareProducts(products: RealProduct[], query: CatalogQuery): Compared
           homePriceBasis: observed ? "observed" : "estimated",
           localPrice: toPrice(product.priceEur, query.to, product.currency === "EUR" ? undefined : product.price),
           savingPct: Math.round(((homeEur - product.priceEur) / homeEur) * 100),
+          localComparison: localComparisonFor(product),
           approximate: true,
           priceUpdatedAt: product.lastSeen,
           evidence: {

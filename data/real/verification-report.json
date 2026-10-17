@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-17T06:53:56.830Z",
+  "fetchedAt": "2026-10-17T07:04:42.459Z",
   "today": "2026-10-17",
   "fx": {
     "ecb": {
@@ -37,6 +37,7 @@
       },
       "distinctProducts": 9,
       "keptProducts": 9,
+      "typesWithLocalComparison": 0,
       "rejectedExamples": []
     },
     "DE": {
@@ -56,6 +57,7 @@
       },
       "distinctProducts": 883,
       "keptProducts": 70,
+      "typesWithLocalComparison": 18,
       "rejectedExamples": [
         {
           "gate": "not a discounted price",
@@ -132,6 +134,7 @@
       },
       "distinctProducts": 60,
       "keptProducts": 31,
+      "typesWithLocalComparison": 4,
       "rejectedExamples": [
         {
           "gate": "not a discounted price",
@@ -208,6 +211,7 @@
       },
       "distinctProducts": 0,
       "keptProducts": 0,
+      "typesWithLocalComparison": 0,
       "rejectedExamples": []
     },
     "ES": {
@@ -227,6 +231,7 @@
       },
       "distinctProducts": 113,
       "keptProducts": 41,
+      "typesWithLocalComparison": 7,
       "rejectedExamples": [
         {
           "gate": "has barcode and name",

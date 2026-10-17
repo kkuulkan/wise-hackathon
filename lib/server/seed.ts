@@ -7,7 +7,14 @@ import categoriesJson from "@/data/seed/categories.json";
 import transactionsJson from "@/data/seed/transactions.json";
 import usersJson from "@/data/seed/users.json";
 
-import type { CategoryDef, PriceLevels, RealProduct, ReferenceItem, SeedTransaction } from "./types";
+import type {
+  CategoryDef,
+  LocalTypeStat,
+  PriceLevels,
+  RealProduct,
+  ReferenceItem,
+  SeedTransaction,
+} from "./types";
 
 /**
  * Read-only data. Users and transactions are demo seed; price levels and
@@ -56,6 +63,11 @@ export function getCategoryDef(slug: string): CategoryDef | undefined {
 /** Verified Open Prices products for every country. */
 export function getRealProducts(): RealProduct[] {
   return productsJson.products as RealProduct[];
+}
+
+/** Median unit price per product type, per country (see LocalTypeStat). */
+export function getLocalStats(): Record<string, Record<string, LocalTypeStat>> {
+  return productsJson.localStats as Record<string, Record<string, LocalTypeStat>>;
 }
 
 /** Official national average prices matched across countries (CSO, KSH). */
