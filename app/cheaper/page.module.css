@@ -96,13 +96,10 @@
   margin-top: var(--space-3);
   max-width: 42ch;
   font-size: 21px;
-  font-weight: 600;
-  color: rgba(240, 240, 182, 0.82);
-}
-
-.lede strong {
-  color: var(--ink-invert);
+  /* 700 is a weight the body face actually ships (see app/layout.tsx); 600
+     was being synthesised. Full-strength ink with it, rather than held back. */
   font-weight: 700;
+  color: var(--ink-invert);
 }
 
 .foot {

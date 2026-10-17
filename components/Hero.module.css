@@ -238,20 +238,40 @@
 
 .whoText {
   min-width: 0;
+  /* Name and place on one line, wrapping only when there is no room. */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
 }
 
 .whoText b {
-  display: block;
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: 26px;
   font-weight: 800;
-  line-height: 1.2;
+  font-stretch: 112%;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
-.whoText span {
-  font-size: 14px;
+/* Where they are, as a tag against the name rather than a line under it. */
+.place {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--chip-bg);
+  font-family: var(--font-mono);
+  font-size: 13px;
   font-weight: 600;
-  color: var(--muted);
+  white-space: nowrap;
+}
+
+.place svg {
+  flex: none;
+  color: var(--stamp);
 }
 
 /* Home to here, as a ticket prints a route. */
@@ -309,11 +329,26 @@
   letter-spacing: 0.04em;
 }
 
+/*
+ * The picker and the account actions move as one block. Narrowed, the column
+ * is laid out with `space-between`, which would otherwise push the buttons to
+ * the foot of the card and open a gap under the picker that grows with the
+ * ticket beside it.
+ */
+.tail {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* Closer together once the card has shrunk, where the room is tight. */
+.gridAway .tail {
+  gap: var(--space-3);
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  margin-top: var(--space-6);
 }
 
 .primaryAction,
@@ -408,4 +443,56 @@
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 500;
+}
+
+/*
+ * The put-away arrival ticket, as a tab on the right edge of the page. Fixed,
+ * so it stays reachable the whole way down the account; under the demo bar
+ * (60) and the consent card (200), over everything else.
+ */
+.ticketTab {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 50;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  /* Reads bottom-to-top, the way a spine does. */
+  writing-mode: vertical-rl;
+  padding: var(--space-4) var(--space-2);
+
+  border: 1px solid var(--line-strong);
+  border-right: 0;
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
+
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ticketTab:hover {
+  transform: translateY(-50%) translateX(-3px);
+}
+
+.ticketTab svg {
+  /* The glyph keeps its upright orientation inside the vertical text. */
+  writing-mode: horizontal-tb;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticketTab {
+    transition: none;
+  }
 }

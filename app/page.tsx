@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { Hero } from "@/components/Hero";
+import { ConsentGate } from "@/components/live/ConsentGate";
 import { DemoBar } from "@/components/live/DemoBar";
 import { getLiveRecommendations, getLiveSession, getLiveTransactions } from "@/lib/live";
 
@@ -29,7 +30,12 @@ async function HomeContent() {
   if (!session) {
     return (
       <>
-        <DemoBar userId={null} homeCountryCode={null} tripCountry={null} />
+        <DemoBar
+          userId={null}
+          homeCountryCode={null}
+          tripCountry={null}
+          notificationsAllowed={false}
+        />
         <p className="fieldLabel" style={{ margin: "var(--space-6) var(--page-gutter)" }}>
           Choose a traveller above to open their account.
         </p>
@@ -37,7 +43,7 @@ async function HomeContent() {
     );
   }
 
-  const { account, profile, tripCountry } = session;
+  const { account, consent, profile, tripCountry } = session;
   const transactions = getLiveTransactions(profile);
   const recommendations = tripCountry ? await getLiveRecommendations(session) : null;
   const categories = recommendations?.ok ? recommendations.categories : [];
@@ -45,10 +51,18 @@ async function HomeContent() {
 
   return (
     <>
+      {/*
+        US-6.1: asked once, before any of their own data is on screen. The
+        answer is stored server-side, and it is the backend that then decides
+        what may be computed, so there is nothing to enforce out here.
+      */}
+      {!consent.decided && <ConsentGate />}
+
       <DemoBar
         userId={profile.userId}
         homeCountryCode={profile.homeCountry}
         tripCountry={tripCountry}
+        notificationsAllowed={consent.notifications}
       />
 
       <Hero

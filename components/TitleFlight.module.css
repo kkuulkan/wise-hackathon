@@ -1,5 +1,10 @@
 .wrap {
   position: relative;
+  /*
+   * Hugs the word, so the plane parks against the end of the title itself
+   * rather than against the far edge of the page.
+   */
+  display: inline-block;
   /* Room for the plane to cross without clipping against the heading box. */
   padding: var(--space-2) 0;
 }
@@ -31,15 +36,18 @@
   pointer-events: none;
 }
 
+/*
+ * Parked: just above the end of the word, which is where the flight ends and
+ * the plane then stays. The tilt comes from the animation, so that the nose
+ * can settle from its climb.
+ */
 .plane {
   position: absolute;
-  top: 50%;
-  left: 0;
+  top: 0;
+  right: 2px;
   z-index: 2;
   display: block;
-  margin-top: -19px;
-  /* Nose up, as a plane sits while it is climbing. */
-  rotate: -12deg;
+  margin-top: -16px;
   opacity: 0;
   pointer-events: none;
 }

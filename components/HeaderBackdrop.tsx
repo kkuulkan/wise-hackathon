@@ -9,7 +9,7 @@ import Image from "next/image";
 export function HeaderBackdrop({ className }: { className: string }) {
   return (
     <Image
-      src="/Background.jpeg"
+      src="/Image.jpeg"
       alt=""
       aria-hidden="true"
       fill

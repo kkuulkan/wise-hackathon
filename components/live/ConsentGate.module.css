@@ -1,0 +1,146 @@
+/*
+ * The opt-in, over the whole page. Paper on navy, like the arrival ticket, so
+ * it reads as a form handed across a desk rather than a cookie banner.
+ */
+.scrim {
+  position: fixed;
+  inset: 0;
+  /* Over the booklet cover (100) and the demo bar (60): nothing may sit on
+     top of a question that has to be answered. */
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  /* The scrim scrolls, not the card. A card with its own hidden overflow put
+     the choices below a fold nobody could see. */
+  overflow-y: auto;
+  padding: var(--space-6) var(--page-gutter);
+  background: rgba(15, 44, 92, 0.58);
+  backdrop-filter: blur(6px);
+  animation: fade 240ms ease-out both;
+}
+
+.card {
+  width: min(560px, 100%);
+  /* Centres when it fits, and stays fully reachable when it does not, which
+     `align-items: center` cannot do. */
+  margin: auto;
+  padding: var(--space-8);
+  border-radius: var(--radius-card);
+  /*
+   * `--surface` is the raised paper the visas and the arrival ticket are
+   * printed on. Not `--paper`, which is the navy cover: that put navy ink on
+   * a navy card and made the choices invisible.
+   */
+  background: var(--surface);
+  /* The body sets beige ink for the navy page, so paper has to set its own. */
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
+  animation: rise 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.title {
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(26px, 4vw, 34px);
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.copy {
+  margin-top: var(--space-4);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.choose {
+  margin-top: var(--space-6);
+  color: var(--muted);
+}
+
+/*
+ * Stacked, full width, equal size. Side by side the second choice reads as an
+ * afterthought, and declining has to be as easy to find as accepting.
+ */
+.actions {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.accept,
+.decline {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 52px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-btn);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.accept {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Declining is a real choice, so it is a button, not a faint link. */
+.decline {
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+}
+
+.decline:hover {
+  background: var(--chip-bg);
+}
+
+.accept:active,
+.decline:active {
+  transform: scale(0.98);
+}
+
+.accept:disabled,
+.decline:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.foot {
+  min-height: 1.6em;
+  margin-top: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .card {
+    animation: none;
+  }
+}

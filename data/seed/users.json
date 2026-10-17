@@ -7,8 +7,11 @@
       "homeCity": "Dublin",
       "homeCountry": "IE",
       "balances": [
-        { "value": 2480.5, "currency": "EUR", "primary": true },
-        { "value": 184200, "currency": "HUF", "primary": false }
+        {
+          "value": 2480.5,
+          "currency": "EUR",
+          "primary": true
+        }
       ]
     },
     {
@@ -17,7 +20,11 @@
       "homeCity": "Berlin",
       "homeCountry": "DE",
       "balances": [
-        { "value": 1315.2, "currency": "EUR", "primary": true }
+        {
+          "value": 1315.2,
+          "currency": "EUR",
+          "primary": true
+        }
       ]
     }
   ]

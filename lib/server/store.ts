@@ -39,9 +39,18 @@ function initialUserState(): UserState {
   return {
     trips: [],
     notifications: [],
-    // PRD open question 5: consent is covered by existing T&Cs, so demo users
-    // start opted in. PUT /api/consent withdraws it.
-    consent: { personalisation: true, notifications: true, updatedAt: new Date(0).toISOString() },
+    /*
+     * PRD open question 5: consent is covered by existing T&Cs, so the
+     * permissions themselves start granted and an API-only caller behaves as
+     * before. `decided` is what the UI goes by: nobody has answered yet, so
+     * the app asks before it shows anything (US-6.1).
+     */
+    consent: {
+      personalisation: true,
+      notifications: true,
+      decided: false,
+      updatedAt: new Date(0).toISOString(),
+    },
     feedback: [],
   };
 }

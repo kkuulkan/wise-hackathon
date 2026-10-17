@@ -15,6 +15,12 @@ type Props = {
   homeCountryCode: string | null;
   /** Country of the active trip, so the picker starts there. */
   tripCountry: string | null;
+  /**
+   * False when this traveller declined. Arrival is something the bank does to
+   * them on the strength of their consent, so without it there is nothing to
+   * simulate and the control goes away.
+   */
+  notificationsAllowed: boolean;
 };
 
 /** Every API error has `{ error: { message } }`; anything else gets a generic line. */
@@ -36,7 +42,12 @@ async function call<T>(method: string, path: string, body?: unknown): Promise<T>
  * server afterwards. The arrival notification the backend returns is not shown:
  * the ticket beside the balance already carries that message.
  */
-export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
+export function DemoBar({
+  userId,
+  homeCountryCode,
+  tripCountry,
+  notificationsAllowed,
+}: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [users, setUsers] = useState<DemoUser[]>([]);
@@ -49,6 +60,17 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
       .then((data) => setUsers(data.users))
       .catch((error: Error) => setMessage(error.message));
   }, []);
+
+  /*
+   * The notices here are asides — "already notified", "nothing was sent" —
+   * and none of them needs acting on, so they clear themselves rather than
+   * sitting over the page until the next action.
+   */
+  useEffect(() => {
+    if (message === null) return;
+    const timer = window.setTimeout(() => setMessage(null), 2000);
+    return () => window.clearTimeout(timer);
+  }, [message]);
 
   useEffect(() => {
     if (!userId) return;
@@ -68,6 +90,19 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
       }
     });
   };
+
+  /*
+   * Consent is remembered per customer, as it should be, so signing out and
+   * back in does not ask again. This wipes the server's demo state — trips,
+   * notifications, consent, feedback — and signs out, which is what makes the
+   * opt-in appear again on the next pick.
+   */
+  const resetDemo = () =>
+    run(async () => {
+      await call("POST", "/api/dev/reset");
+      await call("DELETE", "/api/session");
+      setMessage("Demo reset. Pick a traveller to be asked for consent again.");
+    });
 
   const signIn = (id: string) =>
     run(async () => {
@@ -113,7 +148,14 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
           </select>
         </label>
 
-        {userId && (
+        {userId && !notificationsAllowed && (
+          <p className={styles.declined}>
+            Consent declined, so OtherWise does not watch for arrivals. Turn it back on in
+            OtherWise settings, or reset the demo.
+          </p>
+        )}
+
+        {userId && notificationsAllowed && (
           <>
             <label className={styles.field}>
               <span className={styles.fieldName}>Arrive in</span>
@@ -152,6 +194,15 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
             )}
           </>
         )}
+
+        <button
+          type="button"
+          className={styles.reset}
+          onClick={resetDemo}
+          disabled={pending}
+        >
+          Reset demo
+        </button>
       </div>
 
       {message && (

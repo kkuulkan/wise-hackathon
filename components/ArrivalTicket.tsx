@@ -13,14 +13,15 @@ import styles from "./ArrivalTicket.module.css";
 const PREVIEW = 3;
 
 type Props = {
-  city: string;
+  /** Destination country name: the backend knows the country, not the city. */
+  country: string;
   homeCity: string;
   categories: Category[];
   /** Called once the ticket has finished sliding off to the right. */
   onDismiss: () => void;
 };
 
-export function ArrivalTicket({ city, homeCity, categories, onDismiss }: Props) {
+export function ArrivalTicket({ country, homeCity, categories, onDismiss }: Props) {
   const rootRef = useRef<HTMLElement>(null);
   const leaving = useRef(false);
 
@@ -89,10 +90,10 @@ export function ArrivalTicket({ city, homeCity, categories, onDismiss }: Props) 
       ref={rootRef}
     >
       <div className={styles.body}>
-        <p className={`fieldLabel ${styles.eyebrow}`}>Arrival &middot; {city}</p>
+        <p className={`fieldLabel ${styles.eyebrow}`}>Arrival &middot; {country}</p>
 
         <h1 className={styles.title} id="arrival-title">
-          Welcome to {city}
+          Welcome to {country}
         </h1>
 
         <p className={`fieldLabel ${styles.listLabel}`}>Cheaper than {homeCity}</p>

@@ -5,9 +5,8 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import { HeaderBackdrop } from "@/components/HeaderBackdrop";
 import { TitleFlight } from "@/components/TitleFlight";
 import { VisaSpread } from "@/components/VisaSpread";
+import { ConsentPanel } from "@/components/live/ConsentPanel";
 import { TrackView } from "@/components/live/TrackView";
-import { getTotalAnnualSaving } from "@/lib/data";
-import { formatEur } from "@/lib/format";
 import { getLiveRecommendations, getLiveSession } from "@/lib/live";
 import styles from "./page.module.css";
 
@@ -47,13 +46,25 @@ const PROBLEMS = {
 
 function Problem({ reason }: { reason: keyof typeof PROBLEMS }) {
   return (
-    <header className={styles.head}>
-      <HeaderBackdrop className={styles.headBg} />
-      <div className={`page ${styles.headInner}`}>
-        <p className="fieldLabel">Visas / Endorsements</p>
-        <p className={styles.lede}>{PROBLEMS[reason]}</p>
-      </div>
-    </header>
+    <>
+      <header className={styles.head}>
+        <HeaderBackdrop className={styles.headBg} />
+        <div className={`page ${styles.headInner}`}>
+          <p className={styles.lede}>{PROBLEMS[reason]}</p>
+        </div>
+      </header>
+
+      {/*
+        The settings live here too, not only beside a finished comparison: a
+        traveller who declined has no trip, and this is the one screen they can
+        still reach to change their mind (US-6.3).
+      */}
+      {reason !== "signed-out" && (
+        <div className={`page ${styles.body}`}>
+          <ConsentPanel />
+        </div>
+      )}
+    </>
   );
 }
 
@@ -77,7 +88,6 @@ async function CheaperContent({
   const { account } = session;
   const { response, categories } = result;
   const city = response.country.name;
-  const total = getTotalAnnualSaving(categories);
 
   return (
     <>
@@ -89,17 +99,11 @@ async function CheaperContent({
       <header className={styles.head}>
         <HeaderBackdrop className={styles.headBg} />
         <div className={`page ${styles.headInner}`}>
-          <p className="fieldLabel">Visas / Endorsements</p>
           <TitleFlight city={city} />
           <p className={styles.lede}>
             Set against prices in {account.homeCity}.{" "}
-            {total > 0 ? (
-              <>
-                At your own rate of spending, switching would keep about{" "}
-                <strong className="tabular">{formatEur(total, true)}</strong> a
-                year.
-              </>
-            ) : (
+            {/* US-7.2: say so plainly when none of this came from their payments. */}
+            {!response.personalised && (
               <>These are general suggestions, not based on your payments.</>
             )}
           </p>
@@ -111,6 +115,7 @@ async function CheaperContent({
           categories={categories}
           city={city}
           homeCity={account.homeCity}
+          countryCode={response.country.code}
         />
 
         <footer className={styles.foot}>
@@ -128,6 +133,8 @@ async function CheaperContent({
               : ""}
             This is a prototype, not a travel document.
           </p>
+
+          <ConsentPanel />
         </footer>
       </div>
     </>

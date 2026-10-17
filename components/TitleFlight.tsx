@@ -12,7 +12,8 @@ type Props = {
 };
 
 /**
- * The country name, with a plane crossing straight through it.
+ * The country name, with a plane that crosses straight through it and then
+ * parks above the end of the word.
  *
  * Mounts at the same moment as the spread below, so the flight and the page
  * turn read as one movement without the two components having to coordinate.
@@ -24,36 +25,42 @@ export function TitleFlight({ city }: Props) {
     const plane = `.${styles.plane}`;
     const trail = `.${styles.trail}`;
 
+    /*
+     * Where it comes to rest: its own place in the layout, above the end of
+     * the word. Ending the flight on x/y 0 rather than on measured pixels
+     * means the parked plane is positioned by CSS alone, so it stays put if
+     * the heading rewraps or the window is resized.
+     */
+    const REST = { x: 0, y: 0, rotation: -8, opacity: 1 };
+
     const ctx = gsap.context(() => {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        gsap.set([plane, trail], { autoAlpha: 0 });
+        // No flight, but the plane is still parked where it belongs.
+        gsap.set(plane, REST);
+        gsap.set(trail, { autoAlpha: 0 });
         return;
       }
 
+      const root = rootRef.current;
+      const title = root?.querySelector<HTMLElement>(`.${styles.title}`);
+      // The wrapper hugs the word, so its width is the distance to cross.
+      const run = (root?.offsetWidth ?? 320) + 90;
+      const drop = (title?.offsetHeight ?? 88) * 0.62;
+
       gsap
         .timeline()
-        // Climbing left to right, straight across the letters.
-        .fromTo(
-          plane,
-          { xPercent: -130, yPercent: 46, opacity: 0 },
-          {
-            xPercent: 900,
-            yPercent: -46,
-            opacity: 1,
-            duration: 1.25,
-            ease: "power1.inOut",
-          },
-          0.15,
-        )
-        .to(plane, { opacity: 0, duration: 0.3 }, 1.1)
-        // The contrail draws in behind it, then fades.
+        // Comes in low and off to the left, climbing across the letters.
+        .set(plane, { x: -run, y: drop, rotation: -16, opacity: 0 })
+        .to(plane, { opacity: 1, duration: 0.28 }, 0.15)
+        .to(plane, { ...REST, duration: 1.35, ease: "power1.inOut" }, 0.15)
+        // The contrail draws in behind it, then fades, leaving the plane.
         .fromTo(
           trail,
           { scaleX: 0, opacity: 0.85 },
           { scaleX: 1, duration: 1.05, ease: "power1.inOut" },
           0.15,
         )
-        .to(trail, { opacity: 0, duration: 0.4 }, 1.0);
+        .to(trail, { opacity: 0, duration: 0.4 }, 1.1);
     }, rootRef);
 
     return () => ctx.revert();

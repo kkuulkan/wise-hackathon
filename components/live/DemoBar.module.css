@@ -71,7 +71,8 @@
 }
 
 .primary,
-.secondary {
+.secondary,
+.reset {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -104,8 +105,23 @@
 }
 
 .primary:active,
-.secondary:active {
+.secondary:active,
+.reset:active {
   transform: scale(0.98);
+}
+
+/*
+ * Wipes the server's demo state. Set apart from the two trip controls, and
+ * quieter than both, because it is scaffolding rather than part of the story.
+ */
+.reset {
+  border: 1px dashed var(--line-strong);
+  background: transparent;
+  color: var(--muted);
+}
+
+.reset:hover {
+  color: var(--ink);
 }
 
 /* Popovers below the bar: absolute, so the page never moves. */
@@ -148,4 +164,14 @@
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+}
+
+/* Why the arrival controls are not there. */
+.declined {
+  max-width: 44ch;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--muted);
 }

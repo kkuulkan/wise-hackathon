@@ -14,9 +14,11 @@ type Props = {
   categories: Category[];
   city: string;
   homeCity: string;
+  /** Destination country code, passed down for the product_tapped event. */
+  countryCode: string;
 };
 
-export function VisaSpread({ categories, city, homeCity }: Props) {
+export function VisaSpread({ categories, city, homeCity, countryCode }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -36,7 +38,31 @@ export function VisaSpread({ categories, city, homeCity }: Props) {
         return;
       }
 
-      gsap
+      // Where a stamp lands from. Set up front, so nothing is ever briefly
+      // visible before its own tween takes hold.
+      gsap.set(visas, {
+        opacity: 0,
+        y: 24,
+        rotate: (index: number) => (index % 2 === 0 ? -2 : 2),
+      });
+
+      const START = "top 94%";
+      const land = { opacity: 1, y: 0, rotate: 0, duration: 0.45, ease: "power2.out" };
+
+      /*
+       * Two groups, because a stamp must never overtake the one above it.
+       * Everything on screen when the page turns is sequenced inside the
+       * timeline; everything below waits for the scroll, and those triggers
+       * are only created once the sequence has finished. Previously each card
+       * carried both a delay and a trigger, so card two sat out its 0.87s
+       * while card three, with no delay at all, landed the moment it was
+       * scrolled into view — and arrived first.
+       */
+      const fold = window.innerHeight * 0.94;
+      const onScreen = visas.filter((visa) => visa.getBoundingClientRect().top < fold);
+      const below = visas.slice(onScreen.length);
+
+      const timeline = gsap
         .timeline()
         // The page swings away on its spine, revealing the spread beneath.
         .to(turning, {
@@ -49,25 +75,21 @@ export function VisaSpread({ categories, city, homeCity }: Props) {
         .fromTo(sweep, { opacity: 0 }, { opacity: 0.55, duration: 0.45 }, 0)
         .to(sweep, { opacity: 0, duration: 0.45 }, 0.45);
 
-      // Stamps land one after another, as if applied by hand.
-      visas.forEach((visa, index) => {
-        gsap.fromTo(
-          visa,
-          { opacity: 0, y: 24, rotate: index % 2 === 0 ? -2 : 2 },
-          {
-            opacity: 1,
-            y: 0,
-            rotate: 0,
-            duration: 0.45,
-            delay: index < 2 ? 0.75 + index * 0.12 : 0,
-            ease: "power2.out",
-            scrollTrigger: { trigger: visa, start: "top 94%", once: true },
-          },
-        );
+      // Stamped by hand, one after another, as the page comes off them.
+      onScreen.forEach((visa, index) => {
+        timeline.to(visa, land, 0.55 + index * 0.12);
       });
 
-      // Positions are stale after a client navigation.
-      ScrollTrigger.refresh();
+      timeline.call(() => {
+        below.forEach((visa) => {
+          gsap.to(visa, {
+            ...land,
+            scrollTrigger: { trigger: visa, start: START, once: true },
+          });
+        });
+        // Positions are stale after a client navigation.
+        ScrollTrigger.refresh();
+      });
     }, rootRef);
 
     return () => ctx.revert();
@@ -108,7 +130,6 @@ export function VisaSpread({ categories, city, homeCity }: Props) {
       */}
       <div className={styles.turningPage} aria-hidden="true">
         <div className={styles.turningFace}>
-          <p className="fieldLabel">Visas / Endorsements</p>
           <p className={styles.turningCity}>{city}</p>
         </div>
         <div className={styles.sweep} />
@@ -122,6 +143,7 @@ export function VisaSpread({ categories, city, homeCity }: Props) {
               category={category}
               city={city}
               homeCity={homeCity}
+              countryCode={countryCode}
               index={index}
             />
           </div>

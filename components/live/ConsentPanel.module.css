@@ -1,0 +1,101 @@
+/*
+ * Sits in the footer of the comparison page, below the disclosure it expands
+ * on. Set in the mono face like the rest of the footer, so it reads as the
+ * document's small print rather than a separate widget.
+ */
+.panel {
+  margin-top: var(--space-4);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-card);
+  background: transparent;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:hover {
+  background: var(--chip-bg);
+}
+
+.trigger svg:first-child {
+  flex: none;
+}
+
+.chevron,
+.chevronOpen {
+  flex: none;
+  margin-left: auto;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.body {
+  padding: var(--space-4) var(--space-3) 0;
+}
+
+.explainer {
+  max-width: 68ch;
+  color: var(--muted);
+}
+
+.switches {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.switch {
+  border-top: 1px dotted var(--line);
+}
+
+.switchLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-3) 0;
+  cursor: pointer;
+}
+
+/* Big enough to hit, and a square box suits the form-filling theme. */
+.switchLabel input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  accent-color: var(--accent);
+}
+
+.switchLabel b {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hint {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+/* Reserves its line, so a confirmation does not shift the panel when it lands. */
+.status {
+  min-height: 1.6em;
+  margin-top: var(--space-2);
+  color: var(--ink);
+}

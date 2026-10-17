@@ -2,13 +2,17 @@ import "server-only";
 
 import { connection } from "next/server";
 
-import { COUNTRIES, DEMO_TODAY, FX_PER_EUR, HISTORY_WINDOW_DAYS } from "@/lib/server/config";
+import { COUNTRIES, DEMO_TODAY, HISTORY_WINDOW_DAYS } from "@/lib/server/config";
 import { buildRecommendations } from "@/lib/server/recommendations";
 import { getCategoryDef, getSeedTransactions, type Profile } from "@/lib/server/seed";
 import { currentUser } from "@/lib/server/session";
-import { getActiveTrip } from "@/lib/server/store";
+import { getActiveTrip, getConsent } from "@/lib/server/store";
 import { isEligiblePair } from "@/lib/server/trips";
-import type { RecommendationCategory, RecommendationsResponse } from "@/lib/server/types";
+import type {
+  Consent,
+  RecommendationCategory,
+  RecommendationsResponse,
+} from "@/lib/server/types";
 
 import type { Account, Category, CurrencyCode, Transaction } from "./types";
 
@@ -33,6 +37,8 @@ export type LiveSession = {
   account: Account;
   /** Country of the active trip, or null at home. */
   tripCountry: string | null;
+  /** Their answer to the consent question, and whether they have given one. */
+  consent: Consent;
 };
 
 /** The signed-in user as the frontend's Account, or null when signed out. */
@@ -63,7 +69,12 @@ export async function getLiveSession(): Promise<LiveSession | null> {
     })),
   };
 
-  return { profile, account, tripCountry: away ? here : null };
+  return {
+    profile,
+    account,
+    tripCountry: away ? here : null,
+    consent: getConsent(profile.userId),
+  };
 }
 
 /**
@@ -81,25 +92,15 @@ export function getLiveTransactions(profile: Profile): Transaction[] {
     }));
 }
 
-function toCategory(
-  category: RecommendationCategory,
-  country: string,
-  homeCity: string,
-): Category {
+function toCategory(category: RecommendationCategory, homeCity: string): Category {
   const { products } = category;
   const mean = (values: number[]) => values.reduce((total, value) => total + value, 0) / values.length;
   const updated = products.map((product) => product.priceUpdatedAt).sort().at(-1);
-  const hufPerEur = FX_PER_EUR.HUF;
-
-  // Annualised: what this user spent here in 90 days, scaled to a year, at
-  // the category's saving. Default-set categories have no spend, so no claim.
-  const annualSavingEur = category.reason
-    ? round2(category.reason.spentEur * YEAR_OVER_WINDOW * (category.savingPct / 100))
-    : 0;
 
   return {
     slug: category.slug,
     label: category.label,
+    icon: category.icon,
     unit: category.personalised ? "From your own spending" : "General suggestion",
     homeAvgEur: round2(mean(products.map((product) => product.homePrice.amount))),
     localAvgEur: round2(mean(products.map((product) => product.localPrice.amount))),
@@ -108,17 +109,21 @@ function toCategory(
       : 0,
     source: `Approximate prices compared with ${homeCity}, last updated ${updated}.`,
     savingPct: category.savingPct,
-    annualSavingEur,
     products: products.map((product) => ({
+      id: product.id,
       name: product.name,
       area: product.description,
       priceEur: product.localPrice.amount,
-      // The visa always prints a forint line; outside Hungary it is the
-      // converted figure at the seeded rate.
-      priceHuf: product.localPrice.local?.amount ?? Math.round(product.localPrice.amount * hufPerEur),
-      mapsQuery: `${product.name} ${countryName(country)}`,
-      // Catalog prices are typical local prices, so each one is the local average.
-      vsLocalAvgPct: 0,
+      // Present only where the destination does not use the euro, so a
+      // Portuguese price is one figure and a Hungarian one is two.
+      priceLocal: product.localPrice.local
+        ? {
+            amount: product.localPrice.local.amount,
+            currency: product.localPrice.local.currency as CurrencyCode,
+          }
+        : null,
+      savingPct: product.savingPct,
+      url: product.url,
     })),
   };
 }
@@ -149,7 +154,7 @@ export async function getLiveRecommendations(
     ok: true,
     response,
     categories: response.categories.map((category) =>
-      toCategory(category, country, session.profile.homeCity),
+      toCategory(category, session.profile.homeCity),
     ),
   };
 }
