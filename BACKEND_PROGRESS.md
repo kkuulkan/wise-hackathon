@@ -11,7 +11,7 @@
 
 | Field | Value |
 |---|---|
-| Branch | `backend` (cut from `main` at `fa2432c`). **`integration`** = `backend` + `origin/frontend` merged (see §11) |
+| Branch | **`main` now contains everything** (fast-forwarded to `integration` at `7eb6e85` on 2026-10-17): backend + frontend + wiring. Start new work from `main`. `backend` and `integration` are kept for history |
 | Last updated | 2026-10-17 |
 | Phase | **Backend API complete for the comparison feature with two demo users. Frontend not wired yet.** |
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | `main` fast-forwarded to `integration` and pushed. Build passes on `main` | Pull `main` before branching |
 | 2026-10-17 | `integration`: wired the frontend pages to the backend through `lib/live.ts` and `components/live/*`; only `app/page.tsx` and `app/cheaper/page.tsx` edited | See §11 |
 | 2026-10-17 | Created branch `integration` from `backend` and merged `origin/frontend` (`790d2e8`). Clean merge, build + lint pass, smoke 58/58, `/` and `/cheaper` render | See §11 |
 | 2026-10-17 | Two demo users plus a cookie sign-in (`/api/users`, `/api/session`). All user data and state is per user. Exclusives removed. German prices added to the catalog. Name set to OtherWise. Smoke test now covers both users (58 checks) | Additive. `data/seed/transactions.json` changed shape (keyed by user id) |
