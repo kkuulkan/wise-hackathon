@@ -4,6 +4,10 @@ Spots the things you already buy that cost less where you are right now.
 
 Built for BME HackNight & Day × Wise, **Max Ease** challenge.
 
+# Video Demo
+
+https://drive.google.com/drive/folders/1Iw0rcGXq23dJnRdBGAMFQ182FT28xVXi?dmr=1&ec=wgc-drive-%5Bmodule%5D-goto
+
 ## The idea
 
 Wise users who spend across borders have no idea which of their routine purchases
