@@ -5,7 +5,8 @@
 //
 // Each step prints PASS or FAIL. Exits non-zero on any failure. It resets
 // app state in the database first (trips, consent, feedback, events), so run
-// it against a dev database branch, never the one a live demo uses.
+// it against a dev database branch (`neon checkout dev`); the server refuses to
+// reset the `production` branch.
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 let failures = 0;
@@ -45,7 +46,8 @@ const jonas = client();
 
 const resetResponse = await anon.call("POST", "/api/dev/reset");
 if (resetResponse.status !== 200) {
-  console.error("Reset refused. Start the server with OTHERWISE_ALLOW_RESET=true (production builds block it).");
+  console.error(`Reset refused: ${resetResponse.json.error?.message ?? resetResponse.status}`);
+  console.error("Run the server on a dev branch (neon checkout dev) with OTHERWISE_ALLOW_RESET=true.");
   process.exit(1);
 }
 

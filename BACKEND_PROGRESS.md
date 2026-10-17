@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | Neon `dev` branch for local work and smoke tests; `/api/dev/reset` refuses on the `production` branch (§16) | Run `neon checkout dev` locally |
 | 2026-10-17 | All API routes wrapped in `handle()`: clean JSON 503 when the database is down, JSON 500 otherwise (§16). Route handlers are now `export const GET = handle(get)` | If you add a route, wrap it the same way |
 | 2026-10-17 | **Neon Postgres database** (§16). Users, transactions, trips, notifications, consent, feedback, events and verified price snapshots now live in 13 tables (Drizzle schema + migration). `lib/server/store.ts` and `seed.ts` are DB-backed and async; new `pricedata.ts`, `db.ts`; `neon.ts` added by `neon init`. `app/page.tsx` gains one `await`. `/api/dev/reset` is blocked in production unless `OTHERWISE_ALLOW_RESET=true` | **After pulling: run `neon env pull` (or set `DATABASE_URL`), then `npm run db:migrate && npm run db:seed && npm run db:load-prices`** |
 | 2026-10-17 | **Third user `saoirse`** (Dublin gamer) + Microsoft Store official list prices for electronics with a VAT-normalised consistency gate (§15). New `listPriceCheck` on categories; new `digital-games` category (never recommended). `data/real/brand-prices.json` added | Additive. The user picker now lists 3 users |
@@ -488,8 +489,14 @@ npm run db:migrate                      # create the 13 tables (drizzle/0000_ini
 npm run db:seed                         # 3 demo users + 134 transactions (idempotent)
 npm run db:load-prices                  # data/real/*.json → a new current price snapshot (one transaction)
 ```
-Neon project `wispy-field-62093327`, branch `production`, region **aws-us-east-2**. On Vercel set `DATABASE_URL` (pooled) and set the function region to `iad1` to sit next to the database.
-**Run `npm run smoke` against a dev branch** (`neon checkout dev --create`), not `production`: it resets app state.
+Neon project `wispy-field-62093327`, region **aws-us-east-2**. Two branches:
+
+| Branch | Used by | Notes |
+|---|---|---|
+| `production` (default) | **Vercel / the live demo** | Set Vercel's `DATABASE_URL` to this branch's pooled URL; function region `iad1` |
+| `dev` | **local development and `npm run smoke`** | Copy-on-write clone of production. `neon checkout dev` points `.env.local` at it. The `neon.ts` policy gives new branches a 7-day TTL (current `dev` expires 2026-10-24); `neon checkout dev --create` recreates it |
+
+`neon checkout production` switches local back to production if ever needed. **`/api/dev/reset` refuses to run when `NEON_BRANCH` is `production` or `main`**, so a smoke run can't wipe the live demo, even with `OTHERWISE_ALLOW_RESET=true`.
 
 ### Driver (per the installed Neon agent skill and Neon's Vercel guide)
 `pg` (node-postgres) Pool + `attachDatabasePool` from `@vercel/functions` + Drizzle (`drizzle-orm/node-postgres`), on the **pooled** `DATABASE_URL`.
@@ -512,7 +519,7 @@ The category taxonomy stays a config file. The catalog cache stays in memory (no
 - Every route is wrapped in `handle()` (`lib/server/http.ts`): database unreachable → **`503 {error:{code:"unavailable"}}`**, anything else unexpected → `500 {error:{code:"internal"}}`. Details go to the server log only. `unstable_rethrow` is called first so Next's own signals (`cookies()`, `searchParams`, redirects) are never swallowed.
 - `/api/dev/reset` clears app state only (never users, transactions or prices) and is **disabled in production** unless `OTHERWISE_ALLOW_RESET=true`.
 
-### Verified on 2026-10-17 (against Neon, `production` branch while empty)
+### Verified on 2026-10-17 (first on `production` while it was empty, then on `dev`)
 | Check | Result |
 |---|---|
 | `npm run build` | passes, with and without `DATABASE_URL` |
@@ -520,4 +527,6 @@ The category taxonomy stays a config file. The catalog cache stays in memory (no
 | Restart persistence | killed the server mid-trip, started a new process: active trip, `notifications: false` consent, thumbs-down (coffee hidden) and the stored notification all survived; re-arriving gave `already-seen`, no duplicate notification |
 | DB integrity | Postgres rejected: a second current snapshot, a second active trip, a transaction for an unknown user, a duplicate thumbs-down (all attempts rolled back) |
 | DB unreachable | catalog answered from the bundled snapshot (`source: "fallback"`, 200); user endpoints return JSON `503 unavailable`; home page 200; back to `live` when the DB returned |
+| Smoke on `dev` | **78/78**; an app write landed on `dev` (trips 1, events 1) while `production` stayed at 0, checked by branch id |
+| Reset guard | with `NEON_BRANCH=production`, reset returns 403 and the smoke test stops with that message |
 
