@@ -1,9 +1,10 @@
-import { connection } from "next/server";
-
+import { requireUser } from "@/lib/server/session";
 import { listNotifications } from "@/lib/server/store";
 
-/** Notifications sent so far, newest first. Stands in for the push outbox. */
+/** The signed-in user's notifications, newest first. Stands in for the push outbox. */
 export async function GET() {
-  await connection();
-  return Response.json({ notifications: [...listNotifications()].reverse() });
+  const profile = await requireUser();
+  if (profile instanceof Response) return profile;
+
+  return Response.json({ notifications: [...listNotifications(profile.userId)].reverse() });
 }

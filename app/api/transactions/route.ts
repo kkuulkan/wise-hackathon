@@ -1,7 +1,13 @@
 import { getSeedTransactions } from "@/lib/server/seed";
+import { requireUser } from "@/lib/server/session";
 
-/** The statement, newest first. Static seed, so it can be prerendered. */
+/** The signed-in user's statement, newest first. */
 export async function GET() {
-  const transactions = [...getSeedTransactions()].sort((a, b) => b.date.localeCompare(a.date));
+  const profile = await requireUser();
+  if (profile instanceof Response) return profile;
+
+  const transactions = [...getSeedTransactions(profile.userId)].sort((a, b) =>
+    b.date.localeCompare(a.date),
+  );
   return Response.json({ transactions });
 }

@@ -10,35 +10,44 @@ import type {
 } from "./types";
 
 /**
- * In-memory state for the single demo user. It resets when the server
- * restarts, which is what a demo wants. Kept on globalThis so dev-mode hot
- * reloads do not wipe it between requests.
+ * In-memory state. It resets when the server restarts, which is what a demo
+ * wants. Kept on globalThis so dev-mode hot reloads do not wipe it between
+ * requests.
  *
- * Swapping this for a database means reimplementing these few accessors; no
+ * Trips, notifications, consent and feedback belong to one user and are kept
+ * apart per user id. Analytics events and the catalog cache hold no personal
+ * data (FR-15, FR-23), so they are shared.
+ *
+ * Swapping this for a database means reimplementing these accessors; no
  * caller touches the State object directly.
  */
-type State = {
+type UserState = {
   trips: Trip[];
   notifications: Notification[];
   consent: Consent;
   feedback: FeedbackItem[];
+};
+
+type State = {
+  users: Map<string, UserState>;
   events: AnalyticsEvent[];
   catalogCache: Map<string, { value: CatalogResponse; expiresAt: number }>;
   sequence: number;
 };
 
-function initialState(): State {
+function initialUserState(): UserState {
   return {
     trips: [],
     notifications: [],
-    // PRD open question 5: consent is covered by existing T&Cs, so the demo
-    // user starts opted in. PUT /api/consent withdraws it.
+    // PRD open question 5: consent is covered by existing T&Cs, so demo users
+    // start opted in. PUT /api/consent withdraws it.
     consent: { personalisation: true, notifications: true, updatedAt: new Date(0).toISOString() },
     feedback: [],
-    events: [],
-    catalogCache: new Map(),
-    sequence: 0,
   };
+}
+
+function initialState(): State {
+  return { users: new Map(), events: [], catalogCache: new Map(), sequence: 0 };
 }
 
 const globalStore = globalThis as typeof globalThis & { __otherwiseState?: State };
@@ -46,6 +55,16 @@ const globalStore = globalThis as typeof globalThis & { __otherwiseState?: State
 function state(): State {
   globalStore.__otherwiseState ??= initialState();
   return globalStore.__otherwiseState;
+}
+
+function user(userId: string): UserState {
+  const users = state().users;
+  let entry = users.get(userId);
+  if (!entry) {
+    entry = initialUserState();
+    users.set(userId, entry);
+  }
+  return entry;
 }
 
 export function nextId(prefix: string): string {
@@ -60,45 +79,41 @@ export function resetState(): void {
 
 // Trips
 
-export function getActiveTrip(): Trip | undefined {
-  return state().trips.find((trip) => !trip.endedAt);
+export function getActiveTrip(userId: string): Trip | undefined {
+  return user(userId).trips.find((trip) => !trip.endedAt);
 }
 
-export function saveTrip(trip: Trip): void {
-  const trips = state().trips;
+export function saveTrip(userId: string, trip: Trip): void {
+  const trips = user(userId).trips;
   const index = trips.findIndex((existing) => existing.id === trip.id);
   if (index === -1) trips.push(trip);
   else trips[index] = trip;
 }
 
-export function listTrips(): Trip[] {
-  return state().trips;
-}
-
 // Notifications
 
-export function pushNotification(notification: Notification): void {
-  state().notifications.push(notification);
+export function pushNotification(userId: string, notification: Notification): void {
+  user(userId).notifications.push(notification);
 }
 
-export function listNotifications(): Notification[] {
-  return state().notifications;
+export function listNotifications(userId: string): Notification[] {
+  return user(userId).notifications;
 }
 
 // Consent
 
-export function getConsent(): Consent {
-  return state().consent;
+export function getConsent(userId: string): Consent {
+  return user(userId).consent;
 }
 
-export function setConsent(consent: Consent): void {
-  state().consent = consent;
+export function setConsent(userId: string, consent: Consent): void {
+  user(userId).consent = consent;
 }
 
 // Feedback
 
-export function addFeedback(item: FeedbackItem): void {
-  const list = state().feedback;
+export function addFeedback(userId: string, item: FeedbackItem): void {
+  const list = user(userId).feedback;
   const duplicate = list.some(
     (existing) =>
       existing.tripId === item.tripId && existing.kind === item.kind && existing.id === item.id,
@@ -106,15 +121,20 @@ export function addFeedback(item: FeedbackItem): void {
   if (!duplicate) list.push(item);
 }
 
-export function listFeedback(): FeedbackItem[] {
-  return state().feedback;
+/** For the team (US-8.3): every user's feedback, without saying whose. */
+export function listAllFeedback(): FeedbackItem[] {
+  return [...state().users.values()].flatMap((entry) => entry.feedback);
 }
 
 /** US-8.1: hidden for the rest of the trip, so scoped by trip id. */
-export function hiddenIds(tripId: string | null, kind: FeedbackItem["kind"]): Set<string> {
+export function hiddenIds(
+  userId: string,
+  tripId: string | null,
+  kind: FeedbackItem["kind"],
+): Set<string> {
   if (!tripId) return new Set();
   return new Set(
-    state()
+    user(userId)
       .feedback.filter((item) => item.tripId === tripId && item.kind === kind)
       .map((item) => item.id),
   );

@@ -1,12 +1,12 @@
-import { connection } from "next/server";
-
 import { badRequest, readObject, unknownKeys } from "@/lib/server/http";
+import { requireUser } from "@/lib/server/session";
 import { getConsent, recordEvent, setConsent } from "@/lib/server/store";
 
-/** GET current consent (US-6.3). */
+/** GET the signed-in user's consent (US-6.3). */
 export async function GET() {
-  await connection();
-  return Response.json(getConsent());
+  const profile = await requireUser();
+  if (profile instanceof Response) return profile;
+  return Response.json(getConsent(profile.userId));
 }
 
 /**
@@ -17,6 +17,9 @@ export async function GET() {
  * no transaction data at all (US-6.2).
  */
 export async function PUT(request: Request) {
+  const profile = await requireUser();
+  if (profile instanceof Response) return profile;
+
   const body = await readObject(request);
   if (body instanceof Response) return body;
 
@@ -27,13 +30,13 @@ export async function PUT(request: Request) {
     if (key in body && typeof body[key] !== "boolean") return badRequest(`${key} must be true or false.`);
   }
 
-  const before = getConsent();
+  const before = getConsent(profile.userId);
   const after = {
     personalisation: (body.personalisation as boolean | undefined) ?? before.personalisation,
     notifications: (body.notifications as boolean | undefined) ?? before.notifications,
     updatedAt: new Date().toISOString(),
   };
-  setConsent(after);
+  setConsent(profile.userId, after);
 
   const wasOn = before.personalisation && before.notifications;
   const isOn = after.personalisation && after.notifications;

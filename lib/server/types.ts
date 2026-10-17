@@ -39,18 +39,6 @@ export type CatalogProduct = {
   link: LinkSpec;
 };
 
-export type CatalogExclusive = {
-  id: string;
-  country: string;
-  category: string;
-  name: string;
-  description: string;
-  price: number;
-  priceUpdatedAt: string;
-  ageRestricted?: boolean;
-  link: LinkSpec;
-};
-
 /** Money in the user's home currency, with the local equivalent when it differs. */
 export type Price = {
   amount: number;
@@ -67,18 +55,6 @@ export type ComparedProduct = {
   localPrice: Price;
   /** Percent cheaper than home. Always positive: dearer items are dropped. */
   savingPct: number;
-  approximate: true;
-  priceUpdatedAt: string;
-  url: string;
-};
-
-export type ExclusiveProduct = {
-  id: string;
-  category: string;
-  name: string;
-  description: string;
-  label: "Exclusive";
-  localPrice: Price;
   approximate: true;
   priceUpdatedAt: string;
   url: string;
@@ -185,7 +161,6 @@ export type RecommendationsResponse = {
   tripId: string | null;
   /** False when consent is off or history is empty: everything is general. */
   personalised: boolean;
-  exclusives: ExclusiveProduct[];
   categories: RecommendationCategory[];
   disclosure: string;
   fx: { pair: string; rate: number; asOf: string } | null;

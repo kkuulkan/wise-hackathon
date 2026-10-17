@@ -18,9 +18,6 @@ export const MAX_CATEGORIES = 5;
 /** US-4.1: products per category. A category with none is hidden (US-3.3). */
 export const MAX_PRODUCTS_PER_CATEGORY = 5;
 
-/** "Only here" section size. */
-export const MAX_EXCLUSIVES = 5;
-
 /** Edge case 17: prices older than this are treated as unknown and dropped. */
 export const MAX_PRICE_AGE_DAYS = 90;
 

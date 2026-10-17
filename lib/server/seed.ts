@@ -1,16 +1,11 @@
 import "server-only";
 
-import accountJson from "@/data/account.json";
 import catalogJson from "@/data/seed/catalog.json";
 import categoriesJson from "@/data/seed/categories.json";
 import transactionsJson from "@/data/seed/transactions.json";
+import usersJson from "@/data/seed/users.json";
 
-import type {
-  CatalogExclusive,
-  CatalogProduct,
-  CategoryDef,
-  SeedTransaction,
-} from "./types";
+import type { CatalogProduct, CategoryDef, SeedTransaction } from "./types";
 
 /**
  * Read-only seed data. Mutable state (trips, consent, feedback) lives in
@@ -22,27 +17,29 @@ export type Profile = {
   userId: string;
   holder: string;
   firstName: string;
+  homeCity: string;
   homeCountry: string;
   balances: { value: number; currency: string; primary: boolean }[];
 };
 
-/**
- * The demo account. Reuses data/account.json so the frontend and backend agree
- * on who the user is. Its currentCountry fields are ignored: location now
- * comes from POST /api/location.
- */
-export function getProfile(): Profile {
-  return {
-    userId: "demo-user",
-    holder: accountJson.holder,
-    firstName: accountJson.holder.split(" ")[0],
-    homeCountry: accountJson.homeCountryCode,
-    balances: accountJson.balances,
-  };
+export function getProfiles(): Profile[] {
+  return usersJson.users.map((user) => ({
+    userId: user.id,
+    holder: user.holder,
+    firstName: user.holder.split(" ")[0],
+    homeCity: user.homeCity,
+    homeCountry: user.homeCountry,
+    balances: user.balances,
+  }));
 }
 
-export function getSeedTransactions(): SeedTransaction[] {
-  return transactionsJson.transactions as SeedTransaction[];
+export function getProfile(userId: string): Profile | undefined {
+  return getProfiles().find((profile) => profile.userId === userId);
+}
+
+export function getSeedTransactions(userId: string): SeedTransaction[] {
+  const byUser = transactionsJson.transactions as Record<string, SeedTransaction[]>;
+  return byUser[userId] ?? [];
 }
 
 export function getCategoryDefs(): CategoryDef[] {
@@ -55,8 +52,4 @@ export function getCategoryDef(slug: string): CategoryDef | undefined {
 
 export function getCatalogProducts(): CatalogProduct[] {
   return catalogJson.products as CatalogProduct[];
-}
-
-export function getCatalogExclusives(): CatalogExclusive[] {
-  return catalogJson.exclusives as CatalogExclusive[];
 }

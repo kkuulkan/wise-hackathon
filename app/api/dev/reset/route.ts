@@ -1,8 +1,9 @@
 import { resetState } from "@/lib/server/store";
 
 /**
- * POST: wipe trips, notifications, consent, feedback, events and the catalog
- * cache, so the demo can be run again from "just landed".
+ * POST: wipe every user's trips, notifications, consent and feedback, plus
+ * events and the catalog cache, so the demo can be run again from "just
+ * landed". Does not sign anyone out.
  */
 export async function POST() {
   resetState();

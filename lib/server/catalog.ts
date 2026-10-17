@@ -8,18 +8,15 @@ import {
   DEMO_TODAY,
   FX_PER_EUR,
   INCLUDE_AGE_RESTRICTED,
-  MAX_EXCLUSIVES,
   MAX_PRICE_AGE_DAYS,
   MAX_PRODUCTS_PER_CATEGORY,
 } from "./config";
-import { getCatalogExclusives, getCatalogProducts } from "./seed";
+import { getCatalogProducts } from "./seed";
 import { readCatalogCache, readStaleCatalogCache, writeCatalogCache } from "./store";
 import type {
-  CatalogExclusive,
   CatalogProduct,
   CatalogResponse,
   ComparedProduct,
-  ExclusiveProduct,
   LinkSpec,
   Price,
 } from "./types";
@@ -204,34 +201,4 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
       fetchedAt: new Date(now).toISOString(),
     };
   }
-}
-
-/**
- * FR-12: destination-only products, labelled separately. Products in the
- * user's top categories come first, in the order those categories rank.
- * The "Popular" label from the HTML prototype is out of scope.
- */
-export function exclusivesFor(country: string, preferredCategories: string[]): ExclusiveProduct[] {
-  const rank = (category: string) => {
-    const index = preferredCategories.indexOf(category);
-    return index === -1 ? preferredCategories.length : index;
-  };
-
-  return getCatalogExclusives()
-    .filter((item: CatalogExclusive) => item.country === country)
-    .filter(isAllowed)
-    .filter((item) => isFresh(item.priceUpdatedAt))
-    .sort((a, b) => rank(a.category) - rank(b.category) || a.id.localeCompare(b.id))
-    .slice(0, MAX_EXCLUSIVES)
-    .map((item) => ({
-      id: item.id,
-      category: item.category,
-      name: item.name,
-      description: item.description,
-      label: "Exclusive" as const,
-      localPrice: toPrice(item.price, country),
-      approximate: true as const,
-      priceUpdatedAt: item.priceUpdatedAt,
-      url: productUrl(item.link, country),
-    }));
 }

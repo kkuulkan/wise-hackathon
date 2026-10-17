@@ -1,15 +1,20 @@
 import { connection } from "next/server";
 
 import { badRequest, fail, parseCountry, readObject, unknownKeys } from "@/lib/server/http";
-import { getCatalogExclusives, getCatalogProducts, getCategoryDef } from "@/lib/server/seed";
-import { addFeedback, getActiveTrip, listFeedback, recordEvent } from "@/lib/server/store";
+import { getCatalogProducts, getCategoryDef } from "@/lib/server/seed";
+import { requireUser } from "@/lib/server/session";
+import { addFeedback, getActiveTrip, listAllFeedback, recordEvent } from "@/lib/server/store";
 
 /**
  * POST { kind: "category" | "product", id: string, country: "PT" }
  *
- * Thumbs-down (US-8). Hides the item for the rest of the current trip.
+ * Thumbs-down (US-8). Hides the item for the rest of the signed-in user's
+ * current trip.
  */
 export async function POST(request: Request) {
+  const profile = await requireUser();
+  if (profile instanceof Response) return profile;
+
   const body = await readObject(request);
   if (body instanceof Response) return body;
 
@@ -25,16 +30,16 @@ export async function POST(request: Request) {
   const known =
     kind === "category"
       ? Boolean(getCategoryDef(id))
-      : getCatalogProducts().some((p) => p.id === id) || getCatalogExclusives().some((p) => p.id === id);
+      : getCatalogProducts().some((product) => product.id === id);
   if (!known) return fail(404, "not_found", `No ${kind} with id "${id}".`);
 
-  const trip = getActiveTrip();
+  const trip = getActiveTrip(profile.userId);
   if (!trip || !trip.countries[country]) {
     return fail(409, "no_active_trip", "Feedback is saved per trip, and there is no trip to that country.");
   }
 
   const createdAt = new Date().toISOString();
-  addFeedback({ tripId: trip.id, kind, id, country, createdAt });
+  addFeedback(profile.userId, { tripId: trip.id, kind, id, country, createdAt });
   recordEvent({
     type: "feedback",
     country,
@@ -45,8 +50,8 @@ export async function POST(request: Request) {
   return Response.json({ ok: true, hiddenFor: "trip", tripId: trip.id });
 }
 
-/** For the team: every thumbs-down, analysable by kind, country and id (US-8.3). */
+/** For the team: every thumbs-down, analysable by kind, country and id (US-8.3). No user ids. */
 export async function GET() {
   await connection();
-  return Response.json({ feedback: listFeedback() });
+  return Response.json({ feedback: listAllFeedback() });
 }

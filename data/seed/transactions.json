@@ -1,811 +1,1257 @@
 {
-  "_source": "Illustrative 90-day statement for the demo account, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Includes rows the backend must ignore: rent, insurance and pharmacy (excluded kinds) and one electronics purchase older than 90 days.",
-  "transactions": [
-    {
-      "id": "bt-062",
-      "date": "2026-10-10",
-      "merchant": "Rathmines Grocery",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 48.4,
-        "currency": "EUR"
+  "_source": "Illustrative 90-day statements for the two demo users, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Each includes rows the backend must ignore (rent, insurance, pharmacy, gambling) so the exclusions are visible.",
+  "transactions": {
+    "aoife": [
+      {
+        "id": "ab-062",
+        "date": "2026-10-10",
+        "merchant": "Rathmines Grocery",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 48.4,
+          "currency": "EUR"
+        },
+        "amountEur": 48.4
       },
-      "amountEur": 48.4
-    },
-    {
-      "id": "bt-061",
-      "date": "2026-10-09",
-      "merchant": "Bunsen Burger",
-      "category": "dining-out",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 24.5,
-        "currency": "EUR"
+      {
+        "id": "ab-061",
+        "date": "2026-10-09",
+        "merchant": "Bunsen Burger",
+        "category": "dining-out",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 24.5,
+          "currency": "EUR"
+        },
+        "amountEur": 24.5
       },
-      "amountEur": 24.5
-    },
-    {
-      "id": "bt-060",
-      "date": "2026-10-08",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-060",
+        "date": "2026-10-08",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-059",
-      "date": "2026-10-05",
-      "merchant": "Laya Healthcare",
-      "category": "insurance",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 42,
-        "currency": "EUR"
+      {
+        "id": "ab-059",
+        "date": "2026-10-05",
+        "merchant": "Laya Healthcare",
+        "category": "insurance",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 42,
+          "currency": "EUR"
+        },
+        "amountEur": 42
       },
-      "amountEur": 42
-    },
-    {
-      "id": "bt-058",
-      "date": "2026-10-05",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-058",
+        "date": "2026-10-05",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-057",
-      "date": "2026-10-04",
-      "merchant": "Leap Card Top-Up",
-      "category": "transport",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 30,
-        "currency": "EUR"
+      {
+        "id": "ab-057",
+        "date": "2026-10-04",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 30,
+          "currency": "EUR"
+        },
+        "amountEur": 30
       },
-      "amountEur": 30
-    },
-    {
-      "id": "bt-056",
-      "date": "2026-10-03",
-      "merchant": "Arnotts Beauty Hall",
-      "category": "skincare-beauty",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 29.9,
-        "currency": "EUR"
+      {
+        "id": "ab-056",
+        "date": "2026-10-03",
+        "merchant": "Arnotts Beauty Hall",
+        "category": "skincare-beauty",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 29.9,
+          "currency": "EUR"
+        },
+        "amountEur": 29.9
       },
-      "amountEur": 29.9
-    },
-    {
-      "id": "bt-055",
-      "date": "2026-10-03",
-      "merchant": "Fresh Market Ranelagh",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 57.3,
-        "currency": "EUR"
+      {
+        "id": "ab-055",
+        "date": "2026-10-03",
+        "merchant": "Fresh Market Ranelagh",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 57.3,
+          "currency": "EUR"
+        },
+        "amountEur": 57.3
       },
-      "amountEur": 57.3
-    },
-    {
-      "id": "bt-054",
-      "date": "2026-10-01",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-054",
+        "date": "2026-10-01",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-053",
-      "date": "2026-10-01",
-      "merchant": "Ranelagh Lettings",
-      "category": "rent",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 1450,
-        "currency": "EUR"
+      {
+        "id": "ab-053",
+        "date": "2026-10-01",
+        "merchant": "Ranelagh Lettings",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1450,
+          "currency": "EUR"
+        },
+        "amountEur": 1450
       },
-      "amountEur": 1450
-    },
-    {
-      "id": "bt-052",
-      "date": "2026-09-28",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-052",
+        "date": "2026-09-28",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-051",
-      "date": "2026-09-28",
-      "merchant": "Sharp & Co Barbers",
-      "category": "personal-care",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 32,
-        "currency": "EUR"
+      {
+        "id": "ab-051",
+        "date": "2026-09-28",
+        "merchant": "Sharp & Co Barbers",
+        "category": "personal-care",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 32,
+          "currency": "EUR"
+        },
+        "amountEur": 32
       },
-      "amountEur": 32
-    },
-    {
-      "id": "bt-050",
-      "date": "2026-09-26",
-      "merchant": "Rathmines Grocery",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 50.1,
-        "currency": "EUR"
+      {
+        "id": "ab-050",
+        "date": "2026-09-26",
+        "merchant": "Rathmines Grocery",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 50.1,
+          "currency": "EUR"
+        },
+        "amountEur": 50.1
       },
-      "amountEur": 50.1
-    },
-    {
-      "id": "bt-049",
-      "date": "2026-09-26",
-      "merchant": "The Green Table",
-      "category": "dining-out",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 18,
-        "currency": "EUR"
+      {
+        "id": "ab-049",
+        "date": "2026-09-26",
+        "merchant": "The Green Table",
+        "category": "dining-out",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 18,
+          "currency": "EUR"
+        },
+        "amountEur": 18
       },
-      "amountEur": 18
-    },
-    {
-      "id": "bt-048",
-      "date": "2026-09-24",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-048",
+        "date": "2026-09-24",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-047",
-      "date": "2026-09-22",
-      "merchant": "Hickey's Pharmacy",
-      "category": "pharmacy",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 12.9,
-        "currency": "EUR"
+      {
+        "id": "ab-047",
+        "date": "2026-09-22",
+        "merchant": "Hickey's Pharmacy",
+        "category": "pharmacy",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 12.9,
+          "currency": "EUR"
+        },
+        "amountEur": 12.9
       },
-      "amountEur": 12.9
-    },
-    {
-      "id": "bt-046",
-      "date": "2026-09-21",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-046",
+        "date": "2026-09-21",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-045",
-      "date": "2026-09-19",
-      "merchant": "Arnotts",
-      "category": "sneakers-clothing",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 45,
-        "currency": "EUR"
+      {
+        "id": "ab-045",
+        "date": "2026-09-19",
+        "merchant": "Arnotts",
+        "category": "sneakers-clothing",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 45,
+          "currency": "EUR"
+        },
+        "amountEur": 45
       },
-      "amountEur": 45
-    },
-    {
-      "id": "bt-044",
-      "date": "2026-09-19",
-      "merchant": "Fresh Market Ranelagh",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 53.7,
-        "currency": "EUR"
+      {
+        "id": "ab-044",
+        "date": "2026-09-19",
+        "merchant": "Fresh Market Ranelagh",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 53.7,
+          "currency": "EUR"
+        },
+        "amountEur": 53.7
       },
-      "amountEur": 53.7
-    },
-    {
-      "id": "bt-043",
-      "date": "2026-09-17",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-043",
+        "date": "2026-09-17",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-042",
-      "date": "2026-09-14",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-042",
+        "date": "2026-09-14",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-041",
-      "date": "2026-09-12",
-      "merchant": "Pickle Restaurant",
-      "category": "dining-out",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 41.8,
-        "currency": "EUR"
+      {
+        "id": "ab-041",
+        "date": "2026-09-12",
+        "merchant": "Pickle Restaurant",
+        "category": "dining-out",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 41.8,
+          "currency": "EUR"
+        },
+        "amountEur": 41.8
       },
-      "amountEur": 41.8
-    },
-    {
-      "id": "bt-040",
-      "date": "2026-09-12",
-      "merchant": "Rathmines Grocery",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 46.2,
-        "currency": "EUR"
+      {
+        "id": "ab-040",
+        "date": "2026-09-12",
+        "merchant": "Rathmines Grocery",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 46.2,
+          "currency": "EUR"
+        },
+        "amountEur": 46.2
       },
-      "amountEur": 46.2
-    },
-    {
-      "id": "bt-039",
-      "date": "2026-09-10",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-039",
+        "date": "2026-09-10",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-038",
-      "date": "2026-09-07",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-038",
+        "date": "2026-09-07",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-037",
-      "date": "2026-09-06",
-      "merchant": "Boots Grafton St",
-      "category": "skincare-beauty",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 38.5,
-        "currency": "EUR"
+      {
+        "id": "ab-037",
+        "date": "2026-09-06",
+        "merchant": "Boots Grafton St",
+        "category": "skincare-beauty",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 38.5,
+          "currency": "EUR"
+        },
+        "amountEur": 38.5
       },
-      "amountEur": 38.5
-    },
-    {
-      "id": "bt-036",
-      "date": "2026-09-05",
-      "merchant": "Fresh Market Ranelagh",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 55.6,
-        "currency": "EUR"
+      {
+        "id": "ab-036",
+        "date": "2026-09-05",
+        "merchant": "Fresh Market Ranelagh",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 55.6,
+          "currency": "EUR"
+        },
+        "amountEur": 55.6
       },
-      "amountEur": 55.6
-    },
-    {
-      "id": "bt-035",
-      "date": "2026-09-05",
-      "merchant": "Laya Healthcare",
-      "category": "insurance",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 42,
-        "currency": "EUR"
+      {
+        "id": "ab-035",
+        "date": "2026-09-05",
+        "merchant": "Laya Healthcare",
+        "category": "insurance",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 42,
+          "currency": "EUR"
+        },
+        "amountEur": 42
       },
-      "amountEur": 42
-    },
-    {
-      "id": "bt-034",
-      "date": "2026-09-04",
-      "merchant": "Leap Card Top-Up",
-      "category": "transport",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 30,
-        "currency": "EUR"
+      {
+        "id": "ab-034",
+        "date": "2026-09-04",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 30,
+          "currency": "EUR"
+        },
+        "amountEur": 30
       },
-      "amountEur": 30
-    },
-    {
-      "id": "bt-033",
-      "date": "2026-09-03",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-033",
+        "date": "2026-09-03",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-032",
-      "date": "2026-09-01",
-      "merchant": "Ranelagh Lettings",
-      "category": "rent",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 1450,
-        "currency": "EUR"
+      {
+        "id": "ab-032",
+        "date": "2026-09-01",
+        "merchant": "Ranelagh Lettings",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1450,
+          "currency": "EUR"
+        },
+        "amountEur": 1450
       },
-      "amountEur": 1450
-    },
-    {
-      "id": "bt-031",
-      "date": "2026-08-31",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-031",
+        "date": "2026-08-31",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-030",
-      "date": "2026-08-30",
-      "merchant": "Sharp & Co Barbers",
-      "category": "personal-care",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 32,
-        "currency": "EUR"
+      {
+        "id": "ab-030",
+        "date": "2026-08-30",
+        "merchant": "Sharp & Co Barbers",
+        "category": "personal-care",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 32,
+          "currency": "EUR"
+        },
+        "amountEur": 32
       },
-      "amountEur": 32
-    },
-    {
-      "id": "bt-029",
-      "date": "2026-08-29",
-      "merchant": "Rathmines Grocery",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 49.8,
-        "currency": "EUR"
+      {
+        "id": "ab-029",
+        "date": "2026-08-29",
+        "merchant": "Rathmines Grocery",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 49.8,
+          "currency": "EUR"
+        },
+        "amountEur": 49.8
       },
-      "amountEur": 49.8
-    },
-    {
-      "id": "bt-028",
-      "date": "2026-08-27",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-028",
+        "date": "2026-08-27",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-027",
-      "date": "2026-08-24",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-027",
+        "date": "2026-08-24",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-026",
-      "date": "2026-08-22",
-      "merchant": "Fresh Market Ranelagh",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 61.2,
-        "currency": "EUR"
+      {
+        "id": "ab-026",
+        "date": "2026-08-22",
+        "merchant": "Fresh Market Ranelagh",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 61.2,
+          "currency": "EUR"
+        },
+        "amountEur": 61.2
       },
-      "amountEur": 61.2
-    },
-    {
-      "id": "bt-025",
-      "date": "2026-08-21",
-      "merchant": "Bunsen Burger",
-      "category": "dining-out",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 22.5,
-        "currency": "EUR"
+      {
+        "id": "ab-025",
+        "date": "2026-08-21",
+        "merchant": "Bunsen Burger",
+        "category": "dining-out",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 22.5,
+          "currency": "EUR"
+        },
+        "amountEur": 22.5
       },
-      "amountEur": 22.5
-    },
-    {
-      "id": "bt-024",
-      "date": "2026-08-20",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-024",
+        "date": "2026-08-20",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-023",
-      "date": "2026-08-18",
-      "merchant": "Hickey's Pharmacy",
-      "category": "pharmacy",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 18.4,
-        "currency": "EUR"
+      {
+        "id": "ab-023",
+        "date": "2026-08-18",
+        "merchant": "Hickey's Pharmacy",
+        "category": "pharmacy",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 18.4,
+          "currency": "EUR"
+        },
+        "amountEur": 18.4
       },
-      "amountEur": 18.4
-    },
-    {
-      "id": "bt-022",
-      "date": "2026-08-17",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-022",
+        "date": "2026-08-17",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-021",
-      "date": "2026-08-15",
-      "merchant": "Foot Locker Henry St",
-      "category": "sneakers-clothing",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 120,
-        "currency": "EUR"
+      {
+        "id": "ab-021",
+        "date": "2026-08-15",
+        "merchant": "Foot Locker Henry St",
+        "category": "sneakers-clothing",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 120,
+          "currency": "EUR"
+        },
+        "amountEur": 120
       },
-      "amountEur": 120
-    },
-    {
-      "id": "bt-020",
-      "date": "2026-08-15",
-      "merchant": "Rathmines Grocery",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 44.3,
-        "currency": "EUR"
+      {
+        "id": "ab-020",
+        "date": "2026-08-15",
+        "merchant": "Rathmines Grocery",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 44.3,
+          "currency": "EUR"
+        },
+        "amountEur": 44.3
       },
-      "amountEur": 44.3
-    },
-    {
-      "id": "bt-019",
-      "date": "2026-08-13",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-019",
+        "date": "2026-08-13",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-018",
-      "date": "2026-08-10",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-018",
+        "date": "2026-08-10",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-017",
-      "date": "2026-08-08",
-      "merchant": "Fresh Market Ranelagh",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 58.9,
-        "currency": "EUR"
+      {
+        "id": "ab-017",
+        "date": "2026-08-08",
+        "merchant": "Fresh Market Ranelagh",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 58.9,
+          "currency": "EUR"
+        },
+        "amountEur": 58.9
       },
-      "amountEur": 58.9
-    },
-    {
-      "id": "bt-016",
-      "date": "2026-08-07",
-      "merchant": "Bar Cañete",
-      "category": "dining-out",
-      "city": "Barcelona",
-      "countryCode": "ES",
-      "amount": {
-        "value": 36,
-        "currency": "EUR"
+      {
+        "id": "ab-016",
+        "date": "2026-08-07",
+        "merchant": "Bar Cañete",
+        "category": "dining-out",
+        "city": "Barcelona",
+        "countryCode": "ES",
+        "amount": {
+          "value": 36,
+          "currency": "EUR"
+        },
+        "amountEur": 36
       },
-      "amountEur": 36
-    },
-    {
-      "id": "bt-015",
-      "date": "2026-08-06",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-015",
+        "date": "2026-08-06",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-014",
-      "date": "2026-08-05",
-      "merchant": "Laya Healthcare",
-      "category": "insurance",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 42,
-        "currency": "EUR"
+      {
+        "id": "ab-014",
+        "date": "2026-08-05",
+        "merchant": "Laya Healthcare",
+        "category": "insurance",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 42,
+          "currency": "EUR"
+        },
+        "amountEur": 42
       },
-      "amountEur": 42
-    },
-    {
-      "id": "bt-013",
-      "date": "2026-08-04",
-      "merchant": "Leap Card Top-Up",
-      "category": "transport",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 30,
-        "currency": "EUR"
+      {
+        "id": "ab-013",
+        "date": "2026-08-04",
+        "merchant": "Leap Card Top-Up",
+        "category": "transport",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 30,
+          "currency": "EUR"
+        },
+        "amountEur": 30
       },
-      "amountEur": 30
-    },
-    {
-      "id": "bt-012",
-      "date": "2026-08-03",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-012",
+        "date": "2026-08-03",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-011",
-      "date": "2026-08-02",
-      "merchant": "Boots Grafton St",
-      "category": "skincare-beauty",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 64.2,
-        "currency": "EUR"
+      {
+        "id": "ab-011",
+        "date": "2026-08-02",
+        "merchant": "Boots Grafton St",
+        "category": "skincare-beauty",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 64.2,
+          "currency": "EUR"
+        },
+        "amountEur": 64.2
       },
-      "amountEur": 64.2
-    },
-    {
-      "id": "bt-010",
-      "date": "2026-08-01",
-      "merchant": "Ranelagh Lettings",
-      "category": "rent",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 1450,
-        "currency": "EUR"
+      {
+        "id": "ab-010",
+        "date": "2026-08-01",
+        "merchant": "Ranelagh Lettings",
+        "category": "rent",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 1450,
+          "currency": "EUR"
+        },
+        "amountEur": 1450
       },
-      "amountEur": 1450
-    },
-    {
-      "id": "bt-009",
-      "date": "2026-08-01",
-      "merchant": "Rathmines Grocery",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 47.1,
-        "currency": "EUR"
+      {
+        "id": "ab-009",
+        "date": "2026-08-01",
+        "merchant": "Rathmines Grocery",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 47.1,
+          "currency": "EUR"
+        },
+        "amountEur": 47.1
       },
-      "amountEur": 47.1
-    },
-    {
-      "id": "bt-008",
-      "date": "2026-07-31",
-      "merchant": "The Green Table",
-      "category": "dining-out",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 34,
-        "currency": "EUR"
+      {
+        "id": "ab-008",
+        "date": "2026-07-31",
+        "merchant": "The Green Table",
+        "category": "dining-out",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 34,
+          "currency": "EUR"
+        },
+        "amountEur": 34
       },
-      "amountEur": 34
-    },
-    {
-      "id": "bt-007",
-      "date": "2026-07-30",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-007",
+        "date": "2026-07-30",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-006",
-      "date": "2026-07-27",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-006",
+        "date": "2026-07-27",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-005",
-      "date": "2026-07-26",
-      "merchant": "Sharp & Co Barbers",
-      "category": "personal-care",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 32,
-        "currency": "EUR"
+      {
+        "id": "ab-005",
+        "date": "2026-07-26",
+        "merchant": "Sharp & Co Barbers",
+        "category": "personal-care",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 32,
+          "currency": "EUR"
+        },
+        "amountEur": 32
       },
-      "amountEur": 32
-    },
-    {
-      "id": "bt-004",
-      "date": "2026-07-25",
-      "merchant": "Fresh Market Ranelagh",
-      "category": "groceries",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 52.4,
-        "currency": "EUR"
+      {
+        "id": "ab-004",
+        "date": "2026-07-25",
+        "merchant": "Fresh Market Ranelagh",
+        "category": "groceries",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 52.4,
+          "currency": "EUR"
+        },
+        "amountEur": 52.4
       },
-      "amountEur": 52.4
-    },
-    {
-      "id": "bt-003",
-      "date": "2026-07-23",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-003",
+        "date": "2026-07-23",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-002",
-      "date": "2026-07-20",
-      "merchant": "Proper Grind Coffee",
-      "category": "coffee",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 4.2,
-        "currency": "EUR"
+      {
+        "id": "ab-002",
+        "date": "2026-07-20",
+        "merchant": "Proper Grind Coffee",
+        "category": "coffee",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 4.2,
+          "currency": "EUR"
+        },
+        "amountEur": 4.2
       },
-      "amountEur": 4.2
-    },
-    {
-      "id": "bt-001",
-      "date": "2026-06-20",
-      "merchant": "Currys Jervis",
-      "category": "electronics",
-      "city": "Dublin",
-      "countryCode": "IE",
-      "amount": {
-        "value": 45,
-        "currency": "EUR"
+      {
+        "id": "ab-001",
+        "date": "2026-06-20",
+        "merchant": "Currys Jervis",
+        "category": "electronics",
+        "city": "Dublin",
+        "countryCode": "IE",
+        "amount": {
+          "value": 45,
+          "currency": "EUR"
+        },
+        "amountEur": 45
+      }
+    ],
+    "jonas": [
+      {
+        "id": "jk-034",
+        "date": "2026-10-16",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
       },
-      "amountEur": 45
-    }
-  ]
+      {
+        "id": "jk-033",
+        "date": "2026-10-11",
+        "merchant": "Uniqlo Tauentzienstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 49.9,
+          "currency": "EUR"
+        },
+        "amountEur": 49.9
+      },
+      {
+        "id": "jk-032",
+        "date": "2026-10-09",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 24,
+          "currency": "EUR"
+        },
+        "amountEur": 24
+      },
+      {
+        "id": "jk-031",
+        "date": "2026-10-08",
+        "merchant": "Saturn Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 59,
+          "currency": "EUR"
+        },
+        "amountEur": 59
+      },
+      {
+        "id": "jk-030",
+        "date": "2026-10-04",
+        "merchant": "Lidl Neukölln",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 19.8,
+          "currency": "EUR"
+        },
+        "amountEur": 19.8
+      },
+      {
+        "id": "jk-029",
+        "date": "2026-10-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-028",
+        "date": "2026-10-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-027",
+        "date": "2026-09-28",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 14.5,
+          "currency": "EUR"
+        },
+        "amountEur": 14.5
+      },
+      {
+        "id": "jk-026",
+        "date": "2026-09-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-025",
+        "date": "2026-09-24",
+        "merchant": "Cyberport Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 34.99,
+          "currency": "EUR"
+        },
+        "amountEur": 34.99
+      },
+      {
+        "id": "jk-024",
+        "date": "2026-09-20",
+        "merchant": "Tipico Sportwetten",
+        "category": "gambling",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 15,
+          "currency": "EUR"
+        },
+        "amountEur": 15
+      },
+      {
+        "id": "jk-023",
+        "date": "2026-09-19",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-022",
+        "date": "2026-09-17",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 31,
+          "currency": "EUR"
+        },
+        "amountEur": 31
+      },
+      {
+        "id": "jk-021",
+        "date": "2026-09-14",
+        "merchant": "Snipes Friedrichstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 120,
+          "currency": "EUR"
+        },
+        "amountEur": 120
+      },
+      {
+        "id": "jk-020",
+        "date": "2026-09-06",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 18,
+          "currency": "EUR"
+        },
+        "amountEur": 18
+      },
+      {
+        "id": "jk-019",
+        "date": "2026-09-03",
+        "merchant": "MediaMarkt Alexanderplatz",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 129,
+          "currency": "EUR"
+        },
+        "amountEur": 129
+      },
+      {
+        "id": "jk-018",
+        "date": "2026-09-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-017",
+        "date": "2026-09-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-016",
+        "date": "2026-08-30",
+        "merchant": "Lidl Neukölln",
+        "category": "groceries",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 23.4,
+          "currency": "EUR"
+        },
+        "amountEur": 23.4
+      },
+      {
+        "id": "jk-015",
+        "date": "2026-08-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-014",
+        "date": "2026-08-26",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 27.5,
+          "currency": "EUR"
+        },
+        "amountEur": 27.5
+      },
+      {
+        "id": "jk-013",
+        "date": "2026-08-23",
+        "merchant": "Zalando",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 79.95,
+          "currency": "EUR"
+        },
+        "amountEur": 79.95
+      },
+      {
+        "id": "jk-012",
+        "date": "2026-08-22",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-011",
+        "date": "2026-08-16",
+        "merchant": "Tipico Sportwetten",
+        "category": "gambling",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-010",
+        "date": "2026-08-15",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 13.9,
+          "currency": "EUR"
+        },
+        "amountEur": 13.9
+      },
+      {
+        "id": "jk-009",
+        "date": "2026-08-11",
+        "merchant": "Saturn Berlin",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 42,
+          "currency": "EUR"
+        },
+        "amountEur": 42
+      },
+      {
+        "id": "jk-008",
+        "date": "2026-08-04",
+        "merchant": "Burgermeister",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 22,
+          "currency": "EUR"
+        },
+        "amountEur": 22
+      },
+      {
+        "id": "jk-007",
+        "date": "2026-08-01",
+        "merchant": "BVG Deutschlandticket",
+        "category": "transport",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 58,
+          "currency": "EUR"
+        },
+        "amountEur": 58
+      },
+      {
+        "id": "jk-006",
+        "date": "2026-08-01",
+        "merchant": "Hausverwaltung Neukölln",
+        "category": "rent",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 780,
+          "currency": "EUR"
+        },
+        "amountEur": 780
+      },
+      {
+        "id": "jk-005",
+        "date": "2026-07-29",
+        "merchant": "Snipes Friedrichstraße",
+        "category": "sneakers-clothing",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 100,
+          "currency": "EUR"
+        },
+        "amountEur": 100
+      },
+      {
+        "id": "jk-004",
+        "date": "2026-07-28",
+        "merchant": "Telekom Prepaid",
+        "category": "telecom",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 20,
+          "currency": "EUR"
+        },
+        "amountEur": 20
+      },
+      {
+        "id": "jk-003",
+        "date": "2026-07-25",
+        "merchant": "Barber Shop Kreuzberg",
+        "category": "personal-care",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 28,
+          "currency": "EUR"
+        },
+        "amountEur": 28
+      },
+      {
+        "id": "jk-002",
+        "date": "2026-07-24",
+        "merchant": "Mustafa's Gemüse Kebap",
+        "category": "dining-out",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 16.5,
+          "currency": "EUR"
+        },
+        "amountEur": 16.5
+      },
+      {
+        "id": "jk-001",
+        "date": "2026-07-22",
+        "merchant": "MediaMarkt Alexanderplatz",
+        "category": "electronics",
+        "city": "Berlin",
+        "countryCode": "DE",
+        "amount": {
+          "value": 89,
+          "currency": "EUR"
+        },
+        "amountEur": 89
+      }
+    ]
+  }
 }

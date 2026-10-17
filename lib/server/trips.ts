@@ -1,7 +1,7 @@
 import "server-only";
 
 import { COUNTRIES } from "./config";
-import { getProfile } from "./seed";
+import type { Profile } from "./seed";
 import {
   getActiveTrip,
   getConsent,
@@ -43,16 +43,20 @@ export function isEligiblePair(home: string, destination: string): boolean {
  * `signal` records whether GPS or a card payment abroad told us (PRD open
  * question 1); both are treated the same.
  */
-export function handleLocation(country: string, signal: LocationSignal): LocationResult {
-  const profile = getProfile();
+export function handleLocation(
+  profile: Profile,
+  country: string,
+  signal: LocationSignal,
+): LocationResult {
+  const { userId } = profile;
   const now = new Date().toISOString();
-  const active = getActiveTrip();
+  const active = getActiveTrip(userId);
 
   if (country === profile.homeCountry) {
     if (active) {
       active.endedAt = now;
       active.currentCountry = country;
-      saveTrip(active);
+      saveTrip(userId, active);
     }
     return { status: "home", country, trip: null, notification: null };
   }
@@ -70,7 +74,7 @@ export function handleLocation(country: string, signal: LocationSignal): Locatio
   trip.currentCountry = country;
 
   if (trip.countries[country]) {
-    saveTrip(trip);
+    saveTrip(userId, trip);
     return { status: "already-seen", country, trip, notification: null };
   }
 
@@ -78,8 +82,8 @@ export function handleLocation(country: string, signal: LocationSignal): Locatio
 
   // US-6.2: no notification without consent. The trip is still recorded so
   // the in-app entry point (FR-7) works if they open the app themselves.
-  if (!getConsent().notifications) {
-    saveTrip(trip);
+  if (!getConsent(userId).notifications) {
+    saveTrip(userId, trip);
     return {
       status: "arrived",
       country,
@@ -95,14 +99,14 @@ export function handleLocation(country: string, signal: LocationSignal): Locatio
     tripId: trip.id,
     country,
     title: `Welcome to ${countryName}, ${profile.firstName}`,
-    body: `Here are a few things you already buy that are cheaper or only available in ${countryName}.`,
+    body: `OtherWise found things you already buy that cost less in ${countryName} than at home.`,
     deepLink: `${RECOMMENDATIONS_PATH}?country=${country}`,
     createdAt: now,
   };
 
   trip.countries[country].notifiedAt = now;
-  saveTrip(trip);
-  pushNotification(notification);
+  saveTrip(userId, trip);
+  pushNotification(userId, notification);
   recordEvent({ type: "notification_sent", country, at: now });
 
   return { status: "arrived", country, trip, notification };

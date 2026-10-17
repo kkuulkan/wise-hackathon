@@ -1,0 +1,24 @@
+{
+  "_source": "The two OtherWise demo users. Fictional people with mock balances; not real Wise accounts. Transactions for each are in transactions.json under the same id.",
+  "users": [
+    {
+      "id": "aoife",
+      "holder": "Aoife Brennan",
+      "homeCity": "Dublin",
+      "homeCountry": "IE",
+      "balances": [
+        { "value": 2480.5, "currency": "EUR", "primary": true },
+        { "value": 184200, "currency": "HUF", "primary": false }
+      ]
+    },
+    {
+      "id": "jonas",
+      "holder": "Jonas Keller",
+      "homeCity": "Berlin",
+      "homeCountry": "DE",
+      "balances": [
+        { "value": 1315.2, "currency": "EUR", "primary": true }
+      ]
+    }
+  ]
+}

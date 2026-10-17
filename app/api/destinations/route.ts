@@ -1,10 +1,15 @@
 import { COUNTRIES } from "@/lib/server/config";
+import { requireUser } from "@/lib/server/session";
 import { isEligiblePair } from "@/lib/server/trips";
-import { getProfile } from "@/lib/server/seed";
 
-/** Feeds the "Arrive in…" picker in the demo. Ineligible ones show the US-1.4 path. */
+/**
+ * Feeds the "Arrive in…" picker. Eligibility depends on the signed-in user's
+ * home country, so it is per user. Ineligible ones show the US-1.4 path.
+ */
 export async function GET() {
-  const home = getProfile().homeCountry;
+  const profile = await requireUser();
+  if (profile instanceof Response) return profile;
+  const home = profile.homeCountry;
 
   return Response.json({
     home,

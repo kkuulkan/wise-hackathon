@@ -1,24 +1,26 @@
-import { connection } from "next/server";
-
 import { COUNTRIES } from "@/lib/server/config";
-import { getProfile } from "@/lib/server/seed";
+import { requireUser } from "@/lib/server/session";
 import { getActiveTrip } from "@/lib/server/store";
 
-/** Profile, balances and the active trip, which drives the home banner (FR-7). */
+/** The signed-in user's profile, balances and active trip (drives the home banner, FR-7). */
 export async function GET() {
-  await connection();
-  const profile = getProfile();
-  const trip = getActiveTrip() ?? null;
+  const profile = await requireUser();
+  if (profile instanceof Response) return profile;
+
+  const trip = getActiveTrip(profile.userId) ?? null;
+  const name = (code: string) => COUNTRIES[code]?.name ?? code;
 
   return Response.json({
+    id: profile.userId,
     holder: profile.holder,
     firstName: profile.firstName,
-    home: { code: profile.homeCountry, name: COUNTRIES[profile.homeCountry]?.name ?? profile.homeCountry },
+    homeCity: profile.homeCity,
+    home: { code: profile.homeCountry, name: name(profile.homeCountry) },
     balances: profile.balances,
     activeTrip: trip && {
       id: trip.id,
       startedAt: trip.startedAt,
-      country: { code: trip.currentCountry, name: COUNTRIES[trip.currentCountry]?.name ?? trip.currentCountry },
+      country: { code: trip.currentCountry, name: name(trip.currentCountry) },
       countriesVisited: Object.keys(trip.countries),
     },
   });

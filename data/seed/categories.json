@@ -10,7 +10,6 @@
     { "slug": "sneakers-clothing", "label": "Sneakers & clothing", "icon": "shoe", "kind": "everyday", "isDefault": false },
     { "slug": "electronics", "label": "Electronics", "icon": "headphones", "kind": "everyday", "isDefault": false },
     { "slug": "personal-care", "label": "Hair & personal care", "icon": "scissors", "kind": "everyday", "isDefault": false },
-    { "slug": "souvenirs", "label": "Local crafts", "icon": "gift", "kind": "everyday", "isDefault": false },
     { "slug": "pharmacy", "label": "Pharmacy", "icon": "pill", "kind": "sensitive", "isDefault": false },
     { "slug": "gambling", "label": "Gambling", "icon": "dice", "kind": "sensitive", "isDefault": false },
     { "slug": "rent", "label": "Rent", "icon": "house", "kind": "non-actionable", "isDefault": false },

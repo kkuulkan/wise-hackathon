@@ -9,9 +9,9 @@ import {
   HISTORY_WINDOW_DAYS,
   MAX_CATEGORIES,
 } from "./config";
-import { exclusivesFor, queryCatalog } from "./catalog";
+import { queryCatalog } from "./catalog";
 import { rankCategories } from "./personalize";
-import { getCategoryDef, getCategoryDefs, getProfile, getSeedTransactions } from "./seed";
+import { getCategoryDef, getCategoryDefs, getSeedTransactions, type Profile } from "./seed";
 import { getActiveTrip, getConsent, hiddenIds } from "./store";
 import type {
   CatalogSource,
@@ -30,30 +30,33 @@ function overallSource(sources: CatalogSource[]): CatalogSource {
 }
 
 /**
- * Builds the recommendations screen for one destination.
+ * Builds the comparison screen for one user in one destination.
  *
- *   1. Rank the user's own categories (only if they consented, FR-20).
+ *   1. Rank this user's own categories (only if they consented, FR-20).
  *   2. Append the default everyday set behind them, no duplicates (US-7.3).
  *   3. Ask the catalog about each, by category and country pair only (FR-15).
+ *      The pair is this user's home country and the destination, so two
+ *      users in the same city can see different comparisons.
  *   4. Keep the first five that have at least one cheaper product (US-3.3).
- *   5. Add destination exclusives, preferring the user's categories (FR-12).
  *
  * Anything the user thumbed down on this trip is removed (US-8).
  */
-export async function buildRecommendations(country: string): Promise<RecommendationsResponse> {
-  const profile = getProfile();
-  const home = profile.homeCountry;
-  const trip = getActiveTrip();
+export async function buildRecommendations(
+  profile: Profile,
+  country: string,
+): Promise<RecommendationsResponse> {
+  const { userId, homeCountry: home } = profile;
+  const trip = getActiveTrip(userId);
   // Feedback is per trip. Browsing another country outside a trip has none.
   const tripId = trip && trip.countries[country] ? trip.id : null;
-  const consent = getConsent();
+  const consent = getConsent(userId);
 
   const ranked = consent.personalisation
-    ? rankCategories(getSeedTransactions(), getCategoryDefs(), DEMO_TODAY)
+    ? rankCategories(getSeedTransactions(userId), getCategoryDefs(), DEMO_TODAY)
     : [];
 
-  const hiddenCategories = hiddenIds(tripId, "category");
-  const hiddenProducts = hiddenIds(tripId, "product");
+  const hiddenCategories = hiddenIds(userId, tripId, "category");
+  const hiddenProducts = hiddenIds(userId, tripId, "product");
 
   const candidates: Candidate[] = ranked.map((entry) => ({ slug: entry.slug, ranked: entry }));
   for (const category of getCategoryDefs()) {
@@ -100,11 +103,6 @@ export async function buildRecommendations(country: string): Promise<Recommendat
     });
   });
 
-  const exclusives = exclusivesFor(
-    country,
-    categories.map((category) => category.slug),
-  ).filter((product) => !hiddenProducts.has(product.id));
-
   const localCurrency = COUNTRIES[country].currency;
   const rate = FX_PER_EUR[localCurrency];
 
@@ -113,7 +111,6 @@ export async function buildRecommendations(country: string): Promise<Recommendat
     home: { code: home, name: COUNTRIES[home]?.name ?? home, currency: "EUR" },
     tripId,
     personalised: categories.some((category) => category.personalised),
-    exclusives,
     categories,
     disclosure: DISCLOSURE,
     fx: localCurrency !== "EUR" && rate ? { pair: `EUR/${localCurrency}`, rate, asOf: FX_AS_OF } : null,
