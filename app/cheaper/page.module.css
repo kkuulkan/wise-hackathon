@@ -1,14 +1,20 @@
 .main {
-  padding-bottom: 64px;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-16);
 }
 
+/* Sits on the navy cover, above the page. */
 .back {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  margin: 20px 0 0;
-  font-size: 14px;
-  font-weight: 500;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  font-stretch: 125%;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--muted);
   text-decoration: none;
 }
@@ -17,40 +23,58 @@
   color: var(--ink);
 }
 
-.head {
-  padding: 24px 0 28px;
+/* Same stitched spine as the data page, so it reads as one booklet. */
+.booklet {
+  position: relative;
+  padding-left: var(--space-3);
 }
 
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--stamp);
-}
-
-.stampMark {
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--stamp);
+.booklet::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--ink);
   border-radius: 2px;
-  transform: rotate(-12deg);
+}
+
+.booklet::after {
+  content: "";
+  position: absolute;
+  inset: var(--space-4) auto var(--space-4) 7px;
+  width: 1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--line-strong) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+/* The open visa page: beige, inked navy, holding header, spread and footnotes. */
+.sheet {
+  padding: var(--space-2) 0;
+}
+
+.head {
+  padding: var(--space-2) 0 var(--space-6);
 }
 
 .title {
-  margin-top: 12px;
-  font-size: clamp(40px, 12vw, 60px);
-  letter-spacing: -0.03em;
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(48px, 14vw, 68px);
+  font-weight: 700;
+  font-stretch: 112%;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
 }
 
 .lede {
-  margin-top: 14px;
-  font-size: 16px;
-  color: var(--muted);
+  margin-top: var(--space-3);
   max-width: 42ch;
+  font-size: 15px;
+  color: var(--muted);
 }
 
 .lede strong {
@@ -59,14 +83,15 @@
 }
 
 .foot {
-  margin-top: 32px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  font-size: 12px;
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
   line-height: 1.6;
   color: var(--muted);
 }
 
 .rate {
-  margin-top: 8px;
+  margin-top: var(--space-2);
 }

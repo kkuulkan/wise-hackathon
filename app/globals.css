@@ -1,29 +1,86 @@
-/* Passport Stamp — see .claude/skills/frontend-style-guideline/SKILL.md */
+/* The Booklet — see .claude/skills/frontend-style-guideline/SKILL.md */
 
 :root {
-  --ink: #141b2e;
-  --paper: #f4f0e6;
-  --surface: #fffdf8;
-  --accent: #0f6b63;
-  --accent-ink: #ffffff;
-  --accent-soft: #dceeeb;
-  --stamp: #c4452f;
-  --positive: #0e9f6e;
-  --positive-ink: #0a7a54;
-  --danger: #c4452f;
-  --muted: rgba(20, 27, 46, 0.62);
-  --line: rgba(20, 27, 46, 0.12);
+  /*
+   * Two colours, mapped the way a passport is built: navy is the cover the
+   * booklet sits on, beige is the page you read.
+   */
+  --navy: #0f2c5c;
+  --beige: #f0f0b6;
 
-  --radius-btn: 12px;
-  --radius-card: 20px;
-  --shadow-card: 0 1px 2px rgba(20, 27, 46, 0.06), 0 10px 28px rgba(20, 27, 46, 0.08);
-  --shadow-sheet: 0 -2px 8px rgba(20, 27, 46, 0.06), 0 -24px 64px rgba(20, 27, 46, 0.18);
+  --ink: var(--navy);
+  --ink-invert: var(--beige);
+  --paper: var(--navy); /* the cover, behind everything */
+  --page: var(--beige); /* the open page */
+  --surface: #f7f7d2; /* raised on the page: visas, slips */
+  --band: #e4e49c; /* the machine-readable band and security tints */
 
-  --page-gutter: 20px;
-  --max-width: 520px;
+  --accent: var(--navy);
+  --accent-ink: var(--beige);
+  --accent-soft: #e4e49c;
+  /* A second ink, as a stamp pad gives: same hue, lighter. */
+  --stamp: #16407f;
+  --positive: var(--navy);
+  --positive-ink: var(--navy);
+  --danger: #16407f;
+  --muted: rgba(15, 44, 92, 0.62);
+  --line: rgba(15, 44, 92, 0.16);
+  --line-strong: rgba(15, 44, 92, 0.38);
 
-  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  /* Documents have square corners. */
+  --radius-btn: 6px;
+  --radius-card: 3px;
+  --shadow-card: 0 1px 2px rgba(23, 26, 33, 0.08), 0 8px 24px rgba(23, 26, 33, 0.1);
+  --shadow-sheet: 0 -2px 8px rgba(23, 26, 33, 0.08), 0 -24px 64px rgba(23, 26, 33, 0.2);
+
+  /*
+   * 8px grid with a 4px half-step. Spacing is only ever set from these, so the
+   * rhythm is enforced by the tokens rather than by remembering to be careful.
+   */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-16: 64px;
+
+  /* Neutral chip, so accent stays reserved for emphasis. */
+  --chip-bg: rgba(20, 27, 46, 0.055);
+
+  --page-gutter: var(--space-6);
+  --max-width: 1280px;
+  /* Landing section rhythm. */
+  --section-y: 64px;
+  /* How much navy shows around the page. */
+  --frame: 10px;
+
+  --font-display: var(--font-archivo), system-ui, sans-serif;
   --font-body: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+}
+
+/* Bilingual field label, as a passport sets them: tiny, wide, unmissable. */
+.fieldLabel {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 700;
+  font-stretch: 125%;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* The machine-readable zone. */
+.mrz {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 3.1vw, 13px);
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: uppercase;
 }
 
 *,
@@ -36,9 +93,29 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Held shut while the cover is closed. */
+html.locked,
+html.locked body {
+  overflow: hidden;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
-  background: var(--paper);
+  /* Navy shows only as a thin frame around the page. */
+  background: var(--navy);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
@@ -46,15 +123,30 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Paper grain. Kept under 4% or it reads as noise rather than texture. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+/*
+ * The page: one full-bleed beige sheet, with the navy showing as a thin frame.
+ * This is what the cover doors part to reveal, so the contrast has to be whole
+ * page against whole door, not a card on a dark background.
+ */
+.sheet {
+  position: relative;
+  z-index: 1;
+  margin: var(--frame);
+  min-height: calc(100svh - 2 * var(--frame));
+  border-radius: 22px;
+  overflow: clip;
+  background:
+    repeating-radial-gradient(
+      circle at 16% 20%,
+      transparent 0 9px,
+      rgba(15, 44, 92, 0.05) 9px 10px
+    ),
+    repeating-radial-gradient(
+      circle at 82% 68%,
+      transparent 0 9px,
+      rgba(15, 44, 92, 0.05) 9px 10px
+    ),
+    var(--page);
 }
 
 h1,
@@ -62,8 +154,8 @@ h2,
 h3 {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
   margin: 0;
 }
 
@@ -97,6 +189,13 @@ button {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--page-gutter);
+}
+
+@media (min-width: 900px) {
+  :root {
+    --section-y: 120px;
+    --page-gutter: var(--space-10);
+  }
 }
 
 .srOnly {

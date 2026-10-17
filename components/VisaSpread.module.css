@@ -1,0 +1,93 @@
+.spread {
+  position: relative;
+  /* Depth for the turning page. */
+  perspective: 1400px;
+  perspective-origin: left center;
+}
+
+/*
+ * The page that swings away. Its origin is the spine at the left edge, pulled
+ * slightly off-canvas so the rotation never clips inside the viewport.
+ */
+/*
+ * Only present when motion is allowed and the script is alive. Gating in CSS
+ * rather than markup keeps the server and client output identical.
+ */
+.turningPage {
+  display: none;
+  position: absolute;
+  inset: 0 0 auto -6px;
+  z-index: 5;
+  min-height: 420px;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  background: var(--page);
+  border-left: 3px solid var(--ink);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+:global(html.anim) .turningPage {
+  display: block;
+}
+
+.turningFace {
+  padding: var(--space-6) var(--space-4);
+}
+
+.turningFace::after {
+  content: "";
+  display: block;
+  margin-top: var(--space-4);
+  height: 1px;
+  background: var(--line);
+}
+
+.turningCity {
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(36px, 11vw, 48px);
+  font-weight: 700;
+  font-stretch: 112%;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* Light catching the page face as it lifts off the spine. */
+.sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.7) 48%,
+    transparent 76%
+  );
+}
+
+.visas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.visa {
+  will-change: transform, opacity;
+}
+
+.empty {
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-card);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Reduced motion never gets `anim`, so the turning page is already absent. */
