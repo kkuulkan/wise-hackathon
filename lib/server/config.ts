@@ -1,5 +1,3 @@
-import fxJson from "@/data/real/fx.json";
-
 /**
  * Every tunable the backend uses, in one place, so the demo and the PRD can be
  * checked against each other without reading the logic.
@@ -77,9 +75,6 @@ export const COUNTRIES: Record<string, Country> = {
   MX: { code: "MX", name: "Mexico", currency: "MXN", eu: false },
 };
 
-/** Units of each currency per 1 EUR: ECB reference rate, verified by the fetch script. */
-export const FX_PER_EUR: Record<string, number> = fxJson.perEur;
-export const FX_AS_OF = fxJson.asOf;
 
 /** FR-22: shown on every recommendations response. */
 export const DISCLOSURE =

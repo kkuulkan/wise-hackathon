@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   if (body instanceof Response) return body;
   if (typeof body.userId !== "string") return badRequest("userId is required.");
 
-  const profile = getProfile(body.userId);
+  const profile = await getProfile(body.userId);
   if (!profile) return fail(404, "not_found", `No demo user "${body.userId}".`);
 
   (await cookies()).set(SESSION_COOKIE, profile.userId, {

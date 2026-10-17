@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   const param = request.nextUrl.searchParams.get("country");
   const country = param
     ? parseCountry(param)
-    : (getActiveTrip(profile.userId)?.currentCountry ?? null);
+    : ((await getActiveTrip(profile.userId))?.currentCountry ?? null);
 
   if (param && !country) {
     return fail(400, "bad_request", "country must be a known two-letter country code.");

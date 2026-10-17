@@ -46,12 +46,12 @@ export async function POST(request: Request) {
     event.productId = body.productId;
   }
 
-  recordEvent(event);
+  await recordEvent(event);
   return Response.json({ ok: true }, { status: 201 });
 }
 
 /** For the team dashboard. Contains no personal financial data by construction. */
 export async function GET() {
   await connection();
-  return Response.json({ events: listEvents() });
+  return Response.json({ events: await listEvents() });
 }

@@ -15,9 +15,9 @@
 | Last updated | 2026-10-17 |
 | Phase | **Real data.** Prices come from Eurostat, Open Prices and the ECB through a verified snapshot (§12). Two demo users, frontend wired |
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
-| New dependencies | None (`import "server-only"` is resolved by Next itself) |
-| Env vars | None required. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE` (see §6) |
-| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **78/78** against `next start` |
+| New dependencies | `pg`, `drizzle-orm`, `@vercel/functions`, `@neon/config`, `@neon/env`; dev: `drizzle-kit`, `@types/pg` (§16). Runtime `npm audit`: 0 vulnerabilities |
+| Env vars | **Required:** `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED` (direct), written by `neon env pull`/`neon deploy`. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE`, `OTHERWISE_ALLOW_RESET` (§16) |
+| Verification | `npm run build` passes (with or without a database), `eslint` is clean, `npm run smoke` passes **78/78 against Neon**; restart persistence, DB integrity rules and DB-down fallback verified (§16) |
 
 ### Scope decisions (from aim-t, 2026-10-17)
 
@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | **Neon Postgres database** (§16). Users, transactions, trips, notifications, consent, feedback, events and verified price snapshots now live in 13 tables (Drizzle schema + migration). `lib/server/store.ts` and `seed.ts` are DB-backed and async; new `pricedata.ts`, `db.ts`; `neon.ts` added by `neon init`. `app/page.tsx` gains one `await`. `/api/dev/reset` is blocked in production unless `OTHERWISE_ALLOW_RESET=true` | **After pulling: run `neon env pull` (or set `DATABASE_URL`), then `npm run db:migrate && npm run db:seed && npm run db:load-prices`** |
 | 2026-10-17 | **Third user `saoirse`** (Dublin gamer) + Microsoft Store official list prices for electronics with a VAT-normalised consistency gate (§15). New `listPriceCheck` on categories; new `digital-games` category (never recommended). `data/real/brand-prices.json` added | Additive. The user picker now lists 3 users |
 | 2026-10-17 | `products[].localComparison`: national average, per-kg/L vs the median of ≥5 similar verified products in the same country, or `null` (§14). Fetch script computes per-type medians (`products.json` → `localStats`) | Additive. **Frontend action needed in `Visa`** (§14) |
 | 2026-10-17 | **Only recommend what a traveller can buy here instead of at home** (§13). Categories gain `buyWhere`; transport, mobile, dining and the new `cafe` category are never recommended. Coffee means coffee to take home. Groceries are shelf-stable take-home goods only. New official matched items from CSO Ireland + KSH Hungary (haircuts, sugar). Product lists vary across sub-categories. Café transactions re-tagged `cafe` | Additive API (`evidence` is now a union, see §13). `categories.json` and `transactions.json` changed |
@@ -475,4 +476,47 @@ Brands set one euro-area price and differ only by VAT.
 
 ### To get product-level shop prices for electronics later
 eBay (when approved) or a free SerpApi key. Either would plug in as another source behind `queryCatalog`, with the same gates (new, fixed price, seller located in that country, outlier and VAT consistency).
+
+## 16. Database: Neon Postgres (2026-10-17)
+
+### Setup (one-off per machine)
+```bash
+npm i -g neon && neon login             # Neon CLI, signed in
+neon env pull                           # writes DATABASE_URL (+ _UNPOOLED, NEON_BRANCH) to .env.local; the repo is linked via .neon (git-ignored)
+npm run db:migrate                      # create the 13 tables (drizzle/0000_init.sql)
+npm run db:seed                         # 3 demo users + 134 transactions (idempotent)
+npm run db:load-prices                  # data/real/*.json → a new current price snapshot (one transaction)
+```
+Neon project `wispy-field-62093327`, branch `production`, region **aws-us-east-2**. On Vercel set `DATABASE_URL` (pooled) and set the function region to `iad1` to sit next to the database.
+**Run `npm run smoke` against a dev branch** (`neon checkout dev --create`), not `production`: it resets app state.
+
+### Driver (per the installed Neon agent skill and Neon's Vercel guide)
+`pg` (node-postgres) Pool + `attachDatabasePool` from `@vercel/functions` + Drizzle (`drizzle-orm/node-postgres`), on the **pooled** `DATABASE_URL`.
+Migrations and seed scripts use the **direct** `DATABASE_URL_UNPOOLED`. Connections request `sslmode=verify-full` explicitly.
+The client is created lazily, so `next build` needs no database; every DB-reading route is dynamic.
+
+### Schema (`lib/db/schema.ts`, 13 tables)
+| Group | Tables | Integrity enforced by Postgres |
+|---|---|---|
+| People | `users`, `transactions` (index on user+date) | FK user → transactions |
+| App state | `trips`, `trip_countries`, `notifications`, `consent`, `feedback`, `events` | **one active trip per user** (partial unique index); **one thumbs-down per item per trip**; FKs with cascade; `events` has no user/amount/merchant columns (FR-23) |
+| Prices | `snapshots`, `price_levels`, `products`, `reference_items`, `brand_prices` | every price row belongs to a snapshot; **exactly one current snapshot** (partial unique index); a load inserts rows and flips "current" in **one transaction** |
+
+`data/real/*.json` stays in git as the audit trail; the database holds the same snapshot, plus its verification report, in `snapshots.verification_report`.
+The category taxonomy stays a config file. The catalog cache stays in memory (no user data).
+
+### Runtime behaviour
+- `store.ts` (trips, consent, feedback, events, notifications) and `seed.ts` (users, transactions) are DB-backed and async. Trip upserts and resets run in transactions.
+- `pricedata.ts` reads the current snapshot (5-minute in-process cache). **If the database is unreachable, the catalog serves the bundled verified files** with `source: "fallback"`; it switches back to `live` automatically.
+- User-specific endpoints need the database and currently return a bare HTTP 500 when it is down (follow-up: a clean JSON 503).
+- `/api/dev/reset` clears app state only (never users, transactions or prices) and is **disabled in production** unless `OTHERWISE_ALLOW_RESET=true`.
+
+### Verified on 2026-10-17 (against Neon, `production` branch while empty)
+| Check | Result |
+|---|---|
+| `npm run build` | passes, with and without `DATABASE_URL` |
+| `npm run smoke` | **78/78**, 0 server errors (~28 s; DB in us-east-2) |
+| Restart persistence | killed the server mid-trip, started a new process: active trip, `notifications: false` consent, thumbs-down (coffee hidden) and the stored notification all survived; re-arriving gave `already-seen`, no duplicate notification |
+| DB integrity | Postgres rejected: a second current snapshot, a second active trip, a transaction for an unknown user, a duplicate thumbs-down (all attempts rolled back) |
+| DB unreachable | catalog answered in 20 ms from the bundled snapshot (`source: "fallback"`), home page 200; back to `live` when the DB returned |
 

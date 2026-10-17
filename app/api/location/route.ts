@@ -23,5 +23,5 @@ export async function POST(request: Request) {
   const signal = body.signal ?? "gps";
   if (signal !== "gps" && signal !== "card") return badRequest('signal must be "gps" or "card".');
 
-  return Response.json(handleLocation(profile, country, signal as LocationSignal));
+  return Response.json(await handleLocation(profile, country, signal as LocationSignal));
 }

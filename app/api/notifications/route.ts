@@ -6,5 +6,5 @@ export async function GET() {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
-  return Response.json({ notifications: [...listNotifications(profile.userId)].reverse() });
+  return Response.json({ notifications: [...(await listNotifications(profile.userId))].reverse() });
 }

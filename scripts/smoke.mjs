@@ -1,11 +1,11 @@
 // End-to-end check of the OtherWise backend against a running server.
 //
-//   npm run dev            (or: npm run build && npm start)
+//   npm run dev            (or: npm run build && OTHERWISE_ALLOW_RESET=true npm start)
 //   npm run smoke          (BASE_URL defaults to http://localhost:3000)
 //
 // Each step prints PASS or FAIL. Exits non-zero on any failure. It resets
-// server state first, so it is safe to run repeatedly, but it will reset a
-// demo in progress.
+// app state in the database first (trips, consent, feedback, events), so run
+// it against a dev database branch, never the one a live demo uses.
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 let failures = 0;
@@ -43,7 +43,11 @@ const saoirse = client();
 const aoife = client();
 const jonas = client();
 
-await anon.call("POST", "/api/dev/reset");
+const resetResponse = await anon.call("POST", "/api/dev/reset");
+if (resetResponse.status !== 200) {
+  console.error("Reset refused. Start the server with OTHERWISE_ALLOW_RESET=true (production builds block it).");
+  process.exit(1);
+}
 
 // Sessions
 let r = await anon.call("GET", "/api/users");

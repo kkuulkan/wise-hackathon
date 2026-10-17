@@ -7,7 +7,7 @@ export async function GET() {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
 
-  const trip = getActiveTrip(profile.userId) ?? null;
+  const trip = (await getActiveTrip(profile.userId)) ?? null;
   const name = (code: string) => COUNTRIES[code]?.name ?? code;
 
   return Response.json({

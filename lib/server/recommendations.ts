@@ -4,15 +4,14 @@ import {
   COUNTRIES,
   DEMO_TODAY,
   DISCLOSURE,
-  FX_AS_OF,
-  FX_PER_EUR,
   HISTORY_WINDOW_DAYS,
   MAX_CATEGORIES,
   MIN_CATEGORY_SAVING_PCT,
 } from "./config";
 import { queryCatalog, toPrice } from "./catalog";
 import { rankCategories } from "./personalize";
-import { getCategoryDef, getCategoryDefs, getSeedTransactions, type Profile } from "./seed";
+import { getFx } from "./pricedata";
+import { getCategoryDef, getCategoryDefs, getTransactions, type Profile } from "./seed";
 import { getActiveTrip, getConsent, hiddenIds } from "./store";
 import type {
   CatalogSource,
@@ -51,17 +50,18 @@ export async function buildRecommendations(
   country: string,
 ): Promise<RecommendationsResponse> {
   const { userId, homeCountry: home } = profile;
-  const trip = getActiveTrip(userId);
+  const [trip, consent, fx] = await Promise.all([getActiveTrip(userId), getConsent(userId), getFx()]);
   // Feedback is per trip. Browsing another country outside a trip has none.
   const tripId = trip && trip.countries[country] ? trip.id : null;
-  const consent = getConsent(userId);
 
   const ranked = consent.personalisation
-    ? rankCategories(getSeedTransactions(userId), getCategoryDefs(), DEMO_TODAY)
+    ? rankCategories(await getTransactions(userId), getCategoryDefs(), DEMO_TODAY)
     : [];
 
-  const hiddenCategories = hiddenIds(userId, tripId, "category");
-  const hiddenProducts = hiddenIds(userId, tripId, "product");
+  const [hiddenCategories, hiddenProducts] = await Promise.all([
+    hiddenIds(userId, tripId, "category"),
+    hiddenIds(userId, tripId, "product"),
+  ]);
 
   const candidates: Candidate[] = ranked.map((entry) => ({ slug: entry.slug, ranked: entry }));
   for (const category of getCategoryDefs()) {
@@ -96,8 +96,8 @@ export async function buildRecommendations(
     const averageEur = ranked ? ranked.spentEur / ranked.transactionCount : 0;
     const typicalPurchase = ranked
       ? {
-          home: toPrice(averageEur, home),
-          local: toPrice(averageEur * (comparison.localIndex / comparison.homeIndex), country),
+          home: toPrice(averageEur, home, fx.perEur),
+          local: toPrice(averageEur * (comparison.localIndex / comparison.homeIndex), country, fx.perEur),
         }
       : null;
 
@@ -124,7 +124,7 @@ export async function buildRecommendations(
   });
 
   const localCurrency = COUNTRIES[country].currency;
-  const rate = FX_PER_EUR[localCurrency];
+  const rate = fx.perEur[localCurrency];
 
   return {
     country: { code: country, name: COUNTRIES[country].name },
@@ -133,7 +133,7 @@ export async function buildRecommendations(
     personalised: categories.some((category) => category.personalised),
     categories,
     disclosure: DISCLOSURE,
-    fx: localCurrency !== "EUR" && rate ? { pair: `EUR/${localCurrency}`, rate, asOf: FX_AS_OF } : null,
+    fx: localCurrency !== "EUR" && rate ? { pair: `EUR/${localCurrency}`, rate, asOf: fx.asOf } : null,
     source: sources.length > 0 ? overallSource(sources) : "live",
     generatedAt: new Date().toISOString(),
   };

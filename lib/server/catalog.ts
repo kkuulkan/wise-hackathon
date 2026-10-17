@@ -6,19 +6,12 @@ import {
   CATALOG_TIMEOUT_MS,
   COUNTRIES,
   DEMO_TODAY,
-  FX_PER_EUR,
   MAX_PRICE_AGE_DAYS,
   MAX_PRODUCTS_PER_CATEGORY,
   MIN_LIST_PRICE_SAVING_PCT,
 } from "./config";
-import {
-  getBrandListItems,
-  getCategoryDef,
-  getLocalStats,
-  getPriceLevels,
-  getRealProducts,
-  getReferenceItems,
-} from "./seed";
+import { getBundledPriceData, getPriceData, type PriceData } from "./pricedata";
+import { getCategoryDef } from "./seed";
 import { readCatalogCache, readStaleCatalogCache, writeCatalogCache } from "./store";
 import type {
   CatalogResponse,
@@ -27,6 +20,7 @@ import type {
   ListPriceCheck,
   LocalComparison,
   Price,
+  PriceLevels,
   RealProduct,
 } from "./types";
 
@@ -43,6 +37,9 @@ import type {
  *                   one exists, otherwise an estimate from the Eurostat ratio
  *                   of the product's own sub-index (oils, cheese, pasta…).
  *
+ * Prices come from the database's current verified snapshot; if the database
+ * is unreachable, from the same snapshot's files bundled with the app.
+ *
  * Its whole input is a category slug and a country pair (FR-15). It cannot be
  * handed a user, a merchant or an amount, because the signature has nowhere
  * to put one.
@@ -56,10 +53,15 @@ function round2(value: number): number {
 }
 
 /** EUR price, plus the local-currency figure when the country is not on EUR. */
-export function toPrice(amountEur: number, country: string, localAmount?: number): Price {
+export function toPrice(
+  amountEur: number,
+  country: string,
+  perEur: Record<string, number>,
+  localAmount?: number,
+): Price {
   const price: Price = { amount: round2(amountEur), currency: "EUR" };
   const currency = COUNTRIES[country]?.currency;
-  const rate = currency ? FX_PER_EUR[currency] : undefined;
+  const rate = currency ? perEur[currency] : undefined;
 
   if (currency && currency !== "EUR" && rate) {
     price.local = { amount: Math.round(localAmount ?? amountEur * rate), currency };
@@ -69,11 +71,16 @@ export function toPrice(amountEur: number, country: string, localAmount?: number
 }
 
 /** FR-12 / FR-14 support: the official category comparison for a country pair. */
-export function compareCategory(category: string, from: string, to: string): CategoryComparison | null {
+export function compareCategory(
+  category: string,
+  from: string,
+  to: string,
+  priceLevels: PriceLevels,
+): CategoryComparison | null {
   const code = getCategoryDef(category)?.priceLevel;
   if (!code) return null;
 
-  const { year, levels } = getPriceLevels();
+  const { year, levels } = priceLevels;
   const level = levels[code];
   const homeIndex = level?.values[from];
   const localIndex = level?.values[to];
@@ -136,8 +143,9 @@ function describe(product: RealProduct): string {
 }
 
 /** Official items priced in both countries. FR-14 still applies. */
-function compareReferenceItems(query: CatalogQuery): ComparedProduct[] {
-  return getReferenceItems()
+function compareReferenceItems(query: CatalogQuery, data: PriceData): ComparedProduct[] {
+  const fx = data.fx.perEur;
+  return data.referenceItems
     .filter((item) => item.category === query.category)
     .flatMap((item): ComparedProduct[] => {
       const home = item.prices[query.from];
@@ -150,9 +158,9 @@ function compareReferenceItems(query: CatalogQuery): ComparedProduct[] {
           id: item.id,
           name: item.name,
           description: [item.unit, "national average"].join(" · "),
-          homePrice: toPrice(home.priceEur, query.from, home.currency === "EUR" ? undefined : home.price),
+          homePrice: toPrice(home.priceEur, query.from, fx, home.currency === "EUR" ? undefined : home.price),
           homePriceBasis: "observed",
-          localPrice: toPrice(local.priceEur, query.to, local.currency === "EUR" ? undefined : local.price),
+          localPrice: toPrice(local.priceEur, query.to, fx, local.currency === "EUR" ? undefined : local.price),
           savingPct: Math.round(((home.priceEur - local.priceEur) / home.priceEur) * 100),
           localComparison: { basis: "national-average", pct: 0 },
           approximate: true,
@@ -166,8 +174,8 @@ function compareReferenceItems(query: CatalogQuery): ComparedProduct[] {
 }
 
 /** The same brand SKUs priced in both countries, home and here. */
-function brandPairs(query: CatalogQuery) {
-  return getBrandListItems()
+function brandPairs(query: CatalogQuery, data: PriceData) {
+  return data.brandItems
     .filter((item) => item.category === query.category)
     .flatMap((item) => {
       const home = item.prices[query.from];
@@ -183,8 +191,8 @@ function median(values: number[]): number {
 }
 
 /** Summary of how a brand's official prices compare for this pair. */
-export function checkListPrices(query: CatalogQuery): ListPriceCheck | null {
-  const pairs = brandPairs(query);
+export function checkListPrices(query: CatalogQuery, data: PriceData): ListPriceCheck | null {
+  const pairs = brandPairs(query, data);
   if (pairs.length === 0) return null;
 
   return {
@@ -197,16 +205,17 @@ export function checkListPrices(query: CatalogQuery): ListPriceCheck | null {
 }
 
 /** Brand SKUs whose official price is meaningfully lower here. */
-function compareBrandItems(query: CatalogQuery): ComparedProduct[] {
-  return brandPairs(query)
+function compareBrandItems(query: CatalogQuery, data: PriceData): ComparedProduct[] {
+  const fx = data.fx.perEur;
+  return brandPairs(query, data)
     .filter((pair) => pair.pct >= MIN_LIST_PRICE_SAVING_PCT)
     .map(({ item, home, local, pct }) => ({
       id: item.id,
       name: item.name,
       description: `${item.brand} official list price`,
-      homePrice: toPrice(home.priceEur, query.from, home.currency === "EUR" ? undefined : home.price),
+      homePrice: toPrice(home.priceEur, query.from, fx, home.currency === "EUR" ? undefined : home.price),
       homePriceBasis: "observed" as const,
-      localPrice: toPrice(local.priceEur, query.to, local.currency === "EUR" ? undefined : local.price),
+      localPrice: toPrice(local.priceEur, query.to, fx, local.currency === "EUR" ? undefined : local.price),
       savingPct: Math.round(pct),
       localComparison: null,
       approximate: true as const,
@@ -217,8 +226,8 @@ function compareBrandItems(query: CatalogQuery): ComparedProduct[] {
 }
 
 /** Per kg/L against similar verified products in the same country, or null. */
-function localComparisonFor(product: RealProduct): LocalComparison | null {
-  const stat = product.type ? getLocalStats()[product.country]?.[product.type] : undefined;
+function localComparisonFor(product: RealProduct, localStats: PriceData["localStats"]): LocalComparison | null {
+  const stat = product.type ? localStats[product.country]?.[product.type] : undefined;
   if (!stat || product.unitPriceEur === null || product.unit !== stat.unit) return null;
 
   return {
@@ -230,8 +239,9 @@ function localComparisonFor(product: RealProduct): LocalComparison | null {
   };
 }
 
-function compareProducts(products: RealProduct[], query: CatalogQuery): ComparedProduct[] {
-  const { levels } = getPriceLevels();
+function compareProducts(products: RealProduct[], query: CatalogQuery, data: PriceData): ComparedProduct[] {
+  const { levels } = data.levels;
+  const fx = data.fx.perEur;
   const homeByCode = new Map(
     products
       .filter((product) => product.country === query.from && isFresh(product.lastSeen))
@@ -263,11 +273,11 @@ function compareProducts(products: RealProduct[], query: CatalogQuery): Compared
           id: product.id,
           name: product.name,
           description: describe(product),
-          homePrice: toPrice(homeEur, query.from, observed?.currency === "EUR" ? undefined : observed?.price),
+          homePrice: toPrice(homeEur, query.from, fx, observed?.currency === "EUR" ? undefined : observed?.price),
           homePriceBasis: observed ? "observed" : "estimated",
-          localPrice: toPrice(product.priceEur, query.to, product.currency === "EUR" ? undefined : product.price),
+          localPrice: toPrice(product.priceEur, query.to, fx, product.currency === "EUR" ? undefined : product.price),
           savingPct: Math.round(((homeEur - product.priceEur) / homeEur) * 100),
-          localComparison: localComparisonFor(product),
+          localComparison: localComparisonFor(product, data.localStats),
           approximate: true,
           priceUpdatedAt: product.lastSeen,
           evidence: {
@@ -313,27 +323,23 @@ function bySaving(a: ComparedProduct, b: ComparedProduct): number {
 }
 
 /** Observed-on-both-sides items lead; shelf products fill the rest. */
-function compareAll(products: RealProduct[], query: CatalogQuery): ComparedProduct[] {
+function compareAll(query: CatalogQuery, data: PriceData): ComparedProduct[] {
   return [
-    ...[...compareReferenceItems(query), ...compareBrandItems(query)].sort(bySaving),
-    ...compareProducts(products, query),
-  ].slice(
-    0,
-    MAX_PRODUCTS_PER_CATEGORY,
-  );
+    ...[...compareReferenceItems(query, data), ...compareBrandItems(query, data)].sort(bySaving),
+    ...compareProducts(validProducts(data.products), query, data),
+  ].slice(0, MAX_PRODUCTS_PER_CATEGORY);
 }
 
 /**
- * Stand-in for the remote catalog service. In production this is an HTTP call
- * to a service holding the verified snapshot; here it reads the snapshot,
- * with switches to demonstrate slowness and outage.
+ * The catalog service's data source: the current verified snapshot in the
+ * database. Switches to demonstrate slowness and outage without touching it.
  */
-async function fetchFromCatalogService(): Promise<unknown[]> {
+async function fetchFromCatalogService(): Promise<PriceData> {
   if (CATALOG_MODE === "fail") throw new Error("catalog service unavailable");
   if (CATALOG_MODE === "slow") {
     await new Promise((resolve) => setTimeout(resolve, CATALOG_TIMEOUT_MS + 1000));
   }
-  return getRealProducts();
+  return getPriceData();
 }
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
@@ -352,31 +358,34 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   });
 }
 
+function answer(query: CatalogQuery, data: PriceData, source: CatalogResponse["source"], now: number): CatalogResponse {
+  return {
+    ...query,
+    comparison: compareCategory(query.category, query.from, query.to, data.levels),
+    listPriceCheck: checkListPrices(query, data),
+    products: compareAll(query, data),
+    source,
+    fetchedAt: new Date(now).toISOString(),
+  };
+}
+
 /**
  * FR-11, FR-16, FR-17. Order of preference:
  *   1. fresh cache for this (from, to, category)
- *   2. live catalog call, under a 3 s timeout
- *   3. stale cache, then the bundled snapshot
+ *   2. the database's current snapshot, under a 3 s timeout
+ *   3. stale cache, then the verified snapshot files bundled with the app
  * The response says which one it came from.
  */
 export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse> {
   const key = `${query.from}:${query.to}:${query.category}`;
   const now = Date.now();
-  const comparison = compareCategory(query.category, query.from, query.to);
 
   const cached = readCatalogCache(key, now);
   if (cached) return { ...cached, source: "cache" };
 
   try {
-    const raw = await withTimeout(fetchFromCatalogService(), CATALOG_TIMEOUT_MS);
-    const response: CatalogResponse = {
-      ...query,
-      comparison,
-      listPriceCheck: checkListPrices(query),
-      products: compareAll(validProducts(raw), query),
-      source: "live",
-      fetchedAt: new Date(now).toISOString(),
-    };
+    const data = await withTimeout(fetchFromCatalogService(), CATALOG_TIMEOUT_MS);
+    const response = answer(query, data, "live", now);
     writeCatalogCache(key, response, now + CATALOG_CACHE_TTL_MS);
     return response;
   } catch (error) {
@@ -385,13 +394,6 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
     const stale = readStaleCatalogCache(key);
     if (stale) return { ...stale, source: "fallback" };
 
-    return {
-      ...query,
-      comparison,
-      listPriceCheck: checkListPrices(query),
-      products: compareAll(validProducts(getRealProducts()), query),
-      source: "fallback",
-      fetchedAt: new Date(now).toISOString(),
-    };
+    return answer(query, getBundledPriceData(), "fallback", now);
   }
 }

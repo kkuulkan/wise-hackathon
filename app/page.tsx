@@ -34,7 +34,7 @@ async function HomeContent() {
   }
 
   const { account, profile, tripCountry } = session;
-  const transactions = getLiveTransactions(profile);
+  const transactions = await getLiveTransactions(profile);
   const recommendations = tripCountry ? await getLiveRecommendations(session) : null;
   const categories = recommendations?.ok ? recommendations.categories : [];
   const total = getTotalAnnualSaving(categories);

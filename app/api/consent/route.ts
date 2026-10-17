@@ -6,7 +6,7 @@ import { getConsent, recordEvent, setConsent } from "@/lib/server/store";
 export async function GET() {
   const profile = await requireUser();
   if (profile instanceof Response) return profile;
-  return Response.json(getConsent(profile.userId));
+  return Response.json(await getConsent(profile.userId));
 }
 
 /**
@@ -30,17 +30,17 @@ export async function PUT(request: Request) {
     if (key in body && typeof body[key] !== "boolean") return badRequest(`${key} must be true or false.`);
   }
 
-  const before = getConsent(profile.userId);
+  const before = await getConsent(profile.userId);
   const after = {
     personalisation: (body.personalisation as boolean | undefined) ?? before.personalisation,
     notifications: (body.notifications as boolean | undefined) ?? before.notifications,
     updatedAt: new Date().toISOString(),
   };
-  setConsent(profile.userId, after);
+  await setConsent(profile.userId, after);
 
   const wasOn = before.personalisation && before.notifications;
   const isOn = after.personalisation && after.notifications;
-  if (wasOn !== isOn) recordEvent({ type: isOn ? "opt_in" : "opt_out", at: after.updatedAt });
+  if (wasOn !== isOn) await recordEvent({ type: isOn ? "opt_in" : "opt_out", at: after.updatedAt });
 
   return Response.json({ ...after, confirmation: "Your choice is saved and applies right away." });
 }

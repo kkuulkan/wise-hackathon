@@ -2,9 +2,10 @@ import "server-only";
 
 import { connection } from "next/server";
 
-import { COUNTRIES, DEMO_TODAY, FX_PER_EUR, HISTORY_WINDOW_DAYS } from "@/lib/server/config";
+import { COUNTRIES, DEMO_TODAY, HISTORY_WINDOW_DAYS } from "@/lib/server/config";
+import { getFx } from "@/lib/server/pricedata";
 import { buildRecommendations } from "@/lib/server/recommendations";
-import { getCategoryDef, getSeedTransactions, type Profile } from "@/lib/server/seed";
+import { getCategoryDef, getTransactions, type Profile } from "@/lib/server/seed";
 import { currentUser } from "@/lib/server/session";
 import { getActiveTrip } from "@/lib/server/store";
 import { isEligiblePair } from "@/lib/server/trips";
@@ -43,7 +44,7 @@ export async function getLiveSession(): Promise<LiveSession | null> {
   const profile = await currentUser();
   if (!profile) return null;
 
-  const trip = getActiveTrip(profile.userId);
+  const trip = await getActiveTrip(profile.userId);
   const here = trip?.currentCountry ?? profile.homeCountry;
   const away = Boolean(trip) && here !== profile.homeCountry;
 
@@ -71,10 +72,8 @@ export async function getLiveSession(): Promise<LiveSession | null> {
  * the existing payments list, which looks labels up in the old seed, shows
  * "Skincare & beauty" rather than "skincare-beauty".
  */
-export function getLiveTransactions(profile: Profile): Transaction[] {
-  return [...getSeedTransactions(profile.userId)]
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .map((transaction) => ({
+export async function getLiveTransactions(profile: Profile): Promise<Transaction[]> {
+  return (await getTransactions(profile.userId)).map((transaction) => ({
       ...transaction,
       category: getCategoryDef(transaction.category)?.label ?? transaction.category,
       amount: { ...transaction.amount, currency: transaction.amount.currency as CurrencyCode },
@@ -85,11 +84,11 @@ function toCategory(
   category: RecommendationCategory,
   country: string,
   homeCity: string,
+  hufPerEur: number,
 ): Category {
   const { products, comparison, typicalPurchase } = category;
   const mean = (values: number[]) =>
     values.length ? values.reduce((total, value) => total + value, 0) / values.length : 0;
-  const hufPerEur = FX_PER_EUR.HUF;
 
   // Annualised: what this user spent here in 90 days, scaled to a year, at
   // the category's official saving. General suggestions have no spend.
@@ -158,12 +157,12 @@ export async function getLiveRecommendations(
     return { ok: false, reason: "not-eligible" };
   }
 
-  const response = await buildRecommendations(session.profile, country);
+  const [response, fx] = await Promise.all([buildRecommendations(session.profile, country), getFx()]);
   return {
     ok: true,
     response,
     categories: response.categories.map((category) =>
-      toCategory(category, country, session.profile.homeCity),
+      toCategory(category, country, session.profile.homeCity, fx.perEur.HUF),
     ),
   };
 }
