@@ -197,6 +197,16 @@
   font-weight: 500;
 }
 
+/* The payment's category, as the same ink the weekly split uses. */
+.dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: var(--space-1);
+  border-radius: 50%;
+  vertical-align: 0.08em;
+}
+
 .recentMeta {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -271,7 +281,7 @@
 
 .place svg {
   flex: none;
-  color: var(--stamp);
+  color: var(--ink-getting-around);
 }
 
 /* Home to here, as a ticket prints a route. */
@@ -284,7 +294,8 @@
   font-size: 12px;
   letter-spacing: 0.12em;
   font-weight: 600;
-  color: var(--muted);
+  /* The journey, in the ink the account's travel categories are drawn in. */
+  color: var(--ink-getting-around);
 }
 
 .route i {

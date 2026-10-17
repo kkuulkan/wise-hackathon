@@ -96,7 +96,7 @@ async function CheaperContent({
       <header className={styles.head}>
         <HeaderBackdrop className={styles.headBg} />
         <div className={`page ${styles.headInner}`}>
-          <TitleFlight city={city} />
+          <TitleFlight city={city} countryCode={response.country.code} />
           <p className={styles.lede}>
             Set against prices in {account.homeCity}.{" "}
             {/* US-7.2: say so plainly when none of this came from their payments. */}

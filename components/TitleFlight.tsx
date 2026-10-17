@@ -4,11 +4,14 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { IconPlane } from "@tabler/icons-react";
 
+import { flagEmoji } from "@/lib/flag";
 import styles from "./TitleFlight.module.css";
 
 type Props = {
   /** The country or city the page is about. */
   city: string;
+  /** Its two-letter code, for the flag beside the name. */
+  countryCode: string;
 };
 
 /**
@@ -18,7 +21,7 @@ type Props = {
  * Mounts at the same moment as the spread below, so the flight and the page
  * turn read as one movement without the two components having to coordinate.
  */
-export function TitleFlight({ city }: Props) {
+export function TitleFlight({ city, countryCode }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -68,7 +71,13 @@ export function TitleFlight({ city }: Props) {
 
   return (
     <div className={styles.wrap} ref={rootRef}>
-      <h1 className={styles.title}>{city}</h1>
+      <h1 className={styles.title}>
+        {city}
+        {/* Decorative: the name is right there beside it. */}
+        <span className={styles.flag} aria-hidden="true">
+          {flagEmoji(countryCode)}
+        </span>
+      </h1>
 
       {/* The trail passes behind the letters, the plane in front of them. */}
       <span className={styles.trail} aria-hidden="true" />

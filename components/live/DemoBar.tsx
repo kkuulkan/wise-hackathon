@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { dismissTicket } from "@/lib/ticket";
+import { flagEmoji } from "@/lib/flag";
 import { Dropdown } from "./Dropdown";
 import { FlightScrim } from "./FlightScrim";
 import styles from "./DemoBar.module.css";
@@ -174,8 +175,7 @@ export function DemoBar({
 
         {userId && !notificationsAllowed && (
           <p className={styles.declined}>
-            Consent declined, so OtherWise does not watch for arrivals. Turn it back on in
-            OtherWise settings, or reset the demo.
+            Consent declined, so OtherWise does not watch for arrivals. Reset the demo.
           </p>
         )}
 
@@ -193,6 +193,7 @@ export function DemoBar({
                 options={destinations.map((country) => ({
                   value: country.code,
                   label: country.name,
+                  glyph: flagEmoji(country.code),
                   note: country.eligible ? undefined : "outside the E.U.",
                 }))}
               />

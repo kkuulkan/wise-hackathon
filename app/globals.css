@@ -22,9 +22,15 @@
   --accent-soft: #e4e49c;
   /* A second ink, as a stamp pad gives: same hue, lighter. */
   --stamp: #16407f;
-  --positive: var(--navy);
-  --positive-ink: var(--navy);
-  --danger: #16407f;
+  /*
+   * Saving, as its own reserved colour rather than one of the category inks:
+   * it means a state, not an identity, so it is never one of the four above.
+   * 6:1 on the paper, which the inks cannot all manage, so this is the one
+   * that is allowed to be text.
+   */
+  --positive: #1d6b2a;
+  --positive-ink: #1d6b2a;
+  --danger: #a3302f;
   --muted: rgba(15, 44, 92, 0.62);
   --line: rgba(15, 44, 92, 0.16);
   --line-strong: rgba(15, 44, 92, 0.38);
@@ -52,6 +58,44 @@
 
   /* Neutral chip, so accent stays reserved for emphasis. */
   --chip-bg: rgba(20, 27, 46, 0.055);
+
+  /*
+   * Stamp inks, for telling one spending category from another — the way a
+   * passport's visas are each in a different ink. Navy and beige still carry
+   * the whole frame: type, buttons, paper and the stamps themselves.
+   *
+   * Five, and five is hard-won. These were validated as a categorical palette
+   * against the --surface paper with the dataviz skill's
+   * scripts/validate_palette.js, in `--pairs all` mode because any two
+   * categories can land in one chart together. A green and an amber are
+   * indistinguishable to a red-green colour-blind reader on this paper
+   * (ΔE 2.3), which rules out the obvious greens; the brown below was found
+   * by sweeping the hue space and keeping what passed. Do not add a sixth by
+   * eye; run the script.
+   *
+   * Assigned to a category, never to its position in a list, so Groceries is
+   * the same ink on every traveller's account and on every card.
+   */
+  --ink-shopping: #ad7314;
+  --ink-eating: #a32f85;
+  --ink-cafe: #863727;
+  --ink-getting-around: #1f5fd0;
+  --ink-wearing: #00a0a8;
+  /* The tail with no ink of its own: rent, insurance, games, pharmacy. */
+  --ink-other: rgba(15, 44, 92, 0.55);
+
+  /*
+   * Account colours: one per traveller, for their initials, their balance and
+   * the line beneath it. Kept apart from the category inks above so an
+   * account's colour never looks like a claim about what they spend on.
+   *
+   * These carry text, so each clears 4.5:1 both on the glass and behind beige
+   * initials. They are not chart series, so they need no colour-blind
+   * separation from one another — only from the paper.
+   */
+  --ink-account-crimson: #a3203f;
+  --ink-account-violet: #5b35b5;
+  --ink-account-teal: #00757c;
 
   /*
    * Frosted glass. Kept this opaque on purpose: navy text sits on it over a

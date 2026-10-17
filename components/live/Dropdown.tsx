@@ -10,6 +10,8 @@ export type DropdownOption = {
   label: string;
   /** Quieter trailing detail, such as a city or "you are here". */
   note?: string;
+  /** Decorative glyph before the label, such as a country's flag. */
+  glyph?: string;
 };
 
 type Props = {
@@ -154,6 +156,11 @@ export function Dropdown({
         aria-label={srLabel}
       >
         <span className={styles.value}>
+          {current?.glyph && (
+            <span className={styles.glyph} aria-hidden="true">
+              {current.glyph}
+            </span>
+          )}
           {current ? current.label : placeholder}
           {current?.note && <span className={styles.note}>{current.note}</span>}
         </span>
@@ -184,6 +191,11 @@ export function Dropdown({
               }}
               onPointerEnter={() => setActive(index)}
             >
+              {option.glyph && (
+                <span className={styles.glyph} aria-hidden="true">
+                  {option.glyph}
+                </span>
+              )}
               <span className={styles.optionLabel}>{option.label}</span>
               {option.note && <span className={styles.note}>{option.note}</span>}
               {option.value === value && (

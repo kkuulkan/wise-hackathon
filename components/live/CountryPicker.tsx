@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { IconArrowRight } from "@tabler/icons-react";
 
+import { flagEmoji } from "@/lib/flag";
 import { Dropdown } from "./Dropdown";
 import { FlightScrim } from "./FlightScrim";
 import styles from "./CountryPicker.module.css";
@@ -76,6 +77,7 @@ export function CountryPicker({ tripCountry, homeCity }: Props) {
           options={destinations.map((country) => ({
             value: country.code,
             label: country.name,
+            glyph: flagEmoji(country.code),
             note: country.code === tripCountry ? "you are here" : undefined,
           }))}
         />
