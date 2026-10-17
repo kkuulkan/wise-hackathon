@@ -11,7 +11,7 @@
 
 | Field | Value |
 |---|---|
-| Branch | `backend` (cut from `main` at `fa2432c`) |
+| Branch | `backend` (cut from `main` at `fa2432c`). **`integration`** = `backend` + `origin/frontend` merged (see §11) |
 | Last updated | 2026-10-17 |
 | Phase | **Backend API complete for the comparison feature with two demo users. Frontend not wired yet.** |
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
@@ -21,8 +21,7 @@
 
 ### Scope decisions (from aim-t, 2026-10-17)
 
-- App name is **OtherWise**. The UI on `main` still says "Cheaper Here" in `app/layout.tsx` metadata and `README.md`.
-  Those are frontend files and were left alone. **Frontend: please rename.**
+- App name is **OtherWise**. The `frontend` branch already renamed the UI and package; `main` still says "Cheaper Here".
 - **Comparison only.** No "Only here" / "Exclusive" section and no "Popular" picks. Both were removed from the backend.
 - **Two demo users**, each with their own transaction history. Whoever is signed in sees recommendations from *their* spending,
   compared against *their* home country.
@@ -31,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | Created branch `integration` from `backend` and merged `origin/frontend` (`790d2e8`). Clean merge, build + lint pass, smoke 58/58, `/` and `/cheaper` render | See §11 |
 | 2026-10-17 | Two demo users plus a cookie sign-in (`/api/users`, `/api/session`). All user data and state is per user. Exclusives removed. German prices added to the catalog. Name set to OtherWise. Smoke test now covers both users (58 checks) | Additive. `data/seed/transactions.json` changed shape (keyed by user id) |
 | 2026-10-17 | Initial backend: route handlers, `lib/server/**`, `data/seed/**`, `scripts/smoke.mjs`, `npm run smoke` | Additive. `package.json` gains one script line |
 | 2026-10-17 | Created this progress file | None |
@@ -265,3 +265,27 @@ curl -b jar localhost:3000/api/recommendations
 
 1. Should the old services data (gym, physio, dental on `main`) be folded into `data/seed/catalog.json`? Physio and dental are
    health-adjacent, so they hit PRD edge case 11.
+
+## 11. Integration with `frontend` (branch `integration`)
+
+`integration` = `backend` + `origin/frontend` (`790d2e8`, Linh Vu's passport-themed UI). Checked on 2026-10-17:
+
+| Check | Result |
+|---|---|
+| `git merge origin/frontend` | **No conflicts.** The two branches touch disjoint files, apart from `package.json`, which auto-merged: frontend's name `otherwise` and new deps `@tabler/icons-react`, `lenis`, plus backend's `smoke` script |
+| `npm install`, `eslint .` | Clean |
+| `npm run build` | Passes. Pages `/` and `/cheaper` are static; all 14 `/api/*` routes are present |
+| `npm run smoke` against `next start` | 58/58 |
+| `GET /`, `GET /cheaper` | 200, `<title>OtherWise</title>`, no server errors |
+
+**The halves run side by side but are not yet connected.** The frontend pages still read `data/account.json`, `data/transactions.json` and
+`data/recommendations.json` through `lib/data.ts` (single user Aoife, services such as gym and physio, Budapest). The backend serves
+two users and the product catalog from `data/seed/`. Nothing in the UI calls `/api/*` yet. Wiring needed:
+
+1. A user picker (Aoife / Jonas) that calls `POST /api/session`.
+2. A "Simulate arrival" control that calls `POST /api/location` and shows the returned `notification`.
+3. `/` reading `/api/account` and `/api/transactions` instead of `lib/data.ts`.
+4. `/cheaper` reading `searchParams.country` and rendering `RecommendationsResponse` (§4). `VisaSpread` and `Benefits` currently take the
+   old `Category` type (`homeAvgEur`, `annualSavingEur`, places with districts). They need adapting to `categories[].products[]` with
+   `homePrice` / `localPrice`. The backend has no `annualSavingEur`. If the UI wants a yearly figure, ask backend to add it.
+
