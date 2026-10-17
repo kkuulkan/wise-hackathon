@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | `integration`: wired the frontend pages to the backend through `lib/live.ts` and `components/live/*`; only `app/page.tsx` and `app/cheaper/page.tsx` edited | See §11 |
 | 2026-10-17 | Created branch `integration` from `backend` and merged `origin/frontend` (`790d2e8`). Clean merge, build + lint pass, smoke 58/58, `/` and `/cheaper` render | See §11 |
 | 2026-10-17 | Two demo users plus a cookie sign-in (`/api/users`, `/api/session`). All user data and state is per user. Exclusives removed. German prices added to the catalog. Name set to OtherWise. Smoke test now covers both users (58 checks) | Additive. `data/seed/transactions.json` changed shape (keyed by user id) |
 | 2026-10-17 | Initial backend: route handlers, `lib/server/**`, `data/seed/**`, `scripts/smoke.mjs`, `npm run smoke` | Additive. `package.json` gains one script line |
@@ -278,14 +279,43 @@ curl -b jar localhost:3000/api/recommendations
 | `npm run smoke` against `next start` | 58/58 |
 | `GET /`, `GET /cheaper` | 200, `<title>OtherWise</title>`, no server errors |
 
-**The halves run side by side but are not yet connected.** The frontend pages still read `data/account.json`, `data/transactions.json` and
-`data/recommendations.json` through `lib/data.ts` (single user Aoife, services such as gym and physio, Budapest). The backend serves
-two users and the product catalog from `data/seed/`. Nothing in the UI calls `/api/*` yet. Wiring needed:
+### Wiring (done on `integration`, 2026-10-17)
 
-1. A user picker (Aoife / Jonas) that calls `POST /api/session`.
-2. A "Simulate arrival" control that calls `POST /api/location` and shows the returned `notification`.
-3. `/` reading `/api/account` and `/api/transactions` instead of `lib/data.ts`.
-4. `/cheaper` reading `searchParams.country` and rendering `RecommendationsResponse` (§4). `VisaSpread` and `Benefits` currently take the
-   old `Category` type (`homeAvgEur`, `annualSavingEur`, places with districts). They need adapting to `categories[].products[]` with
-   `homePrice` / `localPrice`. The backend has no `annualSavingEur`. If the UI wants a yearly figure, ask backend to add it.
+The pages are connected to the backend. **No backend file and no component or CSS file was changed.** Only the two pages were edited,
+and three glue files were added:
 
+| File | Kind | What it does |
+|---|---|---|
+| `lib/live.ts` | new, server-only | Adapter: reads the signed-in user, trip, transactions and recommendations from `lib/server` and returns the frontend's own `Account`, `Transaction[]` and `Category[]` shapes from `lib/types.ts`. Calls `connection()` so pages never prerender backend state |
+| `components/live/DemoBar.tsx` + `.module.css` | new, client | Traveller picker (`GET /api/users`, `POST`/`DELETE /api/session`), "Arrive in" + "Simulate arrival" (`GET /api/destinations`, `POST /api/location`), "Fly home", and the notification card that links to its `deepLink` (logs `notification_opened`). Calls `router.refresh()` after each action |
+| `components/live/TrackView.tsx` | new, client | Posts one analytics event on mount (`recommendations_viewed` on `/cheaper`) |
+| `app/page.tsx` | edited | Data loading only: `<Suspense>` around an async part that uses `lib/live.ts`; renders `DemoBar` above `Hero`. Benefits tile copy rewritten so it is true for backend data |
+| `app/cheaper/page.tsx` | edited | Reads `?country=` (deep link) or the active trip; signed-out / at-home / outside-EU messages; footer shows the backend's disclosure, FX and fallback note |
+
+Why server components don't fetch `/api/*`: the Next 16 docs (`02-guides/backend-for-frontend.md`) say to read data at its source
+from server components, because calling your own route handlers fails at build time and adds a round trip. So reads go
+through `lib/server` (the same functions the routes call), and **user actions go through the HTTP API**.
+
+How backend fields map onto the old `Category` shape (in `lib/live.ts`):
+
+| Frontend field | From backend |
+|---|---|
+| `savingPct` | `category.savingPct` |
+| `homeAvgEur` / `localAvgEur` | mean of the shown products' `homePrice` / `localPrice` |
+| `annualSavingEur` | `reason.spentEur × 365/90 × savingPct` (0 for general suggestions) |
+| `purchasesPerYear` | `reason.transactionCount × 365/90` |
+| `unit` | "From your own spending" or "General suggestion" |
+| product `area` | product `description` |
+| product `priceEur` / `priceHuf` | `localPrice.amount` / `localPrice.local.amount`, or EUR × 395 outside Hungary |
+| product `vsLocalAvgPct` | 0. Catalog prices *are* typical local prices, so each shows "At {country} avg" |
+| product `mapsQuery` | `"{product name} {country}"` |
+| transaction `category` | the category's label, so `Payments` shows "Skincare & beauty" rather than the slug |
+
+Verified: build and lint clean; `/` and `/cheaper` are partially prerendered (static shell plus per-user streamed content); signed-out, at-home,
+Aoife in PT/HU, Jonas in PT and Jonas with `?country=JP` all render the right content over HTTP; 0 server errors; smoke 58/58.
+**Not yet clicked in a real browser:** the DemoBar's interactions were checked through the API calls they make, not by clicking.
+
+Known rough edges that need a **frontend** change (left alone on purpose):
+- `Visa` always prints a forint line (`formatHuf`), so Portugal and Spain show a converted HUF price. Better to hide it when `fx` is null.
+- `Visa`'s map pin always opens Google Maps. The backend's own `products[].url` (shop or maps search) is more accurate.
+- `Hero`'s "Welcome to …" uses `currentCity`, which is the country name now (the backend has no city).
