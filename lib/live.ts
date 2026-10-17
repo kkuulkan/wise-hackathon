@@ -86,13 +86,13 @@ function toCategory(
   country: string,
   homeCity: string,
 ): Category {
-  const { products } = category;
-  const mean = (values: number[]) => values.reduce((total, value) => total + value, 0) / values.length;
-  const updated = products.map((product) => product.priceUpdatedAt).sort().at(-1);
+  const { products, comparison, typicalPurchase } = category;
+  const mean = (values: number[]) =>
+    values.length ? values.reduce((total, value) => total + value, 0) / values.length : 0;
   const hufPerEur = FX_PER_EUR.HUF;
 
   // Annualised: what this user spent here in 90 days, scaled to a year, at
-  // the category's saving. Default-set categories have no spend, so no claim.
+  // the category's official saving. General suggestions have no spend.
   const annualSavingEur = category.reason
     ? round2(category.reason.spentEur * YEAR_OVER_WINDOW * (category.savingPct / 100))
     : 0;
@@ -100,13 +100,17 @@ function toCategory(
   return {
     slug: category.slug,
     label: category.label,
-    unit: category.personalised ? "From your own spending" : "General suggestion",
-    homeAvgEur: round2(mean(products.map((product) => product.homePrice.amount))),
-    localAvgEur: round2(mean(products.map((product) => product.localPrice.amount))),
+    unit: typicalPurchase ? "Your average purchase" : "Typical shelf prices",
+    // The visa's two rates: the user's own average purchase when there is one,
+    // otherwise the mean of the real products shown.
+    homeAvgEur: round2(typicalPurchase?.home.amount ?? mean(products.map((p) => p.homePrice.amount))),
+    localAvgEur: round2(typicalPurchase?.local.amount ?? mean(products.map((p) => p.localPrice.amount))),
     purchasesPerYear: category.reason
       ? Math.round(category.reason.transactionCount * YEAR_OVER_WINDOW)
       : 0,
-    source: `Approximate prices compared with ${homeCity}, last updated ${updated}.`,
+    source:
+      `${comparison.indexLabel}: price level ${comparison.localIndex} here vs ${comparison.homeIndex} in ${homeCity} (Eurostat ${comparison.year}, EU = 100).` +
+      (products.length ? " Products are real shelf prices from Open Prices; their home prices are estimates." : ""),
     savingPct: category.savingPct,
     annualSavingEur,
     products: products.map((product) => ({
@@ -114,10 +118,11 @@ function toCategory(
       area: product.description,
       priceEur: product.localPrice.amount,
       // The visa always prints a forint line; outside Hungary it is the
-      // converted figure at the seeded rate.
+      // converted figure at the ECB rate.
       priceHuf: product.localPrice.local?.amount ?? Math.round(product.localPrice.amount * hufPerEur),
       mapsQuery: `${product.name} ${countryName(country)}`,
-      // Catalog prices are typical local prices, so each one is the local average.
+      // The visa compares each place with a local average, which real shelf
+      // data does not give; 0 renders "At {country} avg". See BACKEND_PROGRESS §11.
       vsLocalAvgPct: 0,
     })),
   };

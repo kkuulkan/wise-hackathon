@@ -1,0 +1,151 @@
+{
+  "_source": "Eurostat prc_ppp_ind, price level indices (EU27_2020 = 100), 2024. Dataset updated 2025-07-10T11:00:00+0200.",
+  "dataset": "prc_ppp_ind",
+  "measure": "PLI_EU27_2020",
+  "year": "2024",
+  "updated": "2025-07-10T11:00:00+0200",
+  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON&lang=EN&na_item=PLI_EU27_2020&geo=IE&geo=DE&geo=PT&geo=HU&geo=ES&ppp_cat=A010101&ppp_cat=A01010101&ppp_cat=A01010102&ppp_cat=A01010103&ppp_cat=A01010104&ppp_cat=A01010105&ppp_cat=A01010106&ppp_cat=A010102&ppp_cat=A0103&ppp_cat=A010703&ppp_cat=A0108&ppp_cat=A010901&ppp_cat=A0111&ppp_cat=A0112&lastTimePeriod=2",
+  "levels": {
+    "A010101": {
+      "label": "Food",
+      "values": {
+        "IE": 111.9,
+        "DE": 102.9,
+        "PT": 100.6,
+        "HU": 93.9,
+        "ES": 94.6
+      }
+    },
+    "A01010101": {
+      "label": "Bread and cereals",
+      "values": {
+        "IE": 116.5,
+        "DE": 105.7,
+        "PT": 102.5,
+        "HU": 97.3,
+        "ES": 95.5
+      }
+    },
+    "A01010102": {
+      "label": "Meat",
+      "values": {
+        "IE": 99.9,
+        "DE": 112.3,
+        "PT": 87.9,
+        "HU": 78.1,
+        "ES": 90.5
+      }
+    },
+    "A01010103": {
+      "label": "Fish",
+      "values": {
+        "IE": 105.2,
+        "DE": 117,
+        "PT": 91,
+        "HU": 99.8,
+        "ES": 94.2
+      }
+    },
+    "A01010104": {
+      "label": "Milk, cheese and eggs",
+      "values": {
+        "IE": 111.2,
+        "DE": 97.1,
+        "PT": 107.5,
+        "HU": 101.9,
+        "ES": 93.1
+      }
+    },
+    "A01010105": {
+      "label": "Oils and fats",
+      "values": {
+        "IE": 106,
+        "DE": 104.4,
+        "PT": 102.4,
+        "HU": 109,
+        "ES": 91.4
+      }
+    },
+    "A01010106": {
+      "label": "Fruits, vegetables, potatoes",
+      "values": {
+        "IE": 109,
+        "DE": 103,
+        "PT": 98.5,
+        "HU": 97.7,
+        "ES": 95.8
+      }
+    },
+    "A010102": {
+      "label": "Non-alcoholic beverages",
+      "values": {
+        "IE": 140.4,
+        "DE": 101.7,
+        "PT": 113.2,
+        "HU": 103.2,
+        "ES": 100.6
+      }
+    },
+    "A0103": {
+      "label": "Clothing and footwear",
+      "values": {
+        "IE": 100.2,
+        "DE": 101.2,
+        "PT": 93.5,
+        "HU": 86.6,
+        "ES": 90.9
+      }
+    },
+    "A010703": {
+      "label": "Transport services",
+      "values": {
+        "IE": 115.1,
+        "DE": 118.7,
+        "PT": 80.6,
+        "HU": 61.6,
+        "ES": 81.5
+      }
+    },
+    "A0108": {
+      "label": "Communication",
+      "values": {
+        "IE": 139.8,
+        "DE": 136,
+        "PT": 115.6,
+        "HU": 97.3,
+        "ES": 94.6
+      }
+    },
+    "A010901": {
+      "label": "Audio-visual, photographic and information processing equipment",
+      "values": {
+        "IE": 104.4,
+        "DE": 97.2,
+        "PT": 98.9,
+        "HU": 99.9,
+        "ES": 96.3
+      }
+    },
+    "A0111": {
+      "label": "Restaurants and hotels",
+      "values": {
+        "IE": 129.3,
+        "DE": 112.1,
+        "PT": 75.5,
+        "HU": 71.8,
+        "ES": 83.9
+      }
+    },
+    "A0112": {
+      "label": "Miscellaneous goods and services",
+      "values": {
+        "IE": 137.5,
+        "DE": 104,
+        "PT": 85.6,
+        "HU": 63.6,
+        "ES": 89.4
+      }
+    }
+  },
+  "fetchedAt": "2026-10-17T02:30:20.967Z"
+}

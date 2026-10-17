@@ -1,16 +1,18 @@
 import "server-only";
 
-import catalogJson from "@/data/seed/catalog.json";
+import priceLevelsJson from "@/data/real/price-levels.json";
+import productsJson from "@/data/real/products.json";
 import categoriesJson from "@/data/seed/categories.json";
 import transactionsJson from "@/data/seed/transactions.json";
 import usersJson from "@/data/seed/users.json";
 
-import type { CatalogProduct, CategoryDef, SeedTransaction } from "./types";
+import type { CategoryDef, PriceLevels, RealProduct, SeedTransaction } from "./types";
 
 /**
- * Read-only seed data. Mutable state (trips, consent, feedback) lives in
- * store.ts; this file is what a real deployment would replace with the
- * profile, transaction and catalog services.
+ * Read-only data. Users and transactions are demo seed; price levels and
+ * products are the verified real-data snapshot in data/real/, rebuilt by
+ * `npm run fetch-data`. Mutable state (trips, consent, feedback) lives in
+ * store.ts.
  */
 
 export type Profile = {
@@ -50,6 +52,12 @@ export function getCategoryDef(slug: string): CategoryDef | undefined {
   return getCategoryDefs().find((category) => category.slug === slug);
 }
 
-export function getCatalogProducts(): CatalogProduct[] {
-  return catalogJson.products as CatalogProduct[];
+/** Verified Open Prices products for every country. */
+export function getRealProducts(): RealProduct[] {
+  return productsJson.products as RealProduct[];
+}
+
+/** Eurostat price level indices (EU27 = 100) by category and country. */
+export function getPriceLevels(): PriceLevels {
+  return priceLevelsJson as PriceLevels;
 }

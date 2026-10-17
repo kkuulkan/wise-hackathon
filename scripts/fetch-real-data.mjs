@@ -1,0 +1,374 @@
+// Builds OtherWise's verified price snapshot from real, public sources.
+//
+//   npm run fetch-data            (takes a few minutes; Germany has thousands of prices)
+//
+// Sources
+//   Eurostat prc_ppp_ind   official price level indices per spending category and country (EU27 = 100)
+//   Open Prices (OFF)      crowdsourced shelf prices, each backed by a receipt or price-tag photo
+//   ECB via Frankfurter    EUR exchange rates, cross-checked against Eurostat ert_bil_eur_d
+//
+// Every record passes through verification gates. Anything that fails is
+// dropped and counted in data/real/verification-report.json. If a source
+// the app cannot work without fails its gates (missing index values, FX
+// sources disagreeing), the script exits non-zero and writes nothing, so the
+// app keeps the last good snapshot.
+
+import { mkdir, rename, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const OUT_DIR = path.join(ROOT, "data", "real");
+const USER_AGENT = "OtherWise-hackathon/0.1 (BME x Wise prototype; contact namiatariq@gmail.com)";
+
+const TODAY = process.env.OTHERWISE_TODAY ?? new Date().toISOString().slice(0, 10);
+const COUNTRIES = {
+  IE: { osmName: "Ireland", currency: "EUR" },
+  DE: { osmName: "Deutschland", currency: "EUR" },
+  PT: { osmName: "Portugal", currency: "EUR" },
+  HU: { osmName: "Magyarország", currency: "HUF" },
+  ES: { osmName: "España", currency: "EUR" },
+};
+
+/** Eurostat analytical categories the app needs. Keys are COICOP-based ppp_cat codes. */
+const PRICE_LEVEL_CODES = [
+  "A010101", "A01010101", "A01010102", "A01010103", "A01010104", "A01010105", "A01010106",
+  "A010102", "A0103", "A010703", "A0108", "A010901", "A0111", "A0112",
+];
+
+/**
+ * Open Food Facts category tags → our taxonomy and the Eurostat index that
+ * prices them. First match wins, so specific groups sit above broad ones.
+ */
+const PRODUCT_GROUPS = [
+  // Beans, ground, capsules and instant: sold by weight. Ready-to-drink coffee is not what a café-goer means.
+  { category: "coffee", index: "A010102", tags: ["en:coffees"], unit: "g" },
+  { category: "groceries", index: "A01010101", tags: ["en:breads", "en:pastas", "en:rices", "en:breakfast-cereals", "en:flours"] },
+  { category: "groceries", index: "A01010104", tags: ["en:milks", "en:cheeses", "en:eggs", "en:yogurts"] },
+  { category: "groceries", index: "A01010105", tags: ["en:olive-oils", "en:vegetable-oils", "en:butters"] },
+  { category: "groceries", index: "A01010106", tags: ["en:fruits", "en:vegetables", "en:potatoes"] },
+  { category: "groceries", index: "A01010103", tags: ["en:fishes", "en:seafood"] },
+  { category: "groceries", index: "A01010102", tags: ["en:meats"] },
+  { category: "skincare-beauty", index: "A0112", tags: ["en:shampoos", "en:shower-gels", "en:deodorants", "en:body-milks", "en:toothpastes"] },
+];
+
+/** Never recommended (PRD edge case 21 and sensitive goods). */
+const EXCLUDED_TAGS = [
+  "en:alcoholic-beverages", "en:wines", "en:beers", "en:spirits", "en:baby-milks", "en:dietary-supplements",
+  "en:coffee-substitutes", "en:coffee-drinks", "en:dairy-drinks",
+];
+
+const MAX_AGE_DAYS = 365;
+const PRICE_BOUNDS_EUR = [0.05, 200];
+const OUTLIER_FACTOR = 2; // keep observations within ½× and 2× of the product's median
+const PRODUCTS_PER_GROUP = 10;
+const FX_AGREEMENT_PCT = 1;
+const MAX_INDEX_CHANGE_PCT = 30;
+
+// HTTP
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function getJson(url) {
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const response = await fetch(url, { headers: { "user-agent": USER_AGENT } });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      await sleep(1500 * attempt);
+    }
+  }
+  throw new Error(`${url} failed: ${lastError.message}`);
+}
+
+const median = (values) => {
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+const round2 = (value) => Math.round(value * 100) / 100;
+const daysBetween = (from, to) => (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000;
+
+// 1. FX
+
+async function fetchFx() {
+  const ecb = await getJson("https://api.frankfurter.dev/v1/latest?base=EUR&symbols=HUF");
+  const eurostat = await getJson(
+    "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ert_bil_eur_d?format=JSON&currency=HUF&statinfo=AVG&lastTimePeriod=1",
+  );
+  const eurostatRate = Object.values(eurostat.value)[0];
+  const eurostatDate = Object.keys(eurostat.dimension.time.category.index)[0];
+  const ecbRate = ecb.rates?.HUF;
+
+  const gap = Math.abs(ecbRate - eurostatRate) / ecbRate * 100;
+  const report = { ecb: { rate: ecbRate, date: ecb.date }, eurostat: { rate: eurostatRate, date: eurostatDate }, gapPct: round2(gap) };
+  if (!(ecbRate > 0 && eurostatRate > 0) || gap > FX_AGREEMENT_PCT) {
+    throw new Error(`FX gate failed: sources disagree by ${gap.toFixed(2)}% (limit ${FX_AGREEMENT_PCT}%)`);
+  }
+
+  return {
+    fx: {
+      _source: "ECB reference rate via api.frankfurter.dev, cross-checked against Eurostat ert_bil_eur_d.",
+      base: "EUR",
+      perEur: { EUR: 1, HUF: ecbRate },
+      asOf: ecb.date,
+    },
+    report,
+  };
+}
+
+// 2. Eurostat price levels
+
+async function fetchPriceLevels() {
+  const geos = Object.keys(COUNTRIES).map((code) => `geo=${code}`).join("&");
+  const cats = PRICE_LEVEL_CODES.map((code) => `ppp_cat=${code}`).join("&");
+  const url = `https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON&lang=EN&na_item=PLI_EU27_2020&${geos}&${cats}&lastTimePeriod=2`;
+  const data = await getJson(url);
+
+  const index = Object.fromEntries(data.id.map((dim) => [dim, data.dimension[dim].category.index]));
+  const years = Object.keys(index.time).sort();
+  const [previousYear, year] = years.slice(-2);
+  const at = (cat, geo, time) => {
+    const pos = data.id.map((dim) => ({ ppp_cat: index.ppp_cat[cat], geo: index.geo[geo], time: index.time[time] })[dim] ?? 0);
+    const flat = pos.reduce((acc, p, i) => acc * data.size[i] + p, 0);
+    return data.value[String(flat)];
+  };
+
+  const failures = [];
+  const flagged = [];
+  const levels = {};
+  for (const cat of PRICE_LEVEL_CODES) {
+    const values = {};
+    for (const geo of Object.keys(COUNTRIES)) {
+      const value = at(cat, geo, year);
+      const before = at(cat, geo, previousYear);
+      if (typeof value !== "number") failures.push(`${cat}/${geo}: missing for ${year}`);
+      else if (value < 20 || value > 300) failures.push(`${cat}/${geo}: ${value} outside 20–300`);
+      else {
+        values[geo] = value;
+        if (typeof before === "number" && Math.abs(value - before) / before * 100 > MAX_INDEX_CHANGE_PCT) {
+          flagged.push(`${cat}/${geo}: ${before} → ${value}`);
+        }
+      }
+    }
+    levels[cat] = { label: data.dimension.ppp_cat.category.label[cat], values };
+  }
+
+  if (failures.length > 0) throw new Error(`Eurostat gate failed:\n  ${failures.join("\n  ")}`);
+  // A big jump is not proof of an error, but a silent one would be.
+  if (flagged.length > 0) throw new Error(`Eurostat gate failed, year-on-year change above ${MAX_INDEX_CHANGE_PCT}%:\n  ${flagged.join("\n  ")}`);
+
+  return {
+    levels: {
+      _source: `Eurostat prc_ppp_ind, price level indices (EU27_2020 = 100), ${year}. Dataset updated ${data.updated}.`,
+      dataset: "prc_ppp_ind",
+      measure: "PLI_EU27_2020",
+      year,
+      updated: data.updated,
+      url,
+      levels,
+    },
+    report: { year, previousYear, codes: PRICE_LEVEL_CODES.length, countries: Object.keys(COUNTRIES).length, checkedValues: PRICE_LEVEL_CODES.length * Object.keys(COUNTRIES).length },
+  };
+}
+
+// 3. Open Prices products
+
+function groupFor(tags) {
+  if (!Array.isArray(tags) || tags.some((tag) => EXCLUDED_TAGS.includes(tag))) return null;
+  return PRODUCT_GROUPS.find((group) => group.tags.some((tag) => tags.includes(tag))) ?? null;
+}
+
+async function fetchCountryPrices(country, { currency, osmName }) {
+  const locations = [];
+  for (let page = 1; ; page++) {
+    const data = await getJson(
+      `https://prices.openfoodfacts.org/api/v1/locations?osm_address_country__like=${encodeURIComponent(osmName)}&price_count__gte=1&size=100&page=${page}`,
+    );
+    locations.push(...data.items.filter((location) => location.osm_address_country_code === country));
+    if (page >= data.pages) break;
+    await sleep(300);
+  }
+
+  const since = new Date(Date.parse(`${TODAY}T00:00:00Z`) - MAX_AGE_DAYS * 86_400_000).toISOString().slice(0, 10);
+  const tags = PRODUCT_GROUPS.flatMap((group) => group.tags).join(",");
+  const prices = [];
+  for (let i = 0; i < locations.length; i += 40) {
+    const ids = locations.slice(i, i + 40).map((location) => location.id).join(",");
+    for (let page = 1; ; page++) {
+      const data = await getJson(
+        `https://prices.openfoodfacts.org/api/v1/prices?location_id__in=${ids}&product__categories_tags__overlap=${encodeURIComponent(tags)}&type=PRODUCT&duplicate_of__isnull=true&date__gte=${since}&size=100&page=${page}`,
+      );
+      prices.push(...data.items);
+      if (page >= data.pages) break;
+      await sleep(300);
+    }
+  }
+  process.stdout.write(`  ${country}: ${locations.length} shops, ${prices.length} candidate prices\n`);
+  return { prices, currency };
+}
+
+function verifyPrices(country, { prices, currency }, fx) {
+  const gates = {
+    "has barcode and name": 0,
+    "shop is in this country": 0,
+    "currency matches country": 0,
+    "observed in the last 365 days": 0,
+    "not a discounted price": 0,
+    "backed by receipt or price-tag photo": 0,
+    "maps to an OtherWise category": 0,
+    "sold in the unit its type needs": 0,
+    "price within plausible bounds": 0,
+    "within 2x of the product's median": 0,
+  };
+  const rejectedExamples = [];
+  const reject = (gate, price) => {
+    gates[gate]++;
+    if (rejectedExamples.length < 8) {
+      rejectedExamples.push({ gate, product: price.product?.product_name ?? price.product_code, price: price.price, currency: price.currency, date: price.date });
+    }
+    return false;
+  };
+
+  const passed = prices.filter((price) => {
+    const product = price.product ?? {};
+    const name = (product.product_name ?? "").trim();
+    if (!price.product_code || !name || name.length > 100) return reject("has barcode and name", price);
+    if (price.location?.osm_address_country_code !== country) return reject("shop is in this country", price);
+    if (price.currency !== currency) return reject("currency matches country", price);
+    const age = daysBetween(price.date, TODAY);
+    if (!(age >= 0 && age <= MAX_AGE_DAYS)) return reject("observed in the last 365 days", price);
+    if (price.price_is_discounted) return reject("not a discounted price", price);
+    if (!["RECEIPT", "PRICE_TAG"].includes(price.proof?.type)) return reject("backed by receipt or price-tag photo", price);
+    const group = groupFor(product.categories_tags);
+    if (!group) return reject("maps to an OtherWise category", price);
+    // Crowd tags can be wrong (a milk carton tagged as coffee capsules); the unit catches it.
+    if (group.unit && product.product_quantity_unit !== group.unit) return reject("sold in the unit its type needs", price);
+    const eur = price.price / fx.perEur[currency];
+    if (!(eur >= PRICE_BOUNDS_EUR[0] && eur <= PRICE_BOUNDS_EUR[1])) return reject("price within plausible bounds", price);
+    return true;
+  });
+
+  const byCode = new Map();
+  for (const price of passed) {
+    if (!byCode.has(price.product_code)) byCode.set(price.product_code, []);
+    byCode.get(price.product_code).push(price);
+  }
+
+  const products = [];
+  for (const [code, observations] of byCode) {
+    const mid = median(observations.map((price) => price.price));
+    const kept = observations.filter((price) => {
+      const ok = price.price >= mid / OUTLIER_FACTOR && price.price <= mid * OUTLIER_FACTOR;
+      if (!ok) reject("within 2x of the product's median", price);
+      return ok;
+    });
+    if (kept.length === 0) continue;
+
+    const product = kept[0].product;
+    const group = groupFor(product.categories_tags);
+    const price = round2(median(kept.map((p) => p.price)));
+    const dates = kept.map((p) => p.date).sort();
+    const quantity = product.product_quantity && product.product_quantity_unit
+      ? `${product.product_quantity} ${product.product_quantity_unit}` : null;
+
+    products.push({
+      id: `op-${country.toLowerCase()}-${code}`,
+      code,
+      country,
+      category: group.category,
+      priceLevel: group.index,
+      name: product.product_name.trim(),
+      brand: product.brands ?? null,
+      quantity,
+      price,
+      currency,
+      priceEur: round2(price / fx.perEur[currency]),
+      observations: kept.length,
+      firstSeen: dates[0],
+      lastSeen: dates.at(-1),
+      shops: [...new Set(kept.map((p) => [p.location?.osm_name, p.location?.osm_address_city].filter(Boolean).join(", ")))].slice(0, 3),
+      proofs: [...new Set(kept.map((p) => p.proof.type))].sort(),
+      url: `https://prices.openfoodfacts.org/products/${code}`,
+    });
+  }
+
+  // Keep the best-evidenced products per group: most observations, then most recent.
+  const selected = [];
+  for (const group of PRODUCT_GROUPS) {
+    selected.push(
+      ...products
+        .filter((product) => product.category === group.category && product.priceLevel === group.index)
+        .sort((a, b) => b.observations - a.observations || b.lastSeen.localeCompare(a.lastSeen) || a.code.localeCompare(b.code))
+        .slice(0, PRODUCTS_PER_GROUP),
+    );
+  }
+
+  return {
+    products: selected,
+    report: {
+      candidates: prices.length,
+      passedRecordGates: passed.length,
+      rejectedBy: gates,
+      distinctProducts: products.length,
+      keptProducts: selected.length,
+      rejectedExamples,
+    },
+  };
+}
+
+// Main
+
+async function writeJson(name, value) {
+  const file = path.join(OUT_DIR, name);
+  await writeFile(`${file}.tmp`, JSON.stringify(value, null, 2) + "\n");
+  return file;
+}
+
+async function main() {
+  console.log(`OtherWise data fetch for ${TODAY}`);
+
+  console.log("FX …");
+  const { fx, report: fxReport } = await fetchFx();
+  console.log(`  1 EUR = ${fx.perEur.HUF} HUF (ECB ${fxReport.ecb.rate}, Eurostat ${fxReport.eurostat.rate}, gap ${fxReport.gapPct}%)`);
+
+  console.log("Eurostat price levels …");
+  const { levels, report: levelReport } = await fetchPriceLevels();
+  console.log(`  ${levelReport.checkedValues} values for ${levelReport.year}, all gates passed`);
+
+  console.log("Open Prices …");
+  const products = [];
+  const productReport = {};
+  for (const [country, info] of Object.entries(COUNTRIES)) {
+    const raw = await fetchCountryPrices(country, info);
+    const { products: kept, report } = verifyPrices(country, raw, fx);
+    products.push(...kept);
+    productReport[country] = report;
+    console.log(`  ${country}: ${report.passedRecordGates}/${report.candidates} prices passed, ${report.keptProducts} products kept`);
+  }
+
+  await mkdir(OUT_DIR, { recursive: true });
+  const fetchedAt = new Date().toISOString();
+  const files = [
+    await writeJson("fx.json", { ...fx, fetchedAt }),
+    await writeJson("price-levels.json", { ...levels, fetchedAt }),
+    await writeJson("products.json", {
+      _source: "Open Prices (prices.openfoodfacts.org), crowdsourced shelf prices with receipt or price-tag proof. Only records that passed every gate in verification-report.json. ODbL licence.",
+      fetchedAt,
+      window: { from: new Date(Date.parse(`${TODAY}T00:00:00Z`) - MAX_AGE_DAYS * 86_400_000).toISOString().slice(0, 10), to: TODAY },
+      products,
+    }),
+    await writeJson("verification-report.json", { fetchedAt, today: TODAY, fx: fxReport, priceLevels: levelReport, openPrices: productReport }),
+  ];
+  // Swap all files in only once everything succeeded.
+  for (const file of files) await rename(`${file}.tmp`, file);
+  console.log(`Wrote ${files.length} files to data/real/ (${products.length} verified products).`);
+}
+
+main().catch((error) => {
+  console.error(`\nFetch aborted, nothing written: ${error.message}`);
+  process.exit(1);
+});

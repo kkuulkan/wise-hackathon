@@ -97,8 +97,17 @@ check("electronics not shown for Aoife (only purchase is older than 90 days)", !
 const productsA = recA.categories.flatMap((c) => c.products);
 check("every product cheaper than home (FR-14)", productsA.every((p) => p.localPrice.amount < p.homePrice.amount));
 check("every product approximate with a date (US-4.2)", productsA.every((p) => p.approximate && p.priceUpdatedAt));
-check("age-restricted wine excluded", !productsA.some((p) => p.id === "g-wine"));
-check("stale-priced jeans excluded", !productsA.some((p) => p.id === "f-levis"));
+check("real products present for Aoife in PT", productsA.length > 0);
+check("every category is >=5% cheaper by Eurostat price levels",
+  recA.categories.every((c) => c.comparison?.source === "Eurostat prc_ppp_ind" && c.savingPct >= 5 &&
+    c.savingPct === Math.round((1 - c.comparison.localIndex / c.comparison.homeIndex) * 100)));
+check("personalised categories carry the user's own typical purchase",
+  recA.categories.every((c) => c.typicalPurchase && c.typicalPurchase.local.amount < c.typicalPurchase.home.amount));
+check("every product is a verified Open Prices shelf price",
+  productsA.every((p) => p.url.startsWith("https://prices.openfoodfacts.org/products/") &&
+    p.evidence?.observations >= 1 && p.evidence.proofs.every((x) => ["RECEIPT", "PRICE_TAG"].includes(x))));
+check("home prices are marked observed or estimated", productsA.every((p) => ["observed", "estimated"].includes(p.homePriceBasis)));
+check("no price older than 365 days", productsA.every((p) => (Date.parse("2026-10-17") - Date.parse(p.priceUpdatedAt)) / 864e5 <= 365));
 check("products sorted by saving",
   recA.categories.every((c) => c.products.every((p, i, a) => i === 0 || a[i - 1].savingPct >= p.savingPct)));
 check("links carry no personal data (US-5.3)", productsA.every((p) => !/aoife|brennan|jonas|keller/i.test(p.url)));
@@ -113,19 +122,20 @@ const slugsJ = recJ.categories.map((c) => c.slug);
 check("Jonas compared against Germany", recJ.home?.code === "DE");
 check("Jonas's categories differ from Aoife's", slugsJ.join() !== slugsA.join(), `${slugsJ} vs ${slugsA}`);
 check("Jonas: gambling and rent never shown", !slugsJ.some((s) => ["gambling", "rent"].includes(s)));
-check("Jonas: electronics hidden in PT (all dearer than Germany)", !slugsJ.includes("electronics"));
+check("Jonas: electronics hidden in PT (Eurostat: dearer than Germany)", !slugsJ.includes("electronics"));
 const firstJ = recJ.categories[0];
 r = await anon.call("GET", `/api/catalog?category=${firstJ.slug}&from=DE&to=PT`);
-check("Jonas's home prices are German prices",
-  JSON.stringify(r.json.products.map((p) => p.homePrice)) === JSON.stringify(firstJ.products.map((p) => p.homePrice)));
+check("Jonas is compared against German price levels",
+  JSON.stringify(r.json.comparison) === JSON.stringify(firstJ.comparison));
 r = await jonas.arrive("ES");
 r = await jonas.call("GET", "/api/recommendations");
-check("Jonas in ES: electronics appears (cheaper than Germany)", r.json.categories.some((c) => c.slug === "electronics"),
+check("Jonas in ES: electronics still hidden (under 5% cheaper)", !r.json.categories.some((c) => c.slug === "electronics"),
   r.json.categories.map((c) => c.slug).join());
 
 // FR-15: catalog API boundary
 r = await anon.call("GET", "/api/catalog?category=groceries&from=IE&to=PT");
-check("catalog answers with category + pair, no sign-in needed", r.status === 200 && r.json.products.length > 0);
+check("catalog answers with comparison + products, no sign-in needed",
+  r.status === 200 && r.json.comparison?.savingPct > 0 && r.json.products.length > 0);
 r = await anon.call("GET", "/api/catalog?category=groceries&from=IE&to=PT&userId=aoife");
 check("catalog refuses extra params", r.status === 400);
 r = await anon.call("GET", "/api/catalog?category=pharmacy&from=IE&to=PT");
@@ -143,7 +153,8 @@ check("coffee hidden for Aoife", !r.json.categories.some((c) => c.slug === "coff
 r = await aoife.arrive("HU", "card");
 check("Aoife to HU -> new notification, same trip (edge case 3)", r.json.status === "arrived" && r.json.trip.id === tripId);
 r = await aoife.call("GET", "/api/recommendations");
-check("HU has HUF local prices", r.json.fx?.pair === "EUR/HUF" && r.json.categories[0].products[0].localPrice.local?.currency === "HUF");
+check("HU has HUF local prices at the verified ECB rate",
+  r.json.fx?.pair === "EUR/HUF" && r.json.fx.rate > 300 && r.json.categories[0].typicalPurchase.local.local?.currency === "HUF");
 r = await aoife.arrive("JP");
 check("JP -> ineligible (FR-4)", r.json.status === "ineligible" && r.json.notification === null);
 r = await aoife.arrive("IE");
@@ -158,7 +169,8 @@ r = await aoife.call("PUT", "/api/consent", { personalisation: false, notificati
 check("Aoife withdraws consent", r.status === 200 && r.json.personalisation === false);
 r = await aoife.call("GET", "/api/recommendations");
 check("no consent -> general suggestions only (US-6.2, US-7.2)",
-  r.json.personalised === false && r.json.categories.every((c) => !c.personalised && c.reason === null));
+  r.json.personalised === false && r.json.categories.length > 0 &&
+  r.json.categories.every((c) => !c.personalised && c.reason === null && c.typicalPurchase === null && c.products.length > 0));
 r = await jonas.call("GET", "/api/recommendations");
 check("Jonas still personalised", r.json.personalised === true);
 await aoife.arrive("IE");
@@ -167,7 +179,7 @@ check("no consent -> notification suppressed",
   r.json.status === "arrived" && r.json.notification === null && r.json.suppressedBecause === "notifications-off");
 
 // FR-23: events
-r = await aoife.call("POST", "/api/events", { type: "product_tapped", country: "PT", productId: "g-olive-oil" });
+r = await aoife.call("POST", "/api/events", { type: "product_tapped", country: "PT", productId: productsA[0].id });
 check("event accepted", r.status === 201);
 r = await aoife.call("POST", "/api/events", { type: "product_tapped", amountEur: 12 });
 check("event with extra field refused", r.status === 400);

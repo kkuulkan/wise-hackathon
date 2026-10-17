@@ -12,6 +12,8 @@ export type CategoryDef = {
   icon: string;
   kind: CategoryKind;
   isDefault: boolean;
+  /** Eurostat prc_ppp_ind category that prices it; null means never compared. */
+  priceLevel: string | null;
 };
 
 export type SeedTransaction = {
@@ -25,18 +27,33 @@ export type SeedTransaction = {
   amountEur: number;
 };
 
-export type LinkSpec = { type: "shop" | "maps" | "web"; query: string };
-
-export type CatalogProduct = {
+/** A verified Open Prices product, as written by scripts/fetch-real-data.mjs. */
+export type RealProduct = {
   id: string;
+  code: string;
+  country: string;
   category: string;
+  /** Eurostat sub-index used to estimate its price elsewhere. */
+  priceLevel: string;
   name: string;
-  description: string;
-  /** Approximate EUR price per country code. */
-  prices: Record<string, number>;
-  priceUpdatedAt: string;
-  ageRestricted?: boolean;
-  link: LinkSpec;
+  brand: string | null;
+  quantity: string | null;
+  /** Median of the verified observations, in the country's currency. */
+  price: number;
+  currency: string;
+  priceEur: number;
+  observations: number;
+  firstSeen: string;
+  lastSeen: string;
+  shops: string[];
+  proofs: string[];
+  url: string;
+};
+
+export type PriceLevels = {
+  year: string;
+  updated: string;
+  levels: Record<string, { label: string; values: Record<string, number> }>;
 };
 
 /** Money in the user's home currency, with the local equivalent when it differs. */
@@ -46,17 +63,42 @@ export type Price = {
   local?: { amount: number; currency: string };
 };
 
-/** One product as the catalog API returns it for a country pair. */
+/**
+ * How much cheaper a whole spending category is, from official price levels.
+ * savingPct = (1 − local index / home index) × 100.
+ */
+export type CategoryComparison = {
+  savingPct: number;
+  homeIndex: number;
+  localIndex: number;
+  /** Eurostat prc_ppp_ind category code and label. */
+  index: string;
+  indexLabel: string;
+  year: string;
+  source: "Eurostat prc_ppp_ind";
+};
+
+/** One real product as the catalog API returns it for a country pair. */
 export type ComparedProduct = {
   id: string;
   name: string;
+  /** Quantity and where it was seen, e.g. "250 g · Lidl, Porto". */
   description: string;
   homePrice: Price;
+  /**
+   * observed   the same barcode has verified prices in the home country
+   * estimated  local shelf price scaled by the Eurostat price-level ratio
+   */
+  homePriceBasis: "observed" | "estimated";
+  /** A real shelf price: median of verified observations. */
   localPrice: Price;
   /** Percent cheaper than home. Always positive: dearer items are dropped. */
   savingPct: number;
   approximate: true;
+  /** Date of the most recent verified observation. */
   priceUpdatedAt: string;
+  evidence: { observations: number; shops: string[]; proofs: string[]; source: "Open Prices" };
+  /** The product's public Open Prices page. */
   url: string;
 };
 
@@ -67,6 +109,8 @@ export type CatalogResponse = {
   category: string;
   from: string;
   to: string;
+  /** Null when either country has no price level for this category. */
+  comparison: CategoryComparison | null;
   products: ComparedProduct[];
   source: CatalogSource;
   fetchedAt: string;
@@ -149,8 +193,16 @@ export type RecommendationCategory = {
   personalised: boolean;
   /** Why it is shown. Null for default-set categories. */
   reason: { spentEur: number; transactionCount: number; windowDays: number } | null;
-  /** Mean saving across the products shown. */
+  /** From official price levels (comparison.savingPct). */
   savingPct: number;
+  comparison: CategoryComparison;
+  /**
+   * The user's own average purchase in this category at home, and what the
+   * same spend costs here at the official price ratio. Null for general
+   * suggestions, which have no spending behind them.
+   */
+  typicalPurchase: { home: Price; local: Price } | null;
+  /** Real shelf products. May be empty: services have no product data. */
   products: ComparedProduct[];
 };
 

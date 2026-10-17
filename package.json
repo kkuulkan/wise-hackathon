@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "fetch-data": "node scripts/fetch-real-data.mjs"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.49.0",

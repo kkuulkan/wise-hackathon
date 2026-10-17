@@ -1,0 +1,10 @@
+{
+  "_source": "ECB reference rate via api.frankfurter.dev, cross-checked against Eurostat ert_bil_eur_d.",
+  "base": "EUR",
+  "perEur": {
+    "EUR": 1,
+    "HUF": 363.08
+  },
+  "asOf": "2026-10-16",
+  "fetchedAt": "2026-10-17T02:30:20.967Z"
+}

@@ -1,3 +1,5 @@
+import fxJson from "@/data/real/fx.json";
+
 /**
  * Every tunable the backend uses, in one place, so the demo and the PRD can be
  * checked against each other without reading the logic.
@@ -18,11 +20,18 @@ export const MAX_CATEGORIES = 5;
 /** US-4.1: products per category. A category with none is hidden (US-3.3). */
 export const MAX_PRODUCTS_PER_CATEGORY = 5;
 
-/** Edge case 17: prices older than this are treated as unknown and dropped. */
-export const MAX_PRICE_AGE_DAYS = 90;
+/**
+ * Edge case 17: shelf prices last seen longer ago than this are dropped. A
+ * year, because crowdsourced prices are sparse; the fetch script applies the
+ * same window.
+ */
+export const MAX_PRICE_AGE_DAYS = 365;
 
-/** Edge case 21: age-restricted goods are not recommended at all. */
-export const INCLUDE_AGE_RESTRICTED = false;
+/**
+ * A category must be at least this much cheaper, by official price levels, to
+ * be worth interrupting a traveller about. Below it the difference is noise.
+ */
+export const MIN_CATEGORY_SAVING_PCT = 5;
 
 /** NFR performance: fall back after this long (PRD says 3 s). */
 export const CATALOG_TIMEOUT_MS = 3000;
@@ -62,13 +71,10 @@ export const COUNTRIES: Record<string, Country> = {
   MX: { code: "MX", name: "Mexico", currency: "MXN", eu: false },
 };
 
-/** Units of each currency per 1 EUR. Seeded snapshot, not live. */
-export const FX_PER_EUR: Record<string, number> = {
-  EUR: 1,
-  HUF: 395,
-};
-export const FX_AS_OF = "2026-10-17";
+/** Units of each currency per 1 EUR: ECB reference rate, verified by the fetch script. */
+export const FX_PER_EUR: Record<string, number> = fxJson.perEur;
+export const FX_AS_OF = fxJson.asOf;
 
 /** FR-22: shown on every recommendations response. */
 export const DISCLOSURE =
-  "Prices are approximate and may vary by city and store. Suggestions are not financial advice.";
+  "Category comparisons use Eurostat price levels. Shelf prices are from Open Prices by Open Food Facts (ODbL); home prices for those products are estimates unless marked observed. Prices vary by city and store. Suggestions are not financial advice.";

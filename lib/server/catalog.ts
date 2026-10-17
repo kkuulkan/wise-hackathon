@@ -7,27 +7,32 @@ import {
   COUNTRIES,
   DEMO_TODAY,
   FX_PER_EUR,
-  INCLUDE_AGE_RESTRICTED,
   MAX_PRICE_AGE_DAYS,
   MAX_PRODUCTS_PER_CATEGORY,
 } from "./config";
-import { getCatalogProducts } from "./seed";
+import { getCategoryDef, getPriceLevels, getRealProducts } from "./seed";
 import { readCatalogCache, readStaleCatalogCache, writeCatalogCache } from "./store";
 import type {
-  CatalogProduct,
   CatalogResponse,
+  CategoryComparison,
   ComparedProduct,
-  LinkSpec,
   Price,
+  RealProduct,
 } from "./types";
 
 /**
- * The "product and price API" from the PRD.
+ * The "product and price API" from the PRD, backed by real data:
+ *
+ *   category level  Eurostat price level indices say how much cheaper the
+ *                   whole category is in `to` than in `from`.
+ *   product level   verified Open Prices shelf prices seen in `to`. Their home
+ *                   price is the same barcode's verified price in `from` when
+ *                   one exists, otherwise an estimate from the Eurostat ratio
+ *                   of the product's own sub-index (bread, dairy, oils…).
  *
  * Its whole input is a category slug and a country pair (FR-15). It cannot be
  * handed a user, a merchant or an amount, because the signature has nowhere
- * to put one. That is the privacy boundary, enforced by the type rather than
- * by discipline.
+ * to put one.
  */
 export type CatalogQuery = { category: string; from: string; to: string };
 
@@ -37,64 +42,68 @@ function round2(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
-/** EUR price, plus the local-currency figure when the destination is not EUR. */
-export function toPrice(amountEur: number, localCountry: string): Price {
+/** EUR price, plus the local-currency figure when the country is not on EUR. */
+export function toPrice(amountEur: number, country: string, localAmount?: number): Price {
   const price: Price = { amount: round2(amountEur), currency: "EUR" };
-  const currency = COUNTRIES[localCountry]?.currency;
+  const currency = COUNTRIES[country]?.currency;
   const rate = currency ? FX_PER_EUR[currency] : undefined;
 
   if (currency && currency !== "EUR" && rate) {
-    price.local = { amount: Math.round(amountEur * rate), currency };
+    price.local = { amount: Math.round(localAmount ?? amountEur * rate), currency };
   }
 
   return price;
 }
 
+/** FR-12 / FR-14 support: the official category comparison for a country pair. */
+export function compareCategory(category: string, from: string, to: string): CategoryComparison | null {
+  const code = getCategoryDef(category)?.priceLevel;
+  if (!code) return null;
+
+  const { year, levels } = getPriceLevels();
+  const level = levels[code];
+  const homeIndex = level?.values[from];
+  const localIndex = level?.values[to];
+  if (typeof homeIndex !== "number" || typeof localIndex !== "number") return null;
+
+  return {
+    savingPct: Math.round((1 - localIndex / homeIndex) * 100),
+    homeIndex,
+    localIndex,
+    index: code,
+    indexLabel: level.label,
+    year,
+    source: "Eurostat prc_ppp_ind",
+  };
+}
+
+function isFresh(lastSeen: string): boolean {
+  const age = (Date.parse(`${DEMO_TODAY}T00:00:00Z`) - Date.parse(`${lastSeen}T00:00:00Z`)) / DAY_MS;
+  return Number.isFinite(age) && age >= 0 && age <= MAX_PRICE_AGE_DAYS;
+}
+
 /**
- * US-5.3 / FR-15: outbound links are built from the catalog's own query and
- * the destination name. Nothing about the user can reach the URL.
+ * Edge case 18: the snapshot was verified when it was built, but anything
+ * malformed here is still discarded rather than shown half-built.
  */
-export function productUrl(link: LinkSpec, country: string): string {
-  const where = COUNTRIES[country]?.name ?? country;
-  const q = encodeURIComponent(`${link.query} ${where}`);
-
-  switch (link.type) {
-    case "maps":
-      return `https://www.google.com/maps/search/?api=1&query=${q}`;
-    case "shop":
-      return `https://www.google.com/search?tbm=shop&q=${q}`;
-    case "web":
-      return `https://www.google.com/search?q=${q}`;
-  }
-}
-
-function isFresh(priceUpdatedAt: string): boolean {
-  const age = (Date.parse(`${DEMO_TODAY}T00:00:00Z`) - Date.parse(`${priceUpdatedAt}T00:00:00Z`)) / DAY_MS;
-  return Number.isFinite(age) && age <= MAX_PRICE_AGE_DAYS;
-}
-
-function isAllowed(item: { ageRestricted?: boolean }): boolean {
-  return INCLUDE_AGE_RESTRICTED || !item.ageRestricted;
-}
-
-/**
- * Edge case 18: anything malformed is discarded rather than shown half-built.
- * Duplicates by id are dropped too.
- */
-function validProducts(raw: unknown[]): CatalogProduct[] {
+function validProducts(raw: unknown[]): RealProduct[] {
   const seen = new Set<string>();
 
-  return raw.filter((item): item is CatalogProduct => {
+  return raw.filter((item): item is RealProduct => {
     if (typeof item !== "object" || item === null) return false;
-    const product = item as Partial<CatalogProduct>;
+    const product = item as Partial<RealProduct>;
     const ok =
       typeof product.id === "string" &&
+      typeof product.code === "string" &&
       typeof product.name === "string" &&
+      typeof product.country === "string" &&
       typeof product.category === "string" &&
-      typeof product.priceUpdatedAt === "string" &&
-      typeof product.prices === "object" &&
-      product.prices !== null &&
-      typeof product.link?.query === "string" &&
+      typeof product.priceLevel === "string" &&
+      typeof product.priceEur === "number" &&
+      product.priceEur > 0 &&
+      typeof product.lastSeen === "string" &&
+      typeof product.url === "string" &&
+      product.url.startsWith("https://prices.openfoodfacts.org/") &&
       !seen.has(product.id);
 
     if (ok) seen.add(product.id!);
@@ -102,50 +111,81 @@ function validProducts(raw: unknown[]): CatalogProduct[] {
   });
 }
 
-/**
- * The comparison itself, shared by live and fallback paths. FR-14: only
- * products cheaper here than at home survive. FR-12: ranked by saving, with
- * id as tiebreak so the order never wobbles.
- */
-function compare(products: CatalogProduct[], query: CatalogQuery): ComparedProduct[] {
+function describe(product: RealProduct): string {
+  return [product.quantity, product.shops[0]].filter(Boolean).join(" · ");
+}
+
+function compareProducts(products: RealProduct[], query: CatalogQuery): ComparedProduct[] {
+  const { levels } = getPriceLevels();
+  const homeByCode = new Map(
+    products
+      .filter((product) => product.country === query.from && isFresh(product.lastSeen))
+      .map((product) => [product.code, product]),
+  );
+
   return products
-    .filter((product) => product.category === query.category)
-    .filter(isAllowed)
-    .filter((product) => isFresh(product.priceUpdatedAt))
-    .flatMap((product) => {
-      const home = product.prices[query.from];
-      const local = product.prices[query.to];
-      if (typeof home !== "number" || typeof local !== "number" || home <= 0) return [];
-      if (local >= home) return [];
+    .filter((product) => product.country === query.to && product.category === query.category)
+    .filter((product) => isFresh(product.lastSeen))
+    .flatMap((product): ComparedProduct[] => {
+      const observed = homeByCode.get(product.code);
+      const homeIndex = levels[product.priceLevel]?.values[query.from];
+      const localIndex = levels[product.priceLevel]?.values[query.to];
+
+      let homeEur: number;
+      if (observed) {
+        homeEur = observed.priceEur;
+      } else if (typeof homeIndex === "number" && typeof localIndex === "number") {
+        homeEur = product.priceEur * (homeIndex / localIndex);
+      } else {
+        return [];
+      }
+
+      // FR-14: only what is actually cheaper here.
+      if (product.priceEur >= homeEur) return [];
 
       return [
         {
           id: product.id,
           name: product.name,
-          description: product.description,
-          homePrice: toPrice(home, query.from),
-          localPrice: toPrice(local, query.to),
-          savingPct: Math.round(((home - local) / home) * 100),
-          approximate: true as const,
-          priceUpdatedAt: product.priceUpdatedAt,
-          url: productUrl(product.link, query.to),
+          description: describe(product),
+          homePrice: toPrice(homeEur, query.from, observed?.currency === "EUR" ? undefined : observed?.price),
+          homePriceBasis: observed ? "observed" : "estimated",
+          localPrice: toPrice(product.priceEur, query.to, product.currency === "EUR" ? undefined : product.price),
+          savingPct: Math.round(((homeEur - product.priceEur) / homeEur) * 100),
+          approximate: true,
+          priceUpdatedAt: product.lastSeen,
+          evidence: {
+            observations: product.observations,
+            shops: product.shops,
+            proofs: product.proofs,
+            source: "Open Prices",
+          },
+          url: product.url,
         },
       ];
     })
-    .sort((a, b) => b.savingPct - a.savingPct || a.id.localeCompare(b.id))
+    // FR-12: biggest saving first, then the best-evidenced, then by id so
+    // the order never wobbles.
+    .sort(
+      (a, b) =>
+        b.savingPct - a.savingPct ||
+        b.evidence.observations - a.evidence.observations ||
+        a.id.localeCompare(b.id),
+    )
     .slice(0, MAX_PRODUCTS_PER_CATEGORY);
 }
 
 /**
- * Stand-in for the remote catalog service. In production this is an HTTP call;
- * here it reads the seed, with switches to demonstrate slowness and outage.
+ * Stand-in for the remote catalog service. In production this is an HTTP call
+ * to a service holding the verified snapshot; here it reads the snapshot,
+ * with switches to demonstrate slowness and outage.
  */
 async function fetchFromCatalogService(): Promise<unknown[]> {
   if (CATALOG_MODE === "fail") throw new Error("catalog service unavailable");
   if (CATALOG_MODE === "slow") {
     await new Promise((resolve) => setTimeout(resolve, CATALOG_TIMEOUT_MS + 1000));
   }
-  return getCatalogProducts();
+  return getRealProducts();
 }
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
@@ -168,12 +208,13 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
  * FR-11, FR-16, FR-17. Order of preference:
  *   1. fresh cache for this (from, to, category)
  *   2. live catalog call, under a 3 s timeout
- *   3. stale cache, then the bundled static catalog
+ *   3. stale cache, then the bundled snapshot
  * The response says which one it came from.
  */
 export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse> {
   const key = `${query.from}:${query.to}:${query.category}`;
   const now = Date.now();
+  const comparison = compareCategory(query.category, query.from, query.to);
 
   const cached = readCatalogCache(key, now);
   if (cached) return { ...cached, source: "cache" };
@@ -182,7 +223,8 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
     const raw = await withTimeout(fetchFromCatalogService(), CATALOG_TIMEOUT_MS);
     const response: CatalogResponse = {
       ...query,
-      products: compare(validProducts(raw), query),
+      comparison,
+      products: compareProducts(validProducts(raw), query),
       source: "live",
       fetchedAt: new Date(now).toISOString(),
     };
@@ -196,7 +238,8 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
 
     return {
       ...query,
-      products: compare(validProducts(getCatalogProducts()), query),
+      comparison,
+      products: compareProducts(validProducts(getRealProducts()), query),
       source: "fallback",
       fetchedAt: new Date(now).toISOString(),
     };

@@ -13,11 +13,11 @@
 |---|---|
 | Branch | **`main` now contains everything** (fast-forwarded to `integration` at `7eb6e85` on 2026-10-17): backend + frontend + wiring. Start new work from `main`. `backend` and `integration` are kept for history |
 | Last updated | 2026-10-17 |
-| Phase | **Backend API complete for the comparison feature with two demo users. Frontend not wired yet.** |
+| Phase | **Real data.** Prices come from Eurostat, Open Prices and the ECB through a verified snapshot (§12). Two demo users, frontend wired |
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
 | New dependencies | None (`import "server-only"` is resolved by Next itself) |
 | Env vars | None required. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE` (see §6) |
-| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **58/58** against `next start` |
+| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **62/62** against `next start` |
 
 ### Scope decisions (from aim-t, 2026-10-17)
 
@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | **Real data replaces the mock catalog.** New `scripts/fetch-real-data.mjs` (`npm run fetch-data`) builds `data/real/` from Eurostat, Open Prices and the ECB through verification gates. `data/seed/catalog.json` deleted. Category savings now come from official price levels; products are real shelf prices; FX is the real ECB rate (363 HUF, was a hard-coded 395). `categories.json` gains `priceLevel`. API responses gain fields (none removed); `products` may now be empty. `lib/live.ts` adapted | Additive API. Frontend reading `products[0]` must handle empty lists (§12) |
 | 2026-10-17 | `main` fast-forwarded to `integration` and pushed. Build passes on `main` | Pull `main` before branching |
 | 2026-10-17 | `integration`: wired the frontend pages to the backend through `lib/live.ts` and `components/live/*`; only `app/page.tsx` and `app/cheaper/page.tsx` edited | See §11 |
 | 2026-10-17 | Created branch `integration` from `backend` and merged `origin/frontend` (`790d2e8`). Clean merge, build + lint pass, smoke 58/58, `/` and `/cheaper` render | See §11 |
@@ -227,17 +228,20 @@ curl -b jar localhost:3000/api/recommendations
 
 ---
 
-## 7. Seed data (`data/seed/`)
+## 7. Seed data (`data/seed/`) and real data (`data/real/`)
+
+**Prices are real data now. See §12.** `data/seed/catalog.json` has been deleted. Users and transactions are still demo seed.
 
 | File | Contents |
 |---|---|
 | `users.json` | The two demo profiles: id, name, home city and country, balances |
 | `transactions.json` | `{ transactions: { aoife: [...62], jonas: [...34] } }`, keyed by user id. Each row has the same shape as `data/transactions.json`. Deliberately includes rows that must be ignored (rent, insurance, pharmacy, gambling, one electronics row outside the window). **Generated** once by a script; edit the JSON directly |
 | `categories.json` | 14-category taxonomy with `kind` and `isDefault` |
-| `catalog.json` | 35 products, each priced in EUR for IE, DE, PT, HU, ES. Deliberate traps: dearer-abroad electronics, age-restricted wine, stale-priced Levi's |
+| `categories.json` `priceLevel` | The Eurostat category that prices each everyday category (coffee uses restaurants, because the users' coffee is café spending) |
+| `data/real/*.json` | **Generated** by `npm run fetch-data`. Do not edit by hand. See §12 |
 
 **To add a user:** add a profile to `users.json` and a key with their transactions to `transactions.json`. Their home country must have prices in the catalog.
-**To add a country:** add it to `COUNTRIES` in `lib/server/config.ts` (plus `FX_PER_EUR` if it isn't on EUR) and add its code to each product's `prices`. No logic changes are needed.
+**To add a country:** add it to `COUNTRIES` in `lib/server/config.ts` and to `COUNTRIES` in `scripts/fetch-real-data.mjs` (with its OSM country name and currency), then run `npm run fetch-data`.
 
 `data/account.json`, `data/transactions.json` and `data/recommendations.json` on `main` are **untouched**, and the current `/` and `/cheaper` pages still use them.
 
@@ -259,8 +263,8 @@ curl -b jar localhost:3000/api/recommendations
 
 - Sign-in is a demo picker with no password. The cookie holds a plain user id, so anyone can sign in as either user. `/api/dev/reset` is open.
 - State is in memory and lost on restart. Not safe with multiple server instances.
-- The "catalog service" is in-process. Its static fallback reads the same seed file, so the fallback path is real but not a different data source.
-- Prices are mock EUR snapshots; FX is a fixed 395 HUF/EUR. No real push delivery, no quiet hours, no VPN/spoof detection.
+- The "catalog service" is in-process and reads the verified snapshot. Its fallback reads the same snapshot, so the fallback path is real but not a different data source.
+- Real-data limits are listed in §12 (product coverage, estimated home prices, coarse personal-care index). No real push delivery, no quiet hours, no VPN/spoof detection.
 - Notification copy and API messages are English only (the PRD wants EN/ES/DE).
 
 ## 10. Open decisions (need team input)
@@ -320,3 +324,64 @@ Known rough edges that need a **frontend** change (left alone on purpose):
 - `Visa` always prints a forint line (`formatHuf`), so Portugal and Spain show a converted HUF price. Better to hide it when `fx` is null.
 - `Visa`'s map pin always opens Google Maps. The backend's own `products[].url` (shop or maps search) is more accurate.
 - `Hero`'s "Welcome to …" uses `currentCity`, which is the country name now (the backend has no city).
+
+## 12. Real data (2026-10-17)
+
+### Why a hybrid
+Before any code was written, the candidate sources were measured. Free APIs cannot give the *same product* priced in both home and destination for our users:
+
+| Source | Coverage for IE / DE / PT / HU / ES (prices since 2025) | Verdict |
+|---|---|---|
+| Open Prices, product level | 47 / 12,691 / 364 / 29 / 721. **No barcode priced in Ireland is priced in any destination**; DE shares 9 with ES and 4 with PT | Real and proven, but too sparse to compare the same product. Used for **destination shelf prices** |
+| Eurostat `prc_ppp_ind`, category level | All 5 countries × every category we need, official, 2024 | Used for the **category comparison** and to **estimate home prices** |
+| ECB rate (Frankfurter) vs Eurostat `ert_bil_eur_d` | 363.08 vs 363.6 HUF/EUR, a 0.14% gap | Agree, so used. The old hard-coded 395 was about 9% off |
+
+aim-t chose the hybrid: Eurostat decides how much cheaper a **category** is; under it, real Open Prices products seen in the destination; their home price is
+`observed` (same barcode verified at home) or `estimated` (local price × Eurostat sub-index ratio, e.g. bread, dairy, oils), and the response says which.
+
+### Pipeline: `npm run fetch-data` → `scripts/fetch-real-data.mjs` → `data/real/`
+PRD open questions 3 and 4 ("prebuilt catalog… preprocessing", "validation pipeline with gates and filters"). It runs in about 30 s. If any hard gate fails,
+it writes **nothing** and exits non-zero, so the app keeps the last good snapshot. Files: `fx.json`, `price-levels.json`, `products.json`,
+`verification-report.json` (counts per gate and rejected examples, per country).
+
+| Gates | Rule |
+|---|---|
+| FX (hard) | ECB and Eurostat rates agree within 1% |
+| Eurostat (hard) | Every needed category × country has a value; values within 20–300; year-on-year change ≤ 30% |
+| Open Prices, per price | Has barcode and name · shop is in that country · currency matches the country · seen in the last 365 days · **not discounted** · backed by a **receipt or price-tag photo** · maps to an OtherWise category and isn't excluded (alcohol, baby milk, supplements, coffee drinks) · **coffee sold by weight (g)**, which catches mis-tagged milk and ready-to-drink coffee · €0.05–€200 |
+| Open Prices, per product | Observations outside ½×–2× of the product's median are dropped; the price is the median of the rest; top 10 per sub-category by number of observations, then recency |
+
+The 2026-10-17 run kept **190 products** (DE 80, ES 56, PT 42, IE 11, HU 1). The biggest rejection was discounted prices (757 in DE). A manual review then found
+ready-to-drink coffee and a milk carton tagged as coffee capsules, which is why the unit gate exists. Spot checks matched each country's price levels
+(Emmental 150 g €1.69 in Porto, milk €1.59 in Spain, brown bread €3.00 at Tesco Swords, whole milk €0.95 in Munich).
+
+Category → Eurostat index: groceries `A010101` Food (products use their sub-index: bread `A01010101`, meat `…02`, fish `…03`, dairy `…04`, oils `…05`, fruit and veg `…06`) ·
+coffee and dining out `A0111` Restaurants (coffee products use `A010102` Non-alcoholic beverages) · clothing `A0103` · transport `A010703` · telecom `A0108` ·
+electronics `A010901` · skincare and personal care `A0112` Miscellaneous goods and services.
+
+### What changed in the API (all additive, nothing removed)
+- `categories[].savingPct` now = `round((1 − localIndex/homeIndex) × 100)` from Eurostat. A category needs **≥ 5%** (`MIN_CATEGORY_SAVING_PCT`).
+- `categories[].comparison`: `{ savingPct, homeIndex, localIndex, index, indexLabel, year, source: "Eurostat prc_ppp_ind" }`.
+- `categories[].typicalPurchase`: the user's own average purchase at home and the same spend here at the official ratio. `null` for general suggestions.
+- **`categories[].products` may be empty.** Services and clothing have no shelf data. A personalised category still shows (its comparison and typical purchase are real);
+  a general suggestion with no products is skipped.
+- Products: `homePriceBasis: "observed" | "estimated"`, `evidence: { observations, shops, proofs, source: "Open Prices" }`, `url` = the product's public Open Prices page,
+  `description` = quantity and shop, `priceUpdatedAt` = last verified sighting. For HU, `localPrice.local` is the real HUF shelf price.
+- `GET /api/catalog` gains `comparison`. `fx.rate` is the verified ECB rate. `disclosure` credits Eurostat and Open Prices (ODbL attribution).
+
+### What the demo shows now
+| | Portugal | Spain | Hungary |
+|---|---|---|---|
+| Aoife (vs IE) | Groceries 10% (5 products), Coffee 42% (3 products), Dining 42%, Clothing 7%, Skincare 38% | Groceries 15%, Coffee 35%, Dining 35%, Clothing 9%, Skincare 35% | Groceries 16% (1 product), Coffee 44%, Dining 44%, Clothing 14%, Skincare 54% |
+| Jonas (vs DE) | Clothing 8%, Dining 33%, Transport 32%, Personal care 18%, Mobile 15%. No products (all services) | similar, Mobile 30% | Transport 48%, Personal care 39% |
+
+Jonas's top category, electronics, never shows: Eurostat has PT 2% dearer and ES only 1% cheaper than DE. The real data contradicts the old mock, which had ES electronics cheaper.
+
+### Limitations (put these in the report)
+- Product rows exist only for groceries, packaged coffee and a few toiletries, and are thin in IE (11) and HU (1). Restaurants, transport, mobile, haircuts, clothing and electronics are category-level only.
+- Product home prices are mostly **estimates** (sub-index ratio), labelled as such. Eurostat indices are national annual averages (2024), not city- or shop-level.
+- Skincare and personal care use Eurostat's broad "Miscellaneous goods and services" index, which also covers e.g. insurance.
+- Crowdsourced prices come from a few shops per country, so they aren't a national average.
+- **Frontend `Visa`** still prints "At {country} avg" for each product (`vsLocalAvgPct: 0` from `lib/live.ts`). With real shelf prices that line is no longer accurate.
+  The component should show `description` (quantity and shop) and `homePriceBasis` instead. It also prints a forint line outside Hungary, and its map pin should open `url`.
+
