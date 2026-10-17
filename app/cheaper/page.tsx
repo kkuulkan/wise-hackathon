@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { IconArrowLeft } from "@tabler/icons-react";
 
+import { TitleFlight } from "@/components/TitleFlight";
 import { VisaSpread } from "@/components/VisaSpread";
 import { TrackView } from "@/components/live/TrackView";
 import { getTotalAnnualSaving } from "@/lib/data";
@@ -70,7 +71,7 @@ async function CheaperContent({ searchParams }: Pick<PageProps<"/cheaper">, "sea
 
       <header className={styles.head}>
         <p className="fieldLabel">Visas / Endorsements</p>
-        <h1 className={styles.title}>{city}</h1>
+        <TitleFlight city={city} />
         <p className={styles.lede}>
           Set against prices in {account.homeCity}.{" "}
           {total > 0 ? (

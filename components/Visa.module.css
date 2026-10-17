@@ -40,8 +40,8 @@
   top: var(--space-3);
   right: var(--space-3);
   z-index: 2;
-  width: 92px;
-  height: 92px;
+  width: 104px;
+  height: 104px;
   display: grid;
   place-content: center;
   gap: 1px;
@@ -57,7 +57,7 @@
 .stampTop,
 .stampBottom {
   font-family: var(--font-display);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 700;
   font-stretch: 125%;
   letter-spacing: 0.18em;
@@ -66,7 +66,7 @@
 
 .stampFigure {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 38px;
   font-weight: 700;
   font-stretch: 112%;
   line-height: 1;
@@ -75,8 +75,8 @@
 
 .head {
   /* Clear of the stamp. */
-  padding-right: 104px;
-  min-height: 92px;
+  padding-right: 118px;
+  min-height: 104px;
 }
 
 .label {
@@ -92,14 +92,15 @@
 .unit {
   margin-top: var(--space-1);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 15px;
   letter-spacing: 0.04em;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .rates {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--space-2);
   margin: var(--space-4) 0 0;
   padding: var(--space-3) 0;
@@ -107,14 +108,21 @@
   border-bottom: 1px solid var(--ink);
 }
 
+@media (min-width: 560px) {
+  .rates {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .rates dd {
   margin: 2px 0 0;
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 26px;
   font-weight: 500;
 }
 
 .rateWas {
+  font-weight: 600;
   color: var(--muted);
   text-decoration: line-through;
   text-decoration-thickness: 1.5px;
@@ -153,7 +161,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-2);
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 500;
   min-width: 0;
 }
@@ -163,7 +171,7 @@
   color: var(--stamp);
   padding: 0 4px;
   font-family: var(--font-display);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 700;
   font-stretch: 125%;
   letter-spacing: 0.16em;
@@ -175,7 +183,8 @@
   grid-column: 1;
   grid-row: 2;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -186,14 +195,14 @@
   flex-direction: column;
   align-items: flex-end;
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 21px;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .placeLocal {
-  font-size: 11px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -223,13 +232,15 @@
 }
 
 .level {
+  font-weight: 600;
   color: var(--muted);
 }
 
 .source {
   margin-top: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 13px;
   line-height: 1.5;
+  font-weight: 600;
   color: var(--muted);
 }

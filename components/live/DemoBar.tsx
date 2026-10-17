@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import styles from "./DemoBar.module.css";
 
 type DemoUser = { id: string; holder: string; homeCity: string };
 type Destination = { code: string; name: string; eligible: boolean };
-type Notification = { title: string; body: string; deepLink: string; country: string };
 
 type Props = {
   /** Who the server rendered the page for, or null when signed out. */
@@ -31,9 +29,11 @@ async function call<T>(method: string, path: string, body?: unknown): Promise<T>
 }
 
 /**
- * The demo's control strip: pick a traveller, simulate where they are, and
- * see the arrival notification the backend sends. Everything here goes
- * through the HTTP API; the page re-renders from the server afterwards.
+ * The demo's control strip: pick a traveller and simulate where they are.
+ *
+ * Everything here goes through the HTTP API and the page re-renders from the
+ * server afterwards. The arrival notification the backend returns is not shown:
+ * the ticket beside the balance already carries that message.
  */
 export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
   const router = useRouter();
@@ -41,7 +41,6 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
   const [users, setUsers] = useState<DemoUser[]>([]);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [destination, setDestination] = useState(tripCountry ?? "PT");
-  const [notification, setNotification] = useState<Notification | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -71,19 +70,17 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
 
   const signIn = (id: string) =>
     run(async () => {
-      setNotification(null);
       if (id) await call("POST", "/api/session", { userId: id });
       else await call("DELETE", "/api/session");
     });
 
   const moveTo = (countryCode: string) =>
     run(async () => {
-      const result = await call<{ status: string; notification: Notification | null }>(
+      const result = await call<{ status: string; notification: unknown | null }>(
         "POST",
         "/api/location",
         { countryCode },
       );
-      setNotification(result.notification);
       if (result.status === "ineligible") {
         setMessage("OtherWise only compares prices between E.U. countries, so nothing was sent.");
       } else if (result.status === "already-seen") {
@@ -93,15 +90,10 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
       }
     });
 
-  const open = (note: Notification) => {
-    // Fire and forget: analytics must never block the user.
-    call("POST", "/api/events", { type: "notification_opened", country: note.country }).catch(() => {});
-    setNotification(null);
-  };
 
   return (
     <section className={styles.bar} aria-label="Demo controls">
-      <p className="fieldLabel">Demo / Démonstration</p>
+      <p className={`fieldLabel ${styles.label}`}>For demo purpose:</p>
 
       <div className={styles.controls}>
         <label className={styles.field}>
@@ -167,20 +159,6 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
         </p>
       )}
 
-      {notification && (
-        <div className={styles.notification} role="alert">
-          <p className="fieldLabel">OtherWise · now</p>
-          <p className={styles.notificationTitle}>{notification.title}</p>
-          <p className={styles.notificationBody}>{notification.body}</p>
-          <Link
-            href={notification.deepLink}
-            className={styles.primary}
-            onClick={() => open(notification)}
-          >
-            See what&rsquo;s cheaper
-          </Link>
-        </div>
-      )}
     </section>
   );
 }

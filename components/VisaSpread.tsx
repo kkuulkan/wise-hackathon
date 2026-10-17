@@ -114,6 +114,7 @@ export function VisaSpread({ categories, city, homeCity }: Props) {
         <div className={styles.sweep} />
       </div>
 
+
       <div className={styles.visas}>
         {categories.map((category, index) => (
           <div key={category.slug} className={styles.visa}>

@@ -10,7 +10,7 @@
   gap: var(--space-2);
   margin-bottom: var(--space-4);
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 700;
   font-stretch: 125%;
   letter-spacing: 0.14em;
@@ -26,28 +26,6 @@
 /* Same stitched spine as the data page, so it reads as one booklet. */
 .booklet {
   position: relative;
-  padding-left: var(--space-3);
-}
-
-.booklet::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: var(--ink);
-  border-radius: 2px;
-}
-
-.booklet::after {
-  content: "";
-  position: absolute;
-  inset: var(--space-4) auto var(--space-4) 7px;
-  width: 1px;
-  background: repeating-linear-gradient(
-    to bottom,
-    var(--line-strong) 0 6px,
-    transparent 6px 12px
-  );
 }
 
 /* The open visa page: beige, inked navy, holding header, spread and footnotes. */
@@ -59,21 +37,11 @@
   padding: var(--space-2) 0 var(--space-6);
 }
 
-.title {
-  margin-top: var(--space-2);
-  font-family: var(--font-display);
-  font-size: clamp(48px, 14vw, 68px);
-  font-weight: 700;
-  font-stretch: 112%;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
 .lede {
   margin-top: var(--space-3);
   max-width: 42ch;
-  font-size: 15px;
+  font-size: 21px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -87,11 +55,20 @@
   padding-top: var(--space-4);
   border-top: 1px solid var(--ink);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 15px;
   line-height: 1.6;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .rate {
   margin-top: var(--space-2);
+}
+
+/*
+ * Page 2 runs larger throughout, and that includes the shared label class.
+ * Scoped to this page's root so the account screen keeps its own scale.
+ */
+.main :global(.fieldLabel) {
+  font-size: 13px;
 }

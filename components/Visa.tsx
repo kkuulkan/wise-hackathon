@@ -5,14 +5,23 @@ import { mapsUrl } from "@/lib/data";
 import { formatEur, formatHuf, formatPct } from "@/lib/format";
 import styles from "./Visa.module.css";
 
+/** How many places each card lists. */
+const PLACES = 3;
+
 /** How this place's price reads against the local average for its category. */
 function localAverage(product: Product, city: string) {
   if (product.vsLocalAvgPct >= 1) {
-    return { text: `${formatPct(product.vsLocalAvgPct)} under ${city} avg`, tone: "below" as const };
+    return {
+      text: `${formatPct(product.vsLocalAvgPct)} under ${city} avg`,
+      tone: "below" as const,
+    };
   }
 
   if (product.vsLocalAvgPct <= -1) {
-    return { text: `${formatPct(product.vsLocalAvgPct)} over ${city} avg`, tone: "above" as const };
+    return {
+      text: `${formatPct(product.vsLocalAvgPct)} over ${city} avg`,
+      tone: "above" as const,
+    };
   }
 
   return { text: `At ${city} avg`, tone: "level" as const };
@@ -54,11 +63,15 @@ export function Visa({ category, city, homeCity, index }: Props) {
       <dl className={styles.rates}>
         <div>
           <dt className="fieldLabel">{homeCity}</dt>
-          <dd className={`${styles.rateWas} tabular`}>{formatEur(category.homeAvgEur)}</dd>
+          <dd className={`${styles.rateWas} tabular`}>
+            {formatEur(category.homeAvgEur)}
+          </dd>
         </div>
         <div>
           <dt className="fieldLabel">{city} average</dt>
-          <dd className={`${styles.rateNow} tabular`}>{formatEur(category.localAvgEur)}</dd>
+          <dd className={`${styles.rateNow} tabular`}>
+            {formatEur(category.localAvgEur)}
+          </dd>
         </div>
         <div>
           <dt className="fieldLabel">Kept per year</dt>
@@ -72,40 +85,47 @@ export function Visa({ category, city, homeCity, index }: Props) {
         <p className="fieldLabel">Endorsements / Mentions</p>
 
         <ul className={styles.places}>
-          {category.products.map((product) => {
-            const average = localAverage(product, city);
+          {[...category.products]
+            .sort((a, b) => a.priceEur - b.priceEur)
+            .slice(0, PLACES)
+            .map((product) => {
+              const average = localAverage(product, city);
 
-            return (
-              <li key={product.name} className={styles.place}>
-                <span className={styles.placeName}>
-                  {product.name}
-                  {product.visited && <span className={styles.visited}>visited</span>}
-                </span>
-
-                <span className={styles.placeMeta}>
-                  {product.area} ·{" "}
-                  <span className={styles[average.tone]}>{average.text}</span>
-                </span>
-
-                <span className={`${styles.placePrice} tabular`}>
-                  {formatEur(product.priceEur)}
-                  <span className={styles.placeLocal}>{formatHuf(product.priceHuf)}</span>
-                </span>
-
-                <a
-                  className={styles.placeMap}
-                  href={mapsUrl(product.mapsQuery)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <IconMapPin size={14} stroke={2} aria-hidden="true" />
-                  <span className="srOnly">
-                    Open {product.mapsQuery} in Google Maps in a new tab
+              return (
+                <li key={product.name} className={styles.place}>
+                  <span className={styles.placeName}>
+                    {product.name}
+                    {product.visited && (
+                      <span className={styles.visited}>visited</span>
+                    )}
                   </span>
-                </a>
-              </li>
-            );
-          })}
+
+                  <span className={styles.placeMeta}>
+                    {product.area} ·{" "}
+                    <span className={styles[average.tone]}>{average.text}</span>
+                  </span>
+
+                  <span className={`${styles.placePrice} tabular`}>
+                    {formatEur(product.priceEur)}
+                    <span className={styles.placeLocal}>
+                      {formatHuf(product.priceHuf)}
+                    </span>
+                  </span>
+
+                  <a
+                    className={styles.placeMap}
+                    href={mapsUrl(product.mapsQuery)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <IconMapPin size={14} stroke={2} aria-hidden="true" />
+                    <span className="srOnly">
+                      Open {product.mapsQuery} in Google Maps in a new tab
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
         </ul>
       </div>
 

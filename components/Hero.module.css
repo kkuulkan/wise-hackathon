@@ -1,205 +1,407 @@
+/*
+ * The first block: the photograph, full bleed, with the account held in a
+ * glass box on top of it.
+ */
 .hero {
+  position: relative;
+  isolation: isolate;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
   min-height: 100svh;
-  padding: var(--space-8) 0 var(--space-6);
+  padding: var(--space-10) 0;
+  overflow: clip; /* the ticket flies in from outside, so clip the overflow */
 }
 
-.grid {
-  flex: 1;
+.backdrop {
+  z-index: -1;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* A veil, so the glass has something steady to sit on. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(15, 44, 92, 0.34);
+}
+
+.inner {
+  width: 100%;
+}
+
+
+/*
+ * Before arrival nothing sits beside the account, so it takes the whole
+ * container width and splits internally into two columns.
+ */
+.gridHome {
+  display: grid;
+}
+
+/* After arrival it narrows and moves left, making room for the ticket. */
+.gridAway {
   display: grid;
   gap: var(--space-10);
   align-content: center;
 }
 
 @media (min-width: 900px) {
-  .grid {
-    /* Identity left, the arrival notice right, across the full width. */
-    grid-template-columns: 1fr 1fr;
+  .gridAway {
+    grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
     gap: var(--space-16);
     align-items: center;
   }
 }
 
-.identity {
+/* Inner split: side by side with the room, stacked without it. */
+.cols {
+  flex: 1;
+  display: grid;
+  gap: var(--space-6);
+  min-height: 0;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
 }
 
-.logo {
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 700;
-  font-stretch: 125%;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink);
-}
-
-.holder {
-  margin-top: var(--space-16);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-/* fieldLabel is a global class, so it has to be reached through :global. */
-.identity :global(.fieldLabel) {
-  margin-top: var(--space-6);
-}
-
-.balance {
-  margin-top: var(--space-2);
-  font-family: var(--font-display);
-  font-size: clamp(56px, 14vw, 112px);
-  font-weight: 700;
-  font-stretch: 112%;
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-}
-
-.secondary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  list-style: none;
-  margin: var(--space-4) 0 0;
-  padding: 0;
-  font-family: var(--font-mono);
-  font-size: 15px;
-  color: var(--muted);
-}
-
-/*
- * The arrival notice, built like a ticket stub: beige card, perforated edge
- * down the side that faces the identity column.
- */
-.notice {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-card);
-  padding: var(--space-6);
+/* Alone in the card, the column spreads to the full height it has been given. */
+.gridAway .main {
+  justify-content: space-between;
+  gap: var(--space-4);
 }
 
 @media (min-width: 900px) {
-  .notice {
-    padding: var(--space-8);
+  .gridHome .cols {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: var(--space-16);
   }
 
-  .notice::before {
-    content: "";
-    position: absolute;
-    inset: var(--space-4) auto var(--space-4) var(--space-4);
-    width: 1px;
-    background: repeating-linear-gradient(
-      to bottom,
-      var(--line) 0 5px,
-      transparent 5px 10px
-    );
-  }
-
-  .notice > * {
-    padding-left: var(--space-6);
+  .gridHome .week {
+    border-left: 1px solid var(--line-strong);
+    padding-left: var(--space-16);
   }
 }
 
-.noticeEyebrow {
+.gridAway .week,
+.gridHome .cols > .week:only-child {
+  border-top: 1px solid var(--line-strong);
+  padding-top: var(--space-6);
+}
+
+@media (max-width: 899px) {
+  .week {
+    border-top: 1px solid var(--line-strong);
+    padding-top: var(--space-6);
+  }
+}
+
+/*
+ * The glass box. Three things make it read as glass rather than a tinted
+ * panel: the backdrop is saturated and lifted as well as blurred, the edges
+ * carry a bright inner bevel, and a specular sweep sits over the tint.
+ */
+.account {
+  --account-h: 600px;
+
+  position: relative;
+  isolation: isolate;
   display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-display);
-  font-size: 10px;
-  font-weight: 700;
-  font-stretch: 125%;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--stamp);
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--radius-glass);
+  background: var(--glass-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow:
+    var(--glass-gloss),
+    0 28px 72px -28px rgba(15, 44, 92, 0.55);
+  color: var(--ink);
 }
 
-.noticeTitle {
-  margin-top: var(--space-3);
-  font-family: var(--font-display);
-  font-size: clamp(32px, 5vw, 44px);
-  font-weight: 700;
-  font-stretch: 110%;
-  line-height: 0.96;
-  letter-spacing: -0.02em;
+/*
+ * The sheen. z-index -1 keeps it above the element's own background but below
+ * the text, so the gloss never washes out the figures.
+ */
+.account::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(--glass-sheen);
 }
 
-.previewLabel {
+@media (min-width: 900px) {
+  .account {
+    padding: var(--space-10);
+    /*
+     * Both states clear this, so the card is exactly as tall before arrival as
+     * after it. Raise it if the weekly column ever outgrows the figure.
+     */
+    min-height: var(--account-h);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .account {
+    background: var(--page);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .account::before {
+    display: none;
+  }
+}
+
+/* Payments under the weekly summary. */
+.recent {
   margin-top: var(--space-6);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--line-strong);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line-strong);
 }
 
-.preview {
+.recentList {
   list-style: none;
-  margin: 0;
+  margin: var(--space-2) 0 0;
   padding: 0;
 }
 
-/* Name left, saving right, ruled like a ticket's fare breakdown. */
-.previewRow {
+.recentRow {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-3) 0;
+  padding: var(--space-2) 0;
   border-bottom: 1px dotted var(--line-strong);
 }
 
-.previewName {
-  font-size: 17px;
+.recentMerchant {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 15px;
   font-weight: 500;
 }
 
-.previewSaving {
+.recentMeta {
   font-family: var(--font-mono);
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--stamp);
-  white-space: nowrap;
-}
-
-.previewUnit {
-  margin-left: 4px;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.cta {
+.recentAmount {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: var(--space-6);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--ink);
+  color: var(--page);
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.whoText {
+  min-width: 0;
+}
+
+.whoText b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.whoText span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Home to here, as a ticket prints a route. */
+.route {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.route i {
+  width: 28px;
+  border-top: 1.5px dashed var(--line-strong);
+}
+
+.balance {
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(48px, 9vw, 88px);
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.fx {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.sub {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.pill {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  height: 52px;
+  height: 28px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
   margin-top: var(--space-6);
+}
+
+.primaryAction,
+.ghostAction {
+  height: 52px;
   padding: 0 var(--space-6);
   border-radius: var(--radius-btn);
-  background: var(--accent);
-  color: var(--accent-ink);
   font-family: var(--font-display);
   font-size: 12px;
   font-weight: 700;
   font-stretch: 112%;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
   transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.cta:active {
+.primaryAction {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.ghostAction {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+}
+
+.ghostAction:hover {
+  background: var(--chip-bg);
+}
+
+.primaryAction:active,
+.ghostAction:active {
   transform: scale(0.98);
 }
 
-/* A single machine-readable line, closing the hero like a ticket footer. */
-.strip {
-  margin-top: var(--space-8);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--line-strong);
-  color: var(--muted);
+.weekTotal {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.split {
+  display: flex;
+  gap: 3px;
+  height: 12px;
+  margin-top: var(--space-4);
+}
+
+.split i {
+  flex-shrink: 1;
+  flex-basis: 0;
+  border-radius: 4px;
+  background: var(--ink);
+}
+
+.legend {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2) var(--space-6);
+  font-size: 14px;
+}
+
+@media (min-width: 560px) {
+  .legend {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legend li i {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--ink);
+}
+
+.legend b {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
 }

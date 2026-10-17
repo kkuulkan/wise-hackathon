@@ -1,562 +1,1396 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Otherwise | Passport spread prototype</title>
-<meta name="description" content="Prototype of the account screen as an open passport spread. Sample data only.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap">
-<script>
-if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('anim', 'locked');
-</script>
-<style>
-/*
-  Design Read: account screen for a traveller, passport-document look, calm but bold.
-  Dials: variance 6 / motion 6 / density 6. Direction overrides the guideline's default tokens.
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Otherwise | Neon account prototype</title>
+    <meta
+      name="description"
+      content="Prototype of the account screen: dark, techy, gradient mesh, with an opening-doors intro and four switchable looks. Sample data only."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <script>
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+        document.documentElement.classList.add("anim", "locked");
+    </script>
+    <style>
+      /*
+  Design Read: account screen for a traveller, dark and techy, flashy gradient mesh, confident.
+  Dials: variance 6 / motion 7 / density 6. Direction overrides the guideline's default tokens.
+  Heavy visual: the gradient mesh (CSS only, transform animation). Glass: nav and the look dock only.
 */
-:root {
-  --ink-rgb: 26 45 91;
-  --ink: #1a2d5b;               /* navy: text, frame, primary action */
-  --paper: #f0f0bc;             /* cream page */
-  --surface: #f7f7d6;           /* raised paper */
-  --accent: var(--ink);
-  --accent-ink: var(--paper);
-  --positive: #0e9f6e;          /* fills, and text on ink */
-  --positive-ink: #08694a;      /* money-in text on paper (5.7:1) */
-  --muted: rgb(var(--ink-rgb) / .72);   /* 5.0:1 or better on paper */
-  --line: rgb(var(--ink-rgb) / .16);
-  --line-strong: rgb(var(--ink-rgb) / .38);
-  --glass: rgb(240 240 188 / .74);
-  --radius-btn: 14px;
-  --radius-card: 28px;
-  --shadow-card: 0 1px 2px rgb(var(--ink-rgb) / .08), 0 12px 32px rgb(var(--ink-rgb) / .10);
-  --font-display: 'Archivo', 'DM Sans', system-ui, sans-serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
-  --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  --gutter: clamp(16px, 4vw, 32px);
-  --frame: 10px;
-  --stick: 96px;               /* distance sticky elements keep below the top */
-}
+      :root {
+        --bg: #06070c;
+        --panel: rgb(255 255 255 / 0.045);
+        --panel-hi: rgb(255 255 255 / 0.075);
+        --ink: #f4f6fb; /* text on dark (17:1) */
+        --muted: rgb(244 246 251 / 0.68); /* 8:1 or better on --bg */
+        --line: rgb(255 255 255 / 0.11);
+        --line-strong: rgb(255 255 255 / 0.22);
+        --positive: #4ade80; /* money in, on dark (11:1) */
+        --on-accent: #05060a; /* dark text on bright gradients (9:1+) */
+        --g1: #38bdf8;
+        --g2: #818cf8;
+        --g3: #34d399; /* look: aurora (default) */
+        --glass: rgb(12 14 22 / 0.62);
+        --radius-btn: 14px;
+        --radius-card: 24px;
+        --font-display: "Space Grotesk", "DM Sans", system-ui, sans-serif;
+        --font-body: "DM Sans", system-ui, sans-serif;
+        --font-mono:
+          "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+        --gutter: clamp(16px, 4vw, 32px);
+        --stick: 92px;
+      }
+      :root[data-look="ember"] {
+        --g1: #fb923c;
+        --g2: #f43f5e;
+        --g3: #fbbf24;
+      }
+      :root[data-look="orchid"] {
+        --g1: #e879f9;
+        --g2: #6366f1;
+        --g3: #22d3ee;
+      }
+      :root[data-look="volt"] {
+        --g1: #a3e635;
+        --g2: #22d3ee;
+        --g3: #2dd4bf;
+      }
 
-*, *::before, *::after { box-sizing: border-box; }
-* { margin: 0; }
-html { -webkit-text-size-adjust: 100%; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
-html.locked, html.locked body { overflow: hidden; }
-body {
-  font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--ink);
-  background: var(--ink);
-}
-a { color: inherit; }
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.num { font-variant-numeric: tabular-nums; }
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      * {
+        margin: 0;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+        color-scheme: dark;
+      }
+      html.lenis,
+      html.lenis body {
+        height: auto;
+      }
+      .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+      .lenis.lenis-stopped {
+        overflow: hidden;
+      }
+      html.locked,
+      html.locked body {
+        overflow: hidden;
+      }
+      body {
+        font-family: var(--font-body);
+        font-size: 17px;
+        line-height: 1.5;
+        color: var(--ink);
+        background: var(--bg);
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--g1);
+        outline-offset: 2px;
+      }
+      .num {
+        font-variant-numeric: tabular-nums;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
 
-/* ---------- Paper sheet: full-bleed, navy only as a thin frame ---------- */
-.sheet {
-  margin: var(--frame);
-  min-height: calc(100svh - 2 * var(--frame));
-  border-radius: 22px;
-  overflow: clip;
-  background:
-    repeating-radial-gradient(circle at 16% 20%, transparent 0 9px, rgb(var(--ink-rgb) / .05) 9px 10px),
-    repeating-radial-gradient(circle at 82% 68%, transparent 0 9px, rgb(var(--ink-rgb) / .05) 9px 10px),
-    var(--paper);
-}
-.container { width: min(100% - 2 * var(--gutter), 1280px); margin-inline: auto; }
+      /* ---------- Gradient mesh (the one heavy visual). Only transform is animated. ---------- */
+      .mesh {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background: var(--bg);
+      }
+      .mesh i {
+        position: absolute;
+        width: 70vmax;
+        height: 70vmax;
+        border-radius: 50%;
+        opacity: 0.55;
+        will-change: transform;
+      }
+      .mesh .a {
+        left: -18vmax;
+        top: -22vmax;
+        background: radial-gradient(closest-side, var(--g1), transparent 70%);
+        animation: drift-a 26s ease-in-out infinite alternate;
+      }
+      .mesh .b {
+        right: -24vmax;
+        top: 6vmax;
+        background: radial-gradient(closest-side, var(--g2), transparent 70%);
+        animation: drift-b 32s ease-in-out infinite alternate;
+      }
+      .mesh .c {
+        left: 8vmax;
+        bottom: -38vmax;
+        background: radial-gradient(closest-side, var(--g3), transparent 70%);
+        opacity: 0.4;
+        animation: drift-c 38s ease-in-out infinite alternate;
+      }
+      .mesh::after {
+        /* grid lines fading out toward the bottom, plus a dark veil for legibility */
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(to bottom, rgb(6 7 12 / 0.15), rgb(6 7 12 / 0.72)),
+          linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px) 0 0 /
+            64px 64px,
+          linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px)
+            0 0 / 64px 64px;
+        -webkit-mask-image: radial-gradient(
+          ellipse at 50% 20%,
+          #000 30%,
+          transparent 85%
+        );
+        mask-image: radial-gradient(
+          ellipse at 50% 20%,
+          #000 30%,
+          transparent 85%
+        );
+      }
+      .mesh::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: rgb(6 7 12 / 0.38);
+      }
+      @keyframes drift-a {
+        to {
+          transform: translate3d(22vmax, 14vmax, 0) scale(1.15);
+        }
+      }
+      @keyframes drift-b {
+        to {
+          transform: translate3d(-20vmax, 18vmax, 0) scale(0.9);
+        }
+      }
+      @keyframes drift-c {
+        to {
+          transform: translate3d(18vmax, -10vmax, 0) scale(1.2);
+        }
+      }
 
-/* ---------- Labels (one pattern everywhere: English over French) ---------- */
-.lbl { display: grid; gap: 2px; font-size: 12px; line-height: 1.2; letter-spacing: .14em; text-transform: uppercase; }
-.lbl b { font-weight: 700; }
-.lbl i { font-style: normal; font-weight: 400; color: var(--muted); }
+      .sheet {
+        position: relative;
+        z-index: 1;
+        min-height: 100svh;
+      }
+      .container {
+        width: min(100% - 2 * var(--gutter), 1280px);
+        margin-inline: auto;
+      }
 
-/* ---------- Buttons ---------- */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  height: 52px; padding: 0 24px;
-  border-radius: var(--radius-btn);
-  font: 700 16px/1 var(--font-body);
-  text-decoration: none; white-space: nowrap; cursor: pointer;
-  border: 1px solid transparent;
-  transition: transform .15s ease, background-color .2s ease;
-}
-.btn:active { transform: scale(.98); }
-.btn-primary { background: var(--accent); color: var(--accent-ink); }
-.btn-primary:hover { background: rgb(var(--ink-rgb) / .86); }
-.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
-.btn-ghost:hover { background: rgb(var(--ink-rgb) / .06); }
-.btn-inverse { background: var(--paper); color: var(--ink); }
-.btn-inverse:hover { background: var(--surface); }
+      /* ---------- Labels ---------- */
+      .lbl {
+        font: 500 12px/1.2 var(--font-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
 
-/* ---------- Nav (the one glass element) ---------- */
-.nav {
-  position: sticky; top: calc(var(--frame) + 10px); z-index: 40;
-  width: min(100% - 2 * var(--gutter), 1280px);
-  height: 60px; margin: 10px auto 0;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 4px 4px 4px 22px;
-  border-radius: 18px;
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(16px) saturate(1.3);
-  backdrop-filter: blur(16px) saturate(1.3);
-  border: 1px solid var(--line);
-  transition: box-shadow .3s ease;
-}
-.nav.scrolled { box-shadow: var(--shadow-card); }
-.nav .btn { height: 50px; }
-.logo {
-  font-family: var(--font-display); font-stretch: 125%; font-weight: 800;
-  font-size: 20px; letter-spacing: .12em; text-decoration: none;
-}
-#top-sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 80px; pointer-events: none; }
-@media (prefers-reduced-transparency: reduce) {
-  .nav { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
-}
+      /* ---------- Buttons ---------- */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 52px;
+        padding: 0 24px;
+        border-radius: var(--radius-btn);
+        font: 700 16px/1 var(--font-body);
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.25s ease,
+          background-color 0.2s ease;
+      }
+      .btn:active {
+        transform: scale(0.98);
+      }
+      .btn-primary {
+        color: var(--on-accent);
+        background: linear-gradient(120deg, var(--g1), var(--g2));
+        box-shadow: 0 0 0 0 transparent;
+      }
+      .btn-primary:hover {
+        box-shadow: 0 0 32px -4px var(--g1);
+      }
+      .btn-ghost {
+        color: var(--ink);
+        border-color: var(--line-strong);
+        background: var(--panel);
+      }
+      .btn-ghost:hover {
+        background: var(--panel-hi);
+      }
 
-/* ---------- The spread ---------- */
-.spread {
-  width: min(100% - 2 * var(--gutter), 1280px);
-  margin: 0 auto;
-  padding-block: 36px 72px;
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) 28px minmax(0, 7fr);
-  align-items: start;
-}
-.spine { align-self: stretch; position: relative; background: linear-gradient(90deg, transparent, rgb(var(--ink-rgb) / .07), transparent); }
-.spine::before { content: ""; position: absolute; inset: 0 auto 0 50%; width: 3px; transform: translateX(-50%); background: var(--ink); border-radius: 2px; }
-.spine::after { content: ""; position: absolute; inset: 0 auto 0 calc(50% + 9px); border-left: 1.5px dashed rgb(var(--ink-rgb) / .5); }
+      /* ---------- Nav (glass element 1 of 2) ---------- */
+      .nav {
+        position: sticky;
+        top: 14px;
+        z-index: 40;
+        width: min(100% - 2 * var(--gutter), 1280px);
+        height: 60px;
+        margin: 14px auto 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 4px 4px 22px;
+        border-radius: 18px;
+        background: var(--glass);
+        -webkit-backdrop-filter: blur(18px) saturate(1.4);
+        backdrop-filter: blur(18px) saturate(1.4);
+        border: 1px solid var(--line);
+        transition:
+          box-shadow 0.3s ease,
+          border-color 0.3s ease;
+      }
+      .nav.scrolled {
+        border-color: var(--line-strong);
+        box-shadow: 0 12px 40px rgb(0 0 0 / 0.45);
+      }
+      .nav .btn {
+        height: 50px;
+      }
+      .logo {
+        font: 700 20px/1 var(--font-display);
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo::before {
+        content: "";
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, var(--g1), var(--g2));
+        transform: rotate(45deg);
+      }
+      #top-sentinel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 80px;
+        pointer-events: none;
+      }
 
-.page { min-width: 0; }
-.page-l {
-  padding-right: clamp(12px, 3vw, 40px);
-  position: sticky; top: var(--stick);
-  container-type: inline-size;
-}
-.page-r { padding-left: clamp(12px, 3vw, 40px); }
+      /* ---------- Spread ---------- */
+      .spread {
+        width: min(100% - 2 * var(--gutter), 1280px);
+        margin: 0 auto;
+        padding-block: 28px 120px;
+        display: grid;
+        grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+        gap: 32px;
+        align-items: start;
+      }
+      .card {
+        border-radius: var(--radius-card);
+        border: 1px solid var(--line);
+        background: var(--panel);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 0.06),
+          0 24px 60px -24px rgb(0 0 0 / 0.6);
+      }
+      .page-l {
+        position: sticky;
+        top: var(--stick);
+        padding: 28px;
+        container-type: inline-size;
+        min-width: 0;
+      }
+      .page-r {
+        padding: 8px 28px 20px;
+        min-width: 0;
+      }
 
-/* identity */
-.id { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 20px; align-items: start; }
-.photo {
-  width: 112px; height: 144px;
-  display: grid; place-items: center;
-  border: 1.5px solid var(--ink);
-  background: repeating-linear-gradient(135deg, transparent 0 9px, rgb(var(--ink-rgb) / .12) 9px 10px), var(--surface);
-  font-family: var(--font-display); font-stretch: 125%; font-weight: 800; font-size: 36px; letter-spacing: .02em;
-}
-.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 16px; }
-.fields > div { display: grid; grid-template-rows: 30px auto; gap: 6px; align-content: start; }
-.fields dt { display: grid; gap: 2px; font-size: 12px; line-height: 1.2; letter-spacing: .12em; text-transform: uppercase; }
-.fields dt b { font-weight: 700; }
-.fields dt i { font-style: normal; color: var(--muted); }
-.fields dd { font: 500 18px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: .02em; overflow-wrap: anywhere; }
+      .who {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        font: 700 18px/1 var(--font-display);
+        color: var(--on-accent);
+        background: linear-gradient(135deg, var(--g1), var(--g3));
+      }
+      .who b {
+        display: block;
+        font: 700 19px/1.2 var(--font-display);
+      }
+      .who span {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .route {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font: 500 12px/1 var(--font-mono);
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+      .route i {
+        width: 28px;
+        border-top: 1.5px dashed var(--line-strong);
+      }
 
-.route { display: flex; align-items: center; gap: 12px; margin-top: 24px; font: 500 13px/1 var(--font-mono); letter-spacing: .14em; }
-.route i { flex: 1; position: relative; border-top: 1.5px dashed rgb(var(--ink-rgb) / .5); }
-.route i::after { content: ""; position: absolute; right: -1px; top: -5.5px; width: 9px; height: 9px; border-top: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); transform: rotate(45deg); }
+      .hr {
+        border: 0;
+        border-top: 1px solid var(--line);
+        margin: 24px 0;
+      }
 
-.rule { border: 0; border-top: 1px solid var(--line-strong); margin: 28px 0; }
+      .balance {
+        margin-top: 10px;
+        font: 700 clamp(40px, 15cqi, 84px)/0.95 var(--font-display);
+        letter-spacing: -0.03em;
+      }
+      .balance .cur {
+        margin-right: 0.03em;
+        background: linear-gradient(135deg, var(--g1), var(--g2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .fx {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 14px;
+        margin-top: 14px;
+      }
+      .fx .sub {
+        font: 400 17px/1 var(--font-mono);
+        color: var(--muted);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 28px;
+        padding: 0 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line-strong);
+        font: 500 12px/1 var(--font-mono);
+        letter-spacing: 0.04em;
+      }
+      .pill::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--positive);
+      }
+      .spark {
+        display: block;
+        width: 100%;
+        height: 64px;
+        margin-top: 18px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
 
-/* holdings */
-.balance {
-  margin-top: 10px;
-  font-family: var(--font-display); font-stretch: 125%; font-weight: 800;
-  font-size: clamp(40px, 5vw, 76px);
-  font-size: clamp(40px, 14cqi, 88px);
-  letter-spacing: -.03em; line-height: .92;
-}
-.balance .cur { margin-right: .02em; }
-.fx { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; margin-top: 16px; }
-.fx .sub { font: 400 17px/1 var(--font-mono); color: var(--muted); }
-.stamp {
-  display: inline-grid; gap: 2px; padding: 5px 10px;
-  border: 1.5px solid rgb(var(--ink-rgb) / .8); border-radius: 6px;
-  transform: rotate(-5deg);
-  font: 500 12px/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
-  mix-blend-mode: multiply;
-}
-.stamp small { font-size: 11px; color: var(--muted); }
-.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+      .week-total {
+        margin-top: 8px;
+        font: 500 28px/1 var(--font-mono);
+        letter-spacing: -0.01em;
+      }
+      .split {
+        display: flex;
+        gap: 3px;
+        height: 12px;
+        margin-top: 14px;
+      }
+      .split i {
+        flex: var(--f) 1 0;
+        border-radius: 4px;
+        background: var(--c);
+      }
+      .legend {
+        list-style: none;
+        padding: 0;
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 24px;
+        font-size: 14px;
+      }
+      .legend li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .legend li::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        background: var(--c);
+        flex: none;
+      }
+      .legend b {
+        margin-left: auto;
+        font: 500 14px/1 var(--font-mono);
+      }
 
-/* weekly summary */
-.week-total { margin-top: 8px; font: 500 28px/1 var(--font-mono); letter-spacing: -.01em; }
-.split { display: flex; gap: 3px; height: 14px; margin-top: 14px; }
-.split i { flex: var(--f) 1 0; border-radius: 4px; background: rgb(var(--ink-rgb) / var(--o)); }
-.legend { list-style: none; padding: 0; margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; font-size: 14px; }
-.legend li { display: flex; align-items: center; gap: 8px; }
-.legend li::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: rgb(var(--ink-rgb) / var(--o)); flex: none; }
-.legend b { margin-left: auto; font: 500 14px/1 var(--font-mono); }
+      /* ledger */
+      .ledger-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 22px 0 14px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chip {
+        height: 36px;
+        padding: 0 14px;
+        border-radius: 10px;
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--ink);
+        font: 500 14px/1 var(--font-body);
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+      .chip:hover {
+        background: var(--panel-hi);
+      }
+      .chip[aria-pressed="true"] {
+        color: var(--on-accent);
+        border-color: transparent;
+        background: linear-gradient(120deg, var(--g1), var(--g2));
+      }
+      .day {
+        position: sticky;
+        top: calc(var(--stick) - 8px);
+        z-index: 2;
+        padding: 12px 0 10px;
+        font: 500 12px/1 var(--font-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: rgb(10 11 18 / 0.78);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+      }
+      .rows {
+        list-style: none;
+        padding: 0;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .ico {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font: 700 14px/1 var(--font-display);
+        background: var(--panel-hi);
+        border: 1px solid var(--line);
+      }
+      .row .m {
+        font-weight: 700;
+        font-size: 17px;
+        line-height: 1.25;
+      }
+      .row .meta {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .row .amt {
+        font: 500 17px/1 var(--font-mono);
+        white-space: nowrap;
+      }
+      .row .amt.in {
+        color: var(--positive);
+      }
+      .empty {
+        padding: 40px 0;
+        color: var(--muted);
+      }
+      .anim .row {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .anim .row.in {
+        opacity: 1;
+        transform: none;
+      }
 
-/* ledger */
-.ledger-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: 18px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip {
-  height: 36px; padding: 0 14px; border-radius: 10px;
-  border: 1px solid var(--line-strong); background: transparent; color: var(--ink);
-  font: 500 14px/1 var(--font-body); cursor: pointer;
-  transition: background-color .2s ease, color .2s ease;
-}
-.chip:hover { background: rgb(var(--ink-rgb) / .07); }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+      .foot {
+        border-top: 1px solid var(--line);
+        padding-block: 28px 120px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 32px;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .link {
+        background: none;
+        border: 0;
+        padding: 4px 0;
+        font: 700 14px/1 var(--font-body);
+        color: var(--ink);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        cursor: pointer;
+      }
 
-.day-group { position: relative; }
-.day {
-  position: sticky; top: calc(var(--stick) - 10px); z-index: 2;
-  padding: 12px 0 10px;
-  font: 500 13px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line-strong);
-}
-.rows { list-style: none; padding: 0; }
-.row {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center;
-  padding: 18px 0; border-bottom: 1px dotted var(--line-strong);
-}
-.row .m { font-weight: 700; font-size: 17px; line-height: 1.25; }
-.row .meta { font-size: 14px; color: var(--muted); }
-.row .amt { font: 500 17px/1 var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.row .amt.in { color: var(--positive-ink); }
-.empty { padding: 40px 0; color: var(--muted); }
-.anim .row { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .8, .2, 1); }
-.anim .row.in { opacity: 1; transform: none; }
+      /* ---------- Look dock (prototype tool, glass element 2 of 2) ---------- */
+      .dock {
+        position: fixed;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px 8px 16px;
+        border-radius: 999px;
+        background: var(--glass);
+        -webkit-backdrop-filter: blur(18px) saturate(1.4);
+        backdrop-filter: blur(18px) saturate(1.4);
+        border: 1px solid var(--line-strong);
+      }
+      .dock .lbl {
+        margin-right: 4px;
+      }
+      .sw {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer;
+        padding: 0;
+        background: linear-gradient(135deg, var(--s1), var(--s2));
+        outline-offset: 3px;
+        transition: transform 0.15s ease;
+      }
+      .sw:active {
+        transform: scale(0.92);
+      }
+      .sw[aria-pressed="true"] {
+        border-color: var(--ink);
+      }
+      html.locked .dock {
+        display: none;
+      }
 
-/* footer */
-.foot { border-top: 1px solid var(--line-strong); padding-block: 28px 40px; display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: center; justify-content: space-between; font-size: 14px; color: var(--muted); }
-.link { background: none; border: 0; padding: 4px 0; font: 700 14px/1 var(--font-body); color: var(--ink); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+      /* ---------- Cover (doors) ---------- */
+      .cover {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+      }
+      .anim .cover {
+        display: block;
+      }
+      .cover.done {
+        display: none;
+      }
+      .cover.open {
+        pointer-events: none;
+      }
+      .door {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50.2%;
+        background: #05060a;
+        overflow: hidden;
+        transition: transform 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+      }
+      .door::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px) 0 0 /
+            64px 64px,
+          linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px) 0
+            0 / 64px 64px;
+      }
+      .door::after {
+        content: "";
+        position: absolute;
+        top: -20%;
+        bottom: -20%;
+        width: 90vmin;
+        border-radius: 50%;
+      }
+      .door.l {
+        left: 0;
+      }
+      .door.r {
+        right: 0;
+      }
+      .door.l::after {
+        right: -45vmin;
+        background: radial-gradient(closest-side, var(--g1), transparent 70%);
+        opacity: 0.55;
+      }
+      .door.r::after {
+        left: -45vmin;
+        background: radial-gradient(closest-side, var(--g2), transparent 70%);
+        opacity: 0.55;
+      }
+      .cover.open .door.l {
+        transform: translateX(-102%);
+      }
+      .cover.open .door.r {
+        transform: translateX(102%);
+      }
+      .seam {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        transform: translateX(-50%);
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--g1) 30%,
+          var(--g2) 70%,
+          transparent
+        );
+        box-shadow: 0 0 24px 2px var(--g1);
+        -webkit-mask-image: linear-gradient(
+          to bottom,
+          #000 0 24%,
+          transparent 29% 71%,
+          #000 76% 100%
+        );
+        mask-image: linear-gradient(
+          to bottom,
+          #000 0 24%,
+          transparent 29% 71%,
+          #000 76% 100%
+        );
+        transition: opacity 0.4s ease;
+      }
+      .cover.open .seam {
+        opacity: 0;
+      }
+      .cover-center {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 22px;
+        padding: 24px;
+        text-align: center;
+        transition:
+          opacity 0.5s ease,
+          transform 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+      }
+      .cover.open .cover-center {
+        opacity: 0;
+        transform: scale(1.08);
+      }
+      .crest {
+        width: 64px;
+        height: 64px;
+        border-radius: 20px;
+        transform: rotate(45deg);
+        background: linear-gradient(135deg, var(--g1), var(--g2));
+        box-shadow: 0 0 48px -4px var(--g1);
+      }
+      .cover-title {
+        font: 700 clamp(44px, 11vw, 148px)/0.9 var(--font-display);
+        letter-spacing: -0.04em;
+      }
+      .cover-title span {
+        background: linear-gradient(
+          100deg,
+          var(--g1),
+          var(--g2) 60%,
+          var(--g3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hint {
+        font-size: 14px;
+        color: var(--muted);
+      }
 
-/* ---------- Cover (doors open on first scroll, tap or key) ---------- */
-.cover { position: fixed; inset: 0; z-index: 100; display: none; }
-.anim .cover { display: block; }
-.cover.done { display: none; }
-.cover.open { pointer-events: none; }
-.door {
-  position: absolute; top: 0; bottom: 0; width: 50.2%;
-  background:
-    repeating-radial-gradient(circle at 30% 30%, transparent 0 11px, rgb(240 240 188 / .06) 11px 12px),
-    repeating-radial-gradient(circle at 70% 70%, transparent 0 11px, rgb(240 240 188 / .06) 11px 12px),
-    var(--ink);
-  transition: transform 1.1s cubic-bezier(.76, 0, .24, 1);
-}
-.door.l { left: 0; }
-.door.r { right: 0; }
-.cover.open .door.l { transform: translateX(-102%); }
-.cover.open .door.r { transform: translateX(102%); }
-.seam {
-  position: absolute; top: 24px; bottom: 24px; left: 50%;
-  border-left: 1.5px dashed rgb(240 240 188 / .45);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0 24%, transparent 28% 72%, #000 76% 100%);
-  mask-image: linear-gradient(to bottom, #000 0 24%, transparent 28% 72%, #000 76% 100%);
-  transition: opacity .4s ease;
-}
-.cover.open .seam { opacity: 0; }
-.cover-center {
-  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 22px;
-  padding: 24px; text-align: center; color: var(--paper);
-  transition: opacity .5s ease, transform 1.1s cubic-bezier(.76, 0, .24, 1);
-}
-.cover.open .cover-center { opacity: 0; transform: scale(1.08); }
-.cover-center .lbl { justify-items: center; }
-.cover-center .lbl i { color: rgb(240 240 188 / .78); }
-.crest { width: 76px; height: 76px; border-radius: 50%; border: 1.5px solid rgb(240 240 188 / .6); display: grid; place-items: center; font-family: var(--font-display); font-stretch: 125%; font-weight: 800; font-size: 30px; }
-.cover-title { font-family: var(--font-display); font-stretch: 125%; font-weight: 800; font-size: clamp(36px, 8vw, 104px); letter-spacing: .06em; line-height: .92; }
-.hint { font-size: 14px; color: rgb(240 240 188 / .78); }
+      @media (max-width: 960px) {
+        .spread {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 20px;
+          padding-bottom: 100px;
+        }
+        .page-l {
+          position: static;
+        }
+        .page-r {
+          padding-inline: 18px;
+        }
+      }
+      @media (max-width: 520px) {
+        .nav {
+          height: 56px;
+          padding-left: 16px;
+        }
+        .logo {
+          font-size: 17px;
+        }
+        .nav .btn {
+          height: 44px;
+          padding: 0 16px;
+          font-size: 15px;
+        }
+        .page-l {
+          padding: 20px;
+        }
+        .route {
+          display: none;
+        }
+        .legend {
+          grid-template-columns: 1fr;
+        }
+        .dock {
+          padding-left: 12px;
+          gap: 8px;
+        }
+        .dock .lbl {
+          display: none;
+        }
+      }
+      @media (max-height: 760px) and (min-width: 961px) {
+        .page-l {
+          position: static;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          animation: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mesh" aria-hidden="true">
+      <i class="a"></i><i class="b"></i><i class="c"></i>
+    </div>
 
-/* ---------- Narrow screens: pages stack, the stripe moves to the left edge ---------- */
-@media (max-width: 960px) {
-  .spread { grid-template-columns: minmax(0, 1fr); padding-left: 22px; position: relative; }
-  .spread::before { content: ""; position: absolute; left: 0; top: 36px; bottom: 72px; width: 3px; background: var(--ink); border-radius: 2px; }
-  .spread::after { content: ""; position: absolute; left: 9px; top: 36px; bottom: 72px; border-left: 1.5px dashed rgb(var(--ink-rgb) / .5); }
-  .spine { display: none; }
-  .page-l { position: static; padding-right: 0; }
-  .page-r { padding-left: 0; margin-top: 8px; }
-  .rule { margin: 24px 0; }
-  .ledger-head { padding-top: 12px; }
-}
-@media (max-width: 520px) {
-  /* identity: photo beside surname and given names, home and location on the row below */
-  .id { grid-template-columns: 1fr 1fr; gap: 18px 14px; }
-  .fields { display: contents; }
-  .photo { grid-column: 1; grid-row: 1 / span 2; width: 88px; height: 120px; font-size: 28px; }
-  .fields > div:nth-child(1) { grid-column: 2; grid-row: 1; }
-  .fields > div:nth-child(2) { grid-column: 2; grid-row: 2; }
-  .fields > div:nth-child(3) { grid-column: 1; grid-row: 3; }
-  .fields > div:nth-child(4) { grid-column: 2; grid-row: 3; }
-  .fields dt { letter-spacing: .1em; }
-  .fields dd { font-size: 16px; }
-  /* nav: smaller logo and button so they never collide */
-  .nav { padding-left: 16px; height: 56px; }
-  .logo { font-size: 15px; letter-spacing: .08em; }
-  .nav .btn { height: 44px; padding: 0 16px; font-size: 15px; }
-  .legend { grid-template-columns: 1fr; }
-}
-@media (max-height: 740px) and (min-width: 961px) { .page-l { position: static; } }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
-}
-</style>
-</head>
-<body>
-<div class="cover" id="cover" role="dialog" aria-modal="true" aria-label="Open your account">
-  <div class="door l"></div>
-  <div class="door r"></div>
-  <div class="seam" aria-hidden="true"></div>
-  <div class="cover-center">
-    <div class="crest" aria-hidden="true">O</div>
-    <p class="lbl"><b>Travel account</b><i>Compte de voyage</i></p>
-    <p class="cover-title">OTHERWISE</p>
-    <button class="btn btn-inverse" id="open" type="button">Open account</button>
-    <p class="hint">or just scroll</p>
-  </div>
-</div>
-
-<div class="sheet" id="sheet">
-  <span id="top-sentinel" aria-hidden="true"></span>
-  <h1 class="sr">Aoife Brennan, account overview</h1>
-
-  <header class="nav" id="nav">
-    <a class="logo" href="#top">OTHERWISE</a>
-    <a class="btn btn-primary" href="#top">Send money</a>
-  </header>
-
-  <div class="spread" id="top">
-    <aside class="page page-l" aria-label="Account holder and balance">
-      <div class="id">
-        <div class="photo" aria-hidden="true">AB</div>
-        <dl class="fields">
-          <div><dt><b>Surname</b><i>Nom</i></dt><dd>Brennan</dd></div>
-          <div><dt><b>Given names</b><i>Prénoms</i></dt><dd>Aoife</dd></div>
-          <div><dt><b>Home</b><i>Domicile</i></dt><dd>Dublin</dd></div>
-          <div><dt><b>Present location</b><i>Lieu actuel</i></dt><dd>Budapest</dd></div>
-        </dl>
+    <div
+      class="cover"
+      id="cover"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Open your account"
+    >
+      <div class="door l"></div>
+      <div class="door r"></div>
+      <div class="seam" aria-hidden="true"></div>
+      <div class="cover-center">
+        <div class="crest" aria-hidden="true"></div>
+        <p class="lbl">Travel account</p>
+        <p class="cover-title">Other<span>wise</span></p>
+        <button class="btn btn-primary" id="open" type="button">
+          Open account
+        </button>
+        <p class="hint">or just scroll</p>
       </div>
-      <div class="route" role="img" aria-label="Dublin to Budapest"><span>DUB</span><i></i><span>BUD</span></div>
+    </div>
 
-      <hr class="rule">
+    <div class="sheet" id="sheet">
+      <span id="top-sentinel" aria-hidden="true"></span>
+      <h1 class="sr">Aoife Brennan, account overview</h1>
 
-      <p class="lbl"><b>Holdings</b><i>Avoirs</i></p>
-      <p class="balance num"><span class="cur">€</span><span id="bal" data-count="2480.5">2,480.50</span></p>
-      <div class="fx">
-        <span class="sub num">184&nbsp;200 Ft</span>
-        <span class="stamp"><span>EUR/HUF 74.26</span><small>17 Oct 2026</small></span>
-      </div>
-      <div class="actions">
+      <header class="nav" id="nav">
+        <a class="logo" href="#top">Otherwise</a>
         <a class="btn btn-primary" href="#top">Send money</a>
-        <a class="btn btn-ghost" href="#top">Add money</a>
+      </header>
+
+      <div class="spread" id="top">
+        <aside class="card page-l" aria-label="Account holder and balance">
+          <div class="who">
+            <div class="avatar" aria-hidden="true">AB</div>
+            <div><b>Aoife Brennan</b><span>Dublin, now in Budapest</span></div>
+            <div class="route" role="img" aria-label="Dublin to Budapest">
+              <span>DUB</span><i></i><span>BUD</span>
+            </div>
+          </div>
+
+          <hr class="hr" />
+
+          <p class="lbl">Balance</p>
+          <p class="balance num">
+            <span class="cur">€</span
+            ><span id="bal" data-count="2480.5">2,480.50</span>
+          </p>
+          <div class="fx">
+            <span class="sub num">184&nbsp;200 Ft</span>
+            <span class="pill num">EUR/HUF 74.26</span>
+          </div>
+          <svg
+            class="spark"
+            id="spark"
+            viewBox="0 0 300 64"
+            preserveAspectRatio="none"
+            role="img"
+            aria-label="Balance over the last 30 days: rising from 1,900 to 2,480 euros"
+          ></svg>
+          <div class="actions">
+            <a class="btn btn-primary" href="#top">Send money</a>
+            <a class="btn btn-ghost" href="#top">Add money</a>
+          </div>
+
+          <hr class="hr" />
+
+          <p class="lbl">Spent this week</p>
+          <p class="week-total num">42&nbsp;740 Ft</p>
+          <div
+            class="split"
+            role="img"
+            aria-label="Groceries 48 percent, eating out 35 percent, travel 9 percent, coffee 8 percent"
+          >
+            <i style="--f: 47.6; --c: var(--g1)"></i
+            ><i style="--f: 35.3; --c: var(--g2)"></i
+            ><i style="--f: 9; --c: var(--g3)"></i
+            ><i style="--f: 8.1; --c: rgb(255 255 255 / 0.35)"></i>
+          </div>
+          <ul class="legend">
+            <li style="--c: var(--g1)">
+              Groceries <b class="num">20&nbsp;340 Ft</b>
+            </li>
+            <li style="--c: var(--g2)">
+              Eating out <b class="num">15&nbsp;100 Ft</b>
+            </li>
+            <li style="--c: var(--g3)">
+              Travel <b class="num">3&nbsp;850 Ft</b>
+            </li>
+            <li style="--c: rgb(255 255 255 / 0.35)">
+              Coffee <b class="num">3&nbsp;450 Ft</b>
+            </li>
+          </ul>
+        </aside>
+
+        <main class="card page-r" id="ledger">
+          <div class="ledger-head">
+            <p class="lbl">Activity</p>
+            <div
+              class="chips"
+              id="chips"
+              role="group"
+              aria-label="Filter activity by category"
+            ></div>
+          </div>
+          <div id="days"></div>
+          <p class="empty" id="empty" hidden>
+            No activity in this category yet.
+          </p>
+        </main>
       </div>
 
-      <hr class="rule">
+      <footer class="container foot">
+        <span
+          >Prototype with sample data. The left card stays pinned while activity
+          scrolls.</span
+        >
+        <button class="link" id="replay" type="button">Replay doors</button>
+      </footer>
+    </div>
 
-      <p class="lbl"><b>Spent this week</b><i>Dépenses de la semaine</i></p>
-      <p class="week-total num">42&nbsp;740 Ft</p>
-      <div class="split" role="img" aria-label="Groceries 48 percent, eating out 35 percent, travel 9 percent, coffee 8 percent">
-        <i style="--f:47.6; --o:1"></i><i style="--f:35.3; --o:.62"></i><i style="--f:9; --o:.38"></i><i style="--f:8.1; --o:.2"></i>
-      </div>
-      <ul class="legend">
-        <li style="--o:1">Groceries <b class="num">20&nbsp;340 Ft</b></li>
-        <li style="--o:.62">Eating out <b class="num">15&nbsp;100 Ft</b></li>
-        <li style="--o:.38">Travel <b class="num">3&nbsp;850 Ft</b></li>
-        <li style="--o:.2">Coffee <b class="num">3&nbsp;450 Ft</b></li>
-      </ul>
-    </aside>
+    <div class="dock" role="group" aria-label="Try another look">
+      <span class="lbl">Look</span>
+      <button
+        class="sw"
+        type="button"
+        data-look="aurora"
+        aria-pressed="true"
+        aria-label="Aurora"
+        style="--s1: #38bdf8; --s2: #818cf8"
+      ></button>
+      <button
+        class="sw"
+        type="button"
+        data-look="ember"
+        aria-pressed="false"
+        aria-label="Ember"
+        style="--s1: #fb923c; --s2: #f43f5e"
+      ></button>
+      <button
+        class="sw"
+        type="button"
+        data-look="orchid"
+        aria-pressed="false"
+        aria-label="Orchid"
+        style="--s1: #e879f9; --s2: #6366f1"
+      ></button>
+      <button
+        class="sw"
+        type="button"
+        data-look="volt"
+        aria-pressed="false"
+        aria-label="Volt"
+        style="--s1: #a3e635; --s2: #22d3ee"
+      ></button>
+    </div>
 
-    <div class="spine" aria-hidden="true"></div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var animated = root.classList.contains("anim");
+        var sheet = document.getElementById("sheet");
+        var cover = document.getElementById("cover");
+        var openBtn = document.getElementById("open");
 
-    <main class="page page-r" id="ledger">
-      <div class="ledger-head">
-        <p class="lbl"><b>Entries</b><i>Inscriptions</i></p>
-        <div class="chips" id="chips" role="group" aria-label="Filter entries by category"></div>
-      </div>
-      <div id="days"></div>
-      <p class="empty" id="empty" hidden>No entries in this category yet.</p>
-    </main>
-  </div>
+        /* ---------- Ledger (sample data) ---------- */
+        var M = "−",
+          S = " ";
+        var DAYS = [
+          {
+            day: "Today",
+            items: [
+              {
+                m: "Kávé Műhely",
+                cat: "Coffee",
+                t: "09:12",
+                amt: M + "1" + S + "150 Ft",
+              },
+            ],
+          },
+          {
+            day: "Yesterday",
+            items: [
+              {
+                m: "Nagy Piac Market",
+                cat: "Groceries",
+                t: "18:40",
+                amt: M + "6" + S + "420 Ft",
+              },
+              {
+                m: "Kávé Műhely",
+                cat: "Coffee",
+                t: "08:55",
+                amt: M + "1" + S + "150 Ft",
+              },
+            ],
+          },
+          {
+            day: "15 Oct",
+            items: [
+              {
+                m: "Airport Transfer Budapest",
+                cat: "Travel",
+                t: "14:05",
+                amt: M + "2" + S + "200 Ft",
+              },
+              {
+                m: "Top-up from Dublin account",
+                cat: "Transfers",
+                t: "11:30",
+                amt: "+€500.00",
+                dir: "in",
+              },
+            ],
+          },
+          {
+            day: "14 Oct",
+            items: [
+              {
+                m: "Lunch at the market hall",
+                cat: "Eating out",
+                t: "13:20",
+                amt: M + "3" + S + "900 Ft",
+              },
+              {
+                m: "Flight Dublin to Budapest",
+                cat: "Travel",
+                t: "07:10",
+                amt: M + "€64.99",
+              },
+            ],
+          },
+          {
+            day: "13 Oct",
+            items: [
+              {
+                m: "Dinner by the Danube",
+                cat: "Eating out",
+                t: "20:30",
+                amt: M + "11" + S + "200 Ft",
+              },
+              {
+                m: "Metro day pass",
+                cat: "Travel",
+                t: "09:15",
+                amt: M + "1" + S + "650 Ft",
+              },
+              {
+                m: "Corner bakery",
+                cat: "Groceries",
+                t: "08:40",
+                amt: M + "1" + S + "890 Ft",
+              },
+            ],
+          },
+          {
+            day: "12 Oct",
+            items: [
+              {
+                m: "Sent to Dublin",
+                cat: "Transfers",
+                t: "12:00",
+                amt: M + "€150.00",
+              },
+              {
+                m: "Weekly shop",
+                cat: "Groceries",
+                t: "17:50",
+                amt: M + "8" + S + "740 Ft",
+              },
+              {
+                m: "Kávé Műhely",
+                cat: "Coffee",
+                t: "09:05",
+                amt: M + "1" + S + "150 Ft",
+              },
+            ],
+          },
+          {
+            day: "11 Oct",
+            items: [
+              {
+                m: "Top-up from Dublin account",
+                cat: "Transfers",
+                t: "10:00",
+                amt: "+€2,000.00",
+                dir: "in",
+              },
+              {
+                m: "Pharmacy",
+                cat: "Groceries",
+                t: "15:25",
+                amt: M + "3" + S + "290 Ft",
+              },
+            ],
+          },
+        ];
+        var CATS = [
+          "All",
+          "Coffee",
+          "Eating out",
+          "Groceries",
+          "Travel",
+          "Transfers",
+        ];
+        var current = "All";
+        var daysEl = document.getElementById("days");
+        var chipsEl = document.getElementById("chips");
+        var emptyEl = document.getElementById("empty");
+        var io =
+          "IntersectionObserver" in window
+            ? new IntersectionObserver(
+                function (entries) {
+                  entries.forEach(function (e) {
+                    if (e.isIntersecting) {
+                      e.target.classList.add("in");
+                      io.unobserve(e.target);
+                    }
+                  });
+                },
+                { rootMargin: "0px 0px -8% 0px" },
+              )
+            : null;
 
-  <footer class="container foot">
-    <span>Prototype with sample data. Pages: identity stays pinned, the ledger scrolls.</span>
-    <button class="link" id="replay" type="button">Replay cover</button>
-  </footer>
-</div>
+        function el(tag, cls, text) {
+          var n = document.createElement(tag);
+          if (cls) n.className = cls;
+          if (text != null) n.textContent = text;
+          return n;
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script>
-(function () {
-  var root = document.documentElement;
-  var animated = root.classList.contains('anim');
-  var sheet = document.getElementById('sheet');
-  var cover = document.getElementById('cover');
-  var openBtn = document.getElementById('open');
+        function renderLedger() {
+          daysEl.textContent = "";
+          var shown = 0;
+          DAYS.forEach(function (g) {
+            var items = g.items.filter(function (i) {
+              return current === "All" || i.cat === current;
+            });
+            if (!items.length) return;
+            var sec = el("section", "day-group");
+            sec.appendChild(el("h2", "day", g.day));
+            var ul = el("ul", "rows");
+            items.forEach(function (i) {
+              var li = el("li", "row");
+              li.appendChild(el("span", "ico", i.cat.charAt(0)));
+              var left = el("div");
+              left.appendChild(el("p", "m", i.m));
+              left.appendChild(el("p", "meta", i.cat + " · " + i.t));
+              li.appendChild(left);
+              li.appendChild(
+                el("span", "amt num" + (i.dir === "in" ? " in" : ""), i.amt),
+              );
+              ul.appendChild(li);
+              shown++;
+              if (io && animated) io.observe(li);
+              else li.classList.add("in");
+            });
+            sec.appendChild(ul);
+            daysEl.appendChild(sec);
+          });
+          emptyEl.hidden = shown > 0;
+        }
 
-  /* ---------- Ledger (sample data) ---------- */
-  var M = '−', S = ' ';
-  var DAYS = [
-    { day: 'Today', items: [
-      { m: 'Kávé Műhely', cat: 'Coffee', t: '09:12', amt: M + '1' + S + '150 Ft' }
-    ]},
-    { day: 'Yesterday', items: [
-      { m: 'Nagy Piac Market', cat: 'Groceries', t: '18:40', amt: M + '6' + S + '420 Ft' },
-      { m: 'Kávé Műhely', cat: 'Coffee', t: '08:55', amt: M + '1' + S + '150 Ft' }
-    ]},
-    { day: '15 Oct', items: [
-      { m: 'Airport Transfer Budapest', cat: 'Travel', t: '14:05', amt: M + '2' + S + '200 Ft' },
-      { m: 'Top-up from Dublin account', cat: 'Transfers', t: '11:30', amt: '+€500.00', dir: 'in' }
-    ]},
-    { day: '14 Oct', items: [
-      { m: 'Lunch at the market hall', cat: 'Eating out', t: '13:20', amt: M + '3' + S + '900 Ft' },
-      { m: 'Flight Dublin to Budapest', cat: 'Travel', t: '07:10', amt: M + '€64.99' }
-    ]},
-    { day: '13 Oct', items: [
-      { m: 'Dinner by the Danube', cat: 'Eating out', t: '20:30', amt: M + '11' + S + '200 Ft' },
-      { m: 'Metro day pass', cat: 'Travel', t: '09:15', amt: M + '1' + S + '650 Ft' },
-      { m: 'Corner bakery', cat: 'Groceries', t: '08:40', amt: M + '1' + S + '890 Ft' }
-    ]},
-    { day: '12 Oct', items: [
-      { m: 'Sent to Dublin', cat: 'Transfers', t: '12:00', amt: M + '€150.00' },
-      { m: 'Weekly shop', cat: 'Groceries', t: '17:50', amt: M + '8' + S + '740 Ft' },
-      { m: 'Kávé Műhely', cat: 'Coffee', t: '09:05', amt: M + '1' + S + '150 Ft' }
-    ]},
-    { day: '11 Oct', items: [
-      { m: 'Top-up from Dublin account', cat: 'Transfers', t: '10:00', amt: '+€2,000.00', dir: 'in' },
-      { m: 'Pharmacy', cat: 'Groceries', t: '15:25', amt: M + '3' + S + '290 Ft' }
-    ]}
-  ];
-  var CATS = ['All', 'Coffee', 'Eating out', 'Groceries', 'Travel', 'Transfers'];
-  var current = 'All';
-  var daysEl = document.getElementById('days');
-  var chipsEl = document.getElementById('chips');
-  var emptyEl = document.getElementById('empty');
-  var io = ('IntersectionObserver' in window)
-    ? new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-      }, { rootMargin: '0px 0px -8% 0px' })
-    : null;
+        CATS.forEach(function (c) {
+          var b = el("button", "chip", c);
+          b.type = "button";
+          b.setAttribute("aria-pressed", c === current ? "true" : "false");
+          b.addEventListener("click", function () {
+            current = c;
+            Array.prototype.forEach.call(chipsEl.children, function (x) {
+              x.setAttribute("aria-pressed", x === b ? "true" : "false");
+            });
+            renderLedger();
+          });
+          chipsEl.appendChild(b);
+        });
+        renderLedger();
 
-  function el(tag, cls, text) {
-    var n = document.createElement(tag);
-    if (cls) n.className = cls;
-    if (text != null) n.textContent = text;
-    return n;
-  }
+        /* ---------- Balance sparkline (data-driven) ---------- */
+        (function () {
+          var pts = [
+            1900, 1930, 1880, 1960, 2010, 1990, 2060, 2040, 2120, 2100, 2180,
+            2150, 2230, 2200, 2290, 2260, 2340, 2310, 2380, 2360, 2420, 2390,
+            2450, 2430, 2470, 2440, 2480, 2460, 2495, 2480.5,
+          ];
+          var min = Math.min.apply(null, pts),
+            max = Math.max.apply(null, pts);
+          var d = pts
+            .map(function (v, k) {
+              return (
+                (k ? "L" : "M") +
+                ((k * 300) / (pts.length - 1)).toFixed(1) +
+                " " +
+                (58 - ((v - min) / (max - min)) * 50).toFixed(1)
+              );
+            })
+            .join(" ");
+          var s = document.getElementById("spark");
+          var ns = "http://www.w3.org/2000/svg";
+          var defs =
+            '<defs><linearGradient id="sg" x1="0" x2="1"><stop offset="0" stop-color="var(--g2)"/><stop offset="1" stop-color="var(--g1)"/></linearGradient>' +
+            '<linearGradient id="sf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--g1)" stop-opacity=".28"/><stop offset="1" stop-color="var(--g1)" stop-opacity="0"/></linearGradient></defs>';
+          s.innerHTML =
+            defs +
+            '<path d="' +
+            d +
+            ' L300 64 L0 64 Z" fill="url(#sf)"/><path d="' +
+            d +
+            '" fill="none" stroke="url(#sg)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>';
+        })();
 
-  function renderLedger() {
-    daysEl.textContent = '';
-    var shown = 0;
-    DAYS.forEach(function (g) {
-      var items = g.items.filter(function (i) { return current === 'All' || i.cat === current; });
-      if (!items.length) return;
-      var sec = el('section', 'day-group');
-      sec.appendChild(el('h2', 'day', g.day));
-      var ul = el('ul', 'rows');
-      items.forEach(function (i) {
-        var li = el('li', 'row');
-        var left = el('div');
-        left.appendChild(el('p', 'm', i.m));
-        left.appendChild(el('p', 'meta', i.cat + ' · ' + i.t));
-        li.appendChild(left);
-        li.appendChild(el('span', 'amt num' + (i.dir === 'in' ? ' in' : ''), i.amt));
-        ul.appendChild(li);
-        shown++;
-        if (io && animated) io.observe(li); else li.classList.add('in');
-      });
-      sec.appendChild(ul);
-      daysEl.appendChild(sec);
-    });
-    emptyEl.hidden = shown > 0;
-  }
+        /* ---------- Look switcher ---------- */
+        var sws = document.querySelectorAll(".sw");
+        Array.prototype.forEach.call(sws, function (b) {
+          b.addEventListener("click", function () {
+            root.setAttribute("data-look", b.getAttribute("data-look"));
+            Array.prototype.forEach.call(sws, function (x) {
+              x.setAttribute("aria-pressed", x === b ? "true" : "false");
+            });
+          });
+        });
 
-  CATS.forEach(function (c) {
-    var b = el('button', 'chip', c);
-    b.type = 'button';
-    b.setAttribute('aria-pressed', c === current ? 'true' : 'false');
-    b.addEventListener('click', function () {
-      current = c;
-      Array.prototype.forEach.call(chipsEl.children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-      renderLedger();
-    });
-    chipsEl.appendChild(b);
-  });
-  renderLedger();
+        /* ---------- Nav border after the first scroll (no scroll listener) ---------- */
+        var nav = document.getElementById("nav");
+        var sentinel = document.getElementById("top-sentinel");
+        if (nav && sentinel && "IntersectionObserver" in window) {
+          new IntersectionObserver(function (e) {
+            nav.classList.toggle("scrolled", !e[0].isIntersecting);
+          }).observe(sentinel);
+        }
 
-  /* ---------- Nav border after the first scroll (no scroll listener) ---------- */
-  var nav = document.getElementById('nav');
-  var sentinel = document.getElementById('top-sentinel');
-  if (nav && sentinel && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (e) { nav.classList.toggle('scrolled', !e[0].isIntersecting); }).observe(sentinel);
-  }
+        /* ---------- Smooth scroll (Lenis wired to GSAP) and the one-time count-up ---------- */
+        var lenis = null;
+        if (animated && window.Lenis) {
+          lenis = new Lenis({ lerp: 0.1 });
+          if (window.gsap) {
+            gsap.ticker.add(function (t) {
+              lenis.raf(t * 1000);
+            });
+            gsap.ticker.lagSmoothing(0);
+          } else {
+            (function raf(t) {
+              lenis.raf(t);
+              requestAnimationFrame(raf);
+            })(0);
+          }
+        }
 
-  /* ---------- Smooth scroll (Lenis wired to GSAP) and the one-time count-up ---------- */
-  var lenis = null;
-  if (animated && window.Lenis) {
-    lenis = new Lenis({ lerp: 0.1 });
-    if (window.gsap) {
-      gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
-    }
-  }
+        function countUp() {
+          var node = document.getElementById("bal");
+          var end = parseFloat(node.getAttribute("data-count"));
+          var fmt = function (v) {
+            return v.toLocaleString("en-IE", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          };
+          if (!animated || !window.gsap) {
+            node.textContent = fmt(end);
+            return;
+          }
+          var o = { v: 0 };
+          node.textContent = fmt(0);
+          gsap.to(o, {
+            v: end,
+            duration: 1.4,
+            ease: "power2.out",
+            delay: 0.35,
+            onUpdate: function () {
+              node.textContent = fmt(o.v);
+            },
+            onComplete: function () {
+              node.textContent = fmt(end);
+            } /* always ends on the exact value */,
+          });
+        }
 
-  function countUp() {
-    var node = document.getElementById('bal');
-    var end = parseFloat(node.getAttribute('data-count'));
-    var fmt = function (v) { return v.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
-    if (!animated || !window.gsap) { node.textContent = fmt(end); return; }
-    var o = { v: 0 };
-    node.textContent = fmt(0);
-    gsap.to(o, {
-      v: end, duration: 1.4, ease: 'power2.out', delay: 0.35,
-      onUpdate: function () { node.textContent = fmt(o.v); },
-      onComplete: function () { node.textContent = fmt(end); }   /* always ends on the exact value */
-    });
-  }
+        /* ---------- Cover: opens on button, first scroll, tap or key ---------- */
+        var opened = false;
+        var intentEvents = ["wheel", "touchstart", "keydown"];
+        function lock() {
+          root.classList.add("locked");
+          sheet.inert = true;
+          if (lenis) lenis.stop();
+        }
+        function unlock() {
+          root.classList.remove("locked");
+          sheet.inert = false;
+          if (lenis) lenis.start();
+        }
+        function onIntent(e) {
+          if (
+            e.type === "keydown" &&
+            ["Enter", " ", "ArrowDown", "PageDown", "Escape"].indexOf(e.key) ===
+              -1
+          )
+            return;
+          open();
+        }
+        function arm() {
+          intentEvents.forEach(function (n) {
+            window.addEventListener(n, onIntent, { passive: true });
+          });
+        }
+        function disarm() {
+          intentEvents.forEach(function (n) {
+            window.removeEventListener(n, onIntent);
+          });
+        }
+        function open() {
+          if (opened) return;
+          opened = true;
+          disarm();
+          cover.classList.add("open");
+          unlock();
+          countUp();
+          setTimeout(function () {
+            cover.classList.add("done");
+          }, 1300);
+        }
 
-  /* ---------- Cover: opens on button, first scroll, tap or key ---------- */
-  var opened = false;
-  var intentEvents = ['wheel', 'touchstart', 'keydown'];
-  function lock() { root.classList.add('locked'); sheet.inert = true; if (lenis) lenis.stop(); }
-  function unlock() { root.classList.remove('locked'); sheet.inert = false; if (lenis) lenis.start(); }
-  function onIntent(e) {
-    if (e.type === 'keydown' && ['Enter', ' ', 'ArrowDown', 'PageDown', 'Escape'].indexOf(e.key) === -1) return;
-    open();
-  }
-  function arm() { intentEvents.forEach(function (n) { window.addEventListener(n, onIntent, { passive: true }); }); }
-  function disarm() { intentEvents.forEach(function (n) { window.removeEventListener(n, onIntent); }); }
-  function open() {
-    if (opened) return;
-    opened = true;
-    disarm();
-    cover.classList.add('open');
-    unlock();
-    countUp();
-    setTimeout(function () { cover.classList.add('done'); }, 1300);
-  }
+        openBtn.addEventListener("click", open);
+        document
+          .getElementById("replay")
+          .addEventListener("click", function () {
+            if (!animated) {
+              window.scrollTo(0, 0);
+              return;
+            }
+            window.scrollTo(0, 0);
+            opened = false;
+            cover.classList.remove("open", "done");
+            lock();
+            arm();
+            openBtn.focus({ preventScroll: true });
+          });
 
-  openBtn.addEventListener('click', open);
-  document.getElementById('replay').addEventListener('click', function () {
-    if (!animated) { window.scrollTo(0, 0); return; }
-    window.scrollTo(0, 0);
-    opened = false;
-    cover.classList.remove('open', 'done');
-    lock();
-    arm();
-    openBtn.focus({ preventScroll: true });
-  });
-
-  if (animated) {
-    lock();
-    arm();
-    openBtn.focus({ preventScroll: true });
-  } else {
-    countUp();
-  }
-})();
-</script>
-</body>
+        if (animated) {
+          lock();
+          arm();
+          openBtn.focus({ preventScroll: true });
+        } else {
+          countUp();
+        }
+      })();
+    </script>
+  </body>
 </html>
