@@ -1,0 +1,182 @@
+/*
+ * The booklet cover. Hidden unless <html> carries `anim`, which is set before
+ * paint only when motion is allowed, so reduced motion never meets it.
+ */
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+}
+
+:global(html.anim) .cover {
+  display: block;
+}
+
+.cover.done {
+  display: none;
+}
+
+.cover.open {
+  pointer-events: none;
+}
+
+/* Two navy halves, carrying the same security pattern as the cover board. */
+.door {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* Slightly over half, so no hairline of page shows down the middle. */
+  width: 50.2%;
+  background:
+    repeating-radial-gradient(
+      circle at 30% 30%,
+      transparent 0 11px,
+      rgba(240, 240, 182, 0.06) 11px 12px
+    ),
+    repeating-radial-gradient(
+      circle at 70% 70%,
+      transparent 0 11px,
+      rgba(240, 240, 182, 0.06) 11px 12px
+    ),
+    var(--navy);
+  transition: transform 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
+}
+
+.cover.open .left {
+  transform: translateX(-102%);
+}
+
+.cover.open .right {
+  transform: translateX(102%);
+}
+
+/* The stitched seam, masked so it reads as binding rather than a full rule. */
+.seam {
+  position: absolute;
+  top: var(--space-6);
+  bottom: var(--space-6);
+  left: 50%;
+  border-left: 1.5px dashed rgba(240, 240, 182, 0.45);
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0 24%,
+    transparent 28% 72%,
+    #000 76% 100%
+  );
+  transition: opacity 0.4s ease;
+}
+
+.cover.open .seam {
+  opacity: 0;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--ink-invert);
+  transition:
+    opacity 0.5s ease,
+    transform 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.cover.open .center {
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+.crest {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border: 1.5px solid rgba(240, 240, 182, 0.6);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  font-stretch: 125%;
+}
+
+.label {
+  display: grid;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.label b {
+  font-weight: 700;
+}
+
+.label i {
+  font-style: normal;
+  font-weight: 400;
+  color: rgba(240, 240, 182, 0.78);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 8vw, 104px);
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 0.92;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: var(--radius-btn);
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
+}
+
+.button:hover {
+  background: var(--surface);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--ink-invert);
+  outline-offset: 3px;
+}
+
+.hint {
+  font-size: 14px;
+  color: rgba(240, 240, 182, 0.78);
+}

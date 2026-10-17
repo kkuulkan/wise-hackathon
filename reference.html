@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Otherwise | Passport spread prototype</title>
+<meta name="description" content="Prototype of the account screen as an open passport spread. Sample data only.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap">
+<script>
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('anim', 'locked');
+</script>
+<style>
+/*
+  Design Read: account screen for a traveller, passport-document look, calm but bold.
+  Dials: variance 6 / motion 6 / density 6. Direction overrides the guideline's default tokens.
+*/
+:root {
+  --ink-rgb: 26 45 91;
+  --ink: #1a2d5b;               /* navy: text, frame, primary action */
+  --paper: #f0f0bc;             /* cream page */
+  --surface: #f7f7d6;           /* raised paper */
+  --accent: var(--ink);
+  --accent-ink: var(--paper);
+  --positive: #0e9f6e;          /* fills, and text on ink */
+  --positive-ink: #08694a;      /* money-in text on paper (5.7:1) */
+  --muted: rgb(var(--ink-rgb) / .72);   /* 5.0:1 or better on paper */
+  --line: rgb(var(--ink-rgb) / .16);
+  --line-strong: rgb(var(--ink-rgb) / .38);
+  --glass: rgb(240 240 188 / .74);
+  --radius-btn: 14px;
+  --radius-card: 28px;
+  --shadow-card: 0 1px 2px rgb(var(--ink-rgb) / .08), 0 12px 32px rgb(var(--ink-rgb) / .10);
+  --font-display: 'Archivo', 'DM Sans', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --gutter: clamp(16px, 4vw, 32px);
+  --frame: 10px;
+  --stick: 96px;               /* distance sticky elements keep below the top */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+html.locked, html.locked body { overflow: hidden; }
+body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--ink);
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- Paper sheet: full-bleed, navy only as a thin frame ---------- */
+.sheet {
+  margin: var(--frame);
+  min-height: calc(100svh - 2 * var(--frame));
+  border-radius: 22px;
+  overflow: clip;
+  background:
+    repeating-radial-gradient(circle at 16% 20%, transparent 0 9px, rgb(var(--ink-rgb) / .05) 9px 10px),
+    repeating-radial-gradient(circle at 82% 68%, transparent 0 9px, rgb(var(--ink-rgb) / .05) 9px 10px),
+    var(--paper);
+}
+.container { width: min(100% - 2 * var(--gutter), 1280px); margin-inline: auto; }
+
+/* ---------- Labels (one pattern everywhere: English over French) ---------- */
+.lbl { display: grid; gap: 2px; font-size: 12px; line-height: 1.2; letter-spacing: .14em; text-transform: uppercase; }
+.lbl b { font-weight: 700; }
+.lbl i { font-style: normal; font-weight: 400; color: var(--muted); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 52px; padding: 0 24px;
+  border-radius: var(--radius-btn);
+  font: 700 16px/1 var(--font-body);
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform .15s ease, background-color .2s ease;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: rgb(var(--ink-rgb) / .86); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+.btn-ghost:hover { background: rgb(var(--ink-rgb) / .06); }
+.btn-inverse { background: var(--paper); color: var(--ink); }
+.btn-inverse:hover { background: var(--surface); }
+
+/* ---------- Nav (the one glass element) ---------- */
+.nav {
+  position: sticky; top: calc(var(--frame) + 10px); z-index: 40;
+  width: min(100% - 2 * var(--gutter), 1280px);
+  height: 60px; margin: 10px auto 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 4px 4px 22px;
+  border-radius: 18px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid var(--line);
+  transition: box-shadow .3s ease;
+}
+.nav.scrolled { box-shadow: var(--shadow-card); }
+.nav .btn { height: 50px; }
+.logo {
+  font-family: var(--font-display); font-stretch: 125%; font-weight: 800;
+  font-size: 20px; letter-spacing: .12em; text-decoration: none;
+}
+#top-sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 80px; pointer-events: none; }
+@media (prefers-reduced-transparency: reduce) {
+  .nav { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* ---------- The spread ---------- */
+.spread {
+  width: min(100% - 2 * var(--gutter), 1280px);
+  margin: 0 auto;
+  padding-block: 36px 72px;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) 28px minmax(0, 7fr);
+  align-items: start;
+}
+.spine { align-self: stretch; position: relative; background: linear-gradient(90deg, transparent, rgb(var(--ink-rgb) / .07), transparent); }
+.spine::before { content: ""; position: absolute; inset: 0 auto 0 50%; width: 3px; transform: translateX(-50%); background: var(--ink); border-radius: 2px; }
+.spine::after { content: ""; position: absolute; inset: 0 auto 0 calc(50% + 9px); border-left: 1.5px dashed rgb(var(--ink-rgb) / .5); }
+
+.page { min-width: 0; }
+.page-l {
+  padding-right: clamp(12px, 3vw, 40px);
+  position: sticky; top: var(--stick);
+  container-type: inline-size;
+}
+.page-r { padding-left: clamp(12px, 3vw, 40px); }
+
+/* identity */
+.id { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 20px; align-items: start; }
+.photo {
+  width: 112px; height: 144px;
+  display: grid; place-items: center;
+  border: 1.5px solid var(--ink);
+  background: repeating-linear-gradient(135deg, transparent 0 9px, rgb(var(--ink-rgb) / .12) 9px 10px), var(--surface);
+  font-family: var(--font-display); font-stretch: 125%; font-weight: 800; font-size: 36px; letter-spacing: .02em;
+}
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 16px; }
+.fields > div { display: grid; grid-template-rows: 30px auto; gap: 6px; align-content: start; }
+.fields dt { display: grid; gap: 2px; font-size: 12px; line-height: 1.2; letter-spacing: .12em; text-transform: uppercase; }
+.fields dt b { font-weight: 700; }
+.fields dt i { font-style: normal; color: var(--muted); }
+.fields dd { font: 500 18px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: .02em; overflow-wrap: anywhere; }
+
+.route { display: flex; align-items: center; gap: 12px; margin-top: 24px; font: 500 13px/1 var(--font-mono); letter-spacing: .14em; }
+.route i { flex: 1; position: relative; border-top: 1.5px dashed rgb(var(--ink-rgb) / .5); }
+.route i::after { content: ""; position: absolute; right: -1px; top: -5.5px; width: 9px; height: 9px; border-top: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); transform: rotate(45deg); }
+
+.rule { border: 0; border-top: 1px solid var(--line-strong); margin: 28px 0; }
+
+/* holdings */
+.balance {
+  margin-top: 10px;
+  font-family: var(--font-display); font-stretch: 125%; font-weight: 800;
+  font-size: clamp(40px, 5vw, 76px);
+  font-size: clamp(40px, 14cqi, 88px);
+  letter-spacing: -.03em; line-height: .92;
+}
+.balance .cur { margin-right: .02em; }
+.fx { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; margin-top: 16px; }
+.fx .sub { font: 400 17px/1 var(--font-mono); color: var(--muted); }
+.stamp {
+  display: inline-grid; gap: 2px; padding: 5px 10px;
+  border: 1.5px solid rgb(var(--ink-rgb) / .8); border-radius: 6px;
+  transform: rotate(-5deg);
+  font: 500 12px/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
+  mix-blend-mode: multiply;
+}
+.stamp small { font-size: 11px; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+/* weekly summary */
+.week-total { margin-top: 8px; font: 500 28px/1 var(--font-mono); letter-spacing: -.01em; }
+.split { display: flex; gap: 3px; height: 14px; margin-top: 14px; }
+.split i { flex: var(--f) 1 0; border-radius: 4px; background: rgb(var(--ink-rgb) / var(--o)); }
+.legend { list-style: none; padding: 0; margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; font-size: 14px; }
+.legend li { display: flex; align-items: center; gap: 8px; }
+.legend li::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: rgb(var(--ink-rgb) / var(--o)); flex: none; }
+.legend b { margin-left: auto; font: 500 14px/1 var(--font-mono); }
+
+/* ledger */
+.ledger-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: 18px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  height: 36px; padding: 0 14px; border-radius: 10px;
+  border: 1px solid var(--line-strong); background: transparent; color: var(--ink);
+  font: 500 14px/1 var(--font-body); cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.chip:hover { background: rgb(var(--ink-rgb) / .07); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.day-group { position: relative; }
+.day {
+  position: sticky; top: calc(var(--stick) - 10px); z-index: 2;
+  padding: 12px 0 10px;
+  font: 500 13px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line-strong);
+}
+.rows { list-style: none; padding: 0; }
+.row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center;
+  padding: 18px 0; border-bottom: 1px dotted var(--line-strong);
+}
+.row .m { font-weight: 700; font-size: 17px; line-height: 1.25; }
+.row .meta { font-size: 14px; color: var(--muted); }
+.row .amt { font: 500 17px/1 var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row .amt.in { color: var(--positive-ink); }
+.empty { padding: 40px 0; color: var(--muted); }
+.anim .row { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .8, .2, 1); }
+.anim .row.in { opacity: 1; transform: none; }
+
+/* footer */
+.foot { border-top: 1px solid var(--line-strong); padding-block: 28px 40px; display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: center; justify-content: space-between; font-size: 14px; color: var(--muted); }
+.link { background: none; border: 0; padding: 4px 0; font: 700 14px/1 var(--font-body); color: var(--ink); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+
+/* ---------- Cover (doors open on first scroll, tap or key) ---------- */
+.cover { position: fixed; inset: 0; z-index: 100; display: none; }
+.anim .cover { display: block; }
+.cover.done { display: none; }
+.cover.open { pointer-events: none; }
+.door {
+  position: absolute; top: 0; bottom: 0; width: 50.2%;
+  background:
+    repeating-radial-gradient(circle at 30% 30%, transparent 0 11px, rgb(240 240 188 / .06) 11px 12px),
+    repeating-radial-gradient(circle at 70% 70%, transparent 0 11px, rgb(240 240 188 / .06) 11px 12px),
+    var(--ink);
+  transition: transform 1.1s cubic-bezier(.76, 0, .24, 1);
+}
+.door.l { left: 0; }
+.door.r { right: 0; }
+.cover.open .door.l { transform: translateX(-102%); }
+.cover.open .door.r { transform: translateX(102%); }
+.seam {
+  position: absolute; top: 24px; bottom: 24px; left: 50%;
+  border-left: 1.5px dashed rgb(240 240 188 / .45);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0 24%, transparent 28% 72%, #000 76% 100%);
+  mask-image: linear-gradient(to bottom, #000 0 24%, transparent 28% 72%, #000 76% 100%);
+  transition: opacity .4s ease;
+}
+.cover.open .seam { opacity: 0; }
+.cover-center {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 22px;
+  padding: 24px; text-align: center; color: var(--paper);
+  transition: opacity .5s ease, transform 1.1s cubic-bezier(.76, 0, .24, 1);
+}
+.cover.open .cover-center { opacity: 0; transform: scale(1.08); }
+.cover-center .lbl { justify-items: center; }
+.cover-center .lbl i { color: rgb(240 240 188 / .78); }
+.crest { width: 76px; height: 76px; border-radius: 50%; border: 1.5px solid rgb(240 240 188 / .6); display: grid; place-items: center; font-family: var(--font-display); font-stretch: 125%; font-weight: 800; font-size: 30px; }
+.cover-title { font-family: var(--font-display); font-stretch: 125%; font-weight: 800; font-size: clamp(36px, 8vw, 104px); letter-spacing: .06em; line-height: .92; }
+.hint { font-size: 14px; color: rgb(240 240 188 / .78); }
+
+/* ---------- Narrow screens: pages stack, the stripe moves to the left edge ---------- */
+@media (max-width: 960px) {
+  .spread { grid-template-columns: minmax(0, 1fr); padding-left: 22px; position: relative; }
+  .spread::before { content: ""; position: absolute; left: 0; top: 36px; bottom: 72px; width: 3px; background: var(--ink); border-radius: 2px; }
+  .spread::after { content: ""; position: absolute; left: 9px; top: 36px; bottom: 72px; border-left: 1.5px dashed rgb(var(--ink-rgb) / .5); }
+  .spine { display: none; }
+  .page-l { position: static; padding-right: 0; }
+  .page-r { padding-left: 0; margin-top: 8px; }
+  .rule { margin: 24px 0; }
+  .ledger-head { padding-top: 12px; }
+}
+@media (max-width: 520px) {
+  /* identity: photo beside surname and given names, home and location on the row below */
+  .id { grid-template-columns: 1fr 1fr; gap: 18px 14px; }
+  .fields { display: contents; }
+  .photo { grid-column: 1; grid-row: 1 / span 2; width: 88px; height: 120px; font-size: 28px; }
+  .fields > div:nth-child(1) { grid-column: 2; grid-row: 1; }
+  .fields > div:nth-child(2) { grid-column: 2; grid-row: 2; }
+  .fields > div:nth-child(3) { grid-column: 1; grid-row: 3; }
+  .fields > div:nth-child(4) { grid-column: 2; grid-row: 3; }
+  .fields dt { letter-spacing: .1em; }
+  .fields dd { font-size: 16px; }
+  /* nav: smaller logo and button so they never collide */
+  .nav { padding-left: 16px; height: 56px; }
+  .logo { font-size: 15px; letter-spacing: .08em; }
+  .nav .btn { height: 44px; padding: 0 16px; font-size: 15px; }
+  .legend { grid-template-columns: 1fr; }
+}
+@media (max-height: 740px) and (min-width: 961px) { .page-l { position: static; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+<div class="cover" id="cover" role="dialog" aria-modal="true" aria-label="Open your account">
+  <div class="door l"></div>
+  <div class="door r"></div>
+  <div class="seam" aria-hidden="true"></div>
+  <div class="cover-center">
+    <div class="crest" aria-hidden="true">O</div>
+    <p class="lbl"><b>Travel account</b><i>Compte de voyage</i></p>
+    <p class="cover-title">OTHERWISE</p>
+    <button class="btn btn-inverse" id="open" type="button">Open account</button>
+    <p class="hint">or just scroll</p>
+  </div>
+</div>
+
+<div class="sheet" id="sheet">
+  <span id="top-sentinel" aria-hidden="true"></span>
+  <h1 class="sr">Aoife Brennan, account overview</h1>
+
+  <header class="nav" id="nav">
+    <a class="logo" href="#top">OTHERWISE</a>
+    <a class="btn btn-primary" href="#top">Send money</a>
+  </header>
+
+  <div class="spread" id="top">
+    <aside class="page page-l" aria-label="Account holder and balance">
+      <div class="id">
+        <div class="photo" aria-hidden="true">AB</div>
+        <dl class="fields">
+          <div><dt><b>Surname</b><i>Nom</i></dt><dd>Brennan</dd></div>
+          <div><dt><b>Given names</b><i>Prénoms</i></dt><dd>Aoife</dd></div>
+          <div><dt><b>Home</b><i>Domicile</i></dt><dd>Dublin</dd></div>
+          <div><dt><b>Present location</b><i>Lieu actuel</i></dt><dd>Budapest</dd></div>
+        </dl>
+      </div>
+      <div class="route" role="img" aria-label="Dublin to Budapest"><span>DUB</span><i></i><span>BUD</span></div>
+
+      <hr class="rule">
+
+      <p class="lbl"><b>Holdings</b><i>Avoirs</i></p>
+      <p class="balance num"><span class="cur">€</span><span id="bal" data-count="2480.5">2,480.50</span></p>
+      <div class="fx">
+        <span class="sub num">184&nbsp;200 Ft</span>
+        <span class="stamp"><span>EUR/HUF 74.26</span><small>17 Oct 2026</small></span>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href="#top">Send money</a>
+        <a class="btn btn-ghost" href="#top">Add money</a>
+      </div>
+
+      <hr class="rule">
+
+      <p class="lbl"><b>Spent this week</b><i>Dépenses de la semaine</i></p>
+      <p class="week-total num">42&nbsp;740 Ft</p>
+      <div class="split" role="img" aria-label="Groceries 48 percent, eating out 35 percent, travel 9 percent, coffee 8 percent">
+        <i style="--f:47.6; --o:1"></i><i style="--f:35.3; --o:.62"></i><i style="--f:9; --o:.38"></i><i style="--f:8.1; --o:.2"></i>
+      </div>
+      <ul class="legend">
+        <li style="--o:1">Groceries <b class="num">20&nbsp;340 Ft</b></li>
+        <li style="--o:.62">Eating out <b class="num">15&nbsp;100 Ft</b></li>
+        <li style="--o:.38">Travel <b class="num">3&nbsp;850 Ft</b></li>
+        <li style="--o:.2">Coffee <b class="num">3&nbsp;450 Ft</b></li>
+      </ul>
+    </aside>
+
+    <div class="spine" aria-hidden="true"></div>
+
+    <main class="page page-r" id="ledger">
+      <div class="ledger-head">
+        <p class="lbl"><b>Entries</b><i>Inscriptions</i></p>
+        <div class="chips" id="chips" role="group" aria-label="Filter entries by category"></div>
+      </div>
+      <div id="days"></div>
+      <p class="empty" id="empty" hidden>No entries in this category yet.</p>
+    </main>
+  </div>
+
+  <footer class="container foot">
+    <span>Prototype with sample data. Pages: identity stays pinned, the ledger scrolls.</span>
+    <button class="link" id="replay" type="button">Replay cover</button>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function () {
+  var root = document.documentElement;
+  var animated = root.classList.contains('anim');
+  var sheet = document.getElementById('sheet');
+  var cover = document.getElementById('cover');
+  var openBtn = document.getElementById('open');
+
+  /* ---------- Ledger (sample data) ---------- */
+  var M = '−', S = ' ';
+  var DAYS = [
+    { day: 'Today', items: [
+      { m: 'Kávé Műhely', cat: 'Coffee', t: '09:12', amt: M + '1' + S + '150 Ft' }
+    ]},
+    { day: 'Yesterday', items: [
+      { m: 'Nagy Piac Market', cat: 'Groceries', t: '18:40', amt: M + '6' + S + '420 Ft' },
+      { m: 'Kávé Műhely', cat: 'Coffee', t: '08:55', amt: M + '1' + S + '150 Ft' }
+    ]},
+    { day: '15 Oct', items: [
+      { m: 'Airport Transfer Budapest', cat: 'Travel', t: '14:05', amt: M + '2' + S + '200 Ft' },
+      { m: 'Top-up from Dublin account', cat: 'Transfers', t: '11:30', amt: '+€500.00', dir: 'in' }
+    ]},
+    { day: '14 Oct', items: [
+      { m: 'Lunch at the market hall', cat: 'Eating out', t: '13:20', amt: M + '3' + S + '900 Ft' },
+      { m: 'Flight Dublin to Budapest', cat: 'Travel', t: '07:10', amt: M + '€64.99' }
+    ]},
+    { day: '13 Oct', items: [
+      { m: 'Dinner by the Danube', cat: 'Eating out', t: '20:30', amt: M + '11' + S + '200 Ft' },
+      { m: 'Metro day pass', cat: 'Travel', t: '09:15', amt: M + '1' + S + '650 Ft' },
+      { m: 'Corner bakery', cat: 'Groceries', t: '08:40', amt: M + '1' + S + '890 Ft' }
+    ]},
+    { day: '12 Oct', items: [
+      { m: 'Sent to Dublin', cat: 'Transfers', t: '12:00', amt: M + '€150.00' },
+      { m: 'Weekly shop', cat: 'Groceries', t: '17:50', amt: M + '8' + S + '740 Ft' },
+      { m: 'Kávé Műhely', cat: 'Coffee', t: '09:05', amt: M + '1' + S + '150 Ft' }
+    ]},
+    { day: '11 Oct', items: [
+      { m: 'Top-up from Dublin account', cat: 'Transfers', t: '10:00', amt: '+€2,000.00', dir: 'in' },
+      { m: 'Pharmacy', cat: 'Groceries', t: '15:25', amt: M + '3' + S + '290 Ft' }
+    ]}
+  ];
+  var CATS = ['All', 'Coffee', 'Eating out', 'Groceries', 'Travel', 'Transfers'];
+  var current = 'All';
+  var daysEl = document.getElementById('days');
+  var chipsEl = document.getElementById('chips');
+  var emptyEl = document.getElementById('empty');
+  var io = ('IntersectionObserver' in window)
+    ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { rootMargin: '0px 0px -8% 0px' })
+    : null;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function renderLedger() {
+    daysEl.textContent = '';
+    var shown = 0;
+    DAYS.forEach(function (g) {
+      var items = g.items.filter(function (i) { return current === 'All' || i.cat === current; });
+      if (!items.length) return;
+      var sec = el('section', 'day-group');
+      sec.appendChild(el('h2', 'day', g.day));
+      var ul = el('ul', 'rows');
+      items.forEach(function (i) {
+        var li = el('li', 'row');
+        var left = el('div');
+        left.appendChild(el('p', 'm', i.m));
+        left.appendChild(el('p', 'meta', i.cat + ' · ' + i.t));
+        li.appendChild(left);
+        li.appendChild(el('span', 'amt num' + (i.dir === 'in' ? ' in' : ''), i.amt));
+        ul.appendChild(li);
+        shown++;
+        if (io && animated) io.observe(li); else li.classList.add('in');
+      });
+      sec.appendChild(ul);
+      daysEl.appendChild(sec);
+    });
+    emptyEl.hidden = shown > 0;
+  }
+
+  CATS.forEach(function (c) {
+    var b = el('button', 'chip', c);
+    b.type = 'button';
+    b.setAttribute('aria-pressed', c === current ? 'true' : 'false');
+    b.addEventListener('click', function () {
+      current = c;
+      Array.prototype.forEach.call(chipsEl.children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      renderLedger();
+    });
+    chipsEl.appendChild(b);
+  });
+  renderLedger();
+
+  /* ---------- Nav border after the first scroll (no scroll listener) ---------- */
+  var nav = document.getElementById('nav');
+  var sentinel = document.getElementById('top-sentinel');
+  if (nav && sentinel && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) { nav.classList.toggle('scrolled', !e[0].isIntersecting); }).observe(sentinel);
+  }
+
+  /* ---------- Smooth scroll (Lenis wired to GSAP) and the one-time count-up ---------- */
+  var lenis = null;
+  if (animated && window.Lenis) {
+    lenis = new Lenis({ lerp: 0.1 });
+    if (window.gsap) {
+      gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
+    }
+  }
+
+  function countUp() {
+    var node = document.getElementById('bal');
+    var end = parseFloat(node.getAttribute('data-count'));
+    var fmt = function (v) { return v.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+    if (!animated || !window.gsap) { node.textContent = fmt(end); return; }
+    var o = { v: 0 };
+    node.textContent = fmt(0);
+    gsap.to(o, {
+      v: end, duration: 1.4, ease: 'power2.out', delay: 0.35,
+      onUpdate: function () { node.textContent = fmt(o.v); },
+      onComplete: function () { node.textContent = fmt(end); }   /* always ends on the exact value */
+    });
+  }
+
+  /* ---------- Cover: opens on button, first scroll, tap or key ---------- */
+  var opened = false;
+  var intentEvents = ['wheel', 'touchstart', 'keydown'];
+  function lock() { root.classList.add('locked'); sheet.inert = true; if (lenis) lenis.stop(); }
+  function unlock() { root.classList.remove('locked'); sheet.inert = false; if (lenis) lenis.start(); }
+  function onIntent(e) {
+    if (e.type === 'keydown' && ['Enter', ' ', 'ArrowDown', 'PageDown', 'Escape'].indexOf(e.key) === -1) return;
+    open();
+  }
+  function arm() { intentEvents.forEach(function (n) { window.addEventListener(n, onIntent, { passive: true }); }); }
+  function disarm() { intentEvents.forEach(function (n) { window.removeEventListener(n, onIntent); }); }
+  function open() {
+    if (opened) return;
+    opened = true;
+    disarm();
+    cover.classList.add('open');
+    unlock();
+    countUp();
+    setTimeout(function () { cover.classList.add('done'); }, 1300);
+  }
+
+  openBtn.addEventListener('click', open);
+  document.getElementById('replay').addEventListener('click', function () {
+    if (!animated) { window.scrollTo(0, 0); return; }
+    window.scrollTo(0, 0);
+    opened = false;
+    cover.classList.remove('open', 'done');
+    lock();
+    arm();
+    openBtn.focus({ preventScroll: true });
+  });
+
+  if (animated) {
+    lock();
+    arm();
+    openBtn.focus({ preventScroll: true });
+  } else {
+    countUp();
+  }
+})();
+</script>
+</body>
+</html>
