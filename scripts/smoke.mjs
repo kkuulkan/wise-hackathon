@@ -88,11 +88,14 @@ const recA = r.json;
 check("Aoife recommendations 200", r.status === 200, JSON.stringify(r.json).slice(0, 200));
 check("no exclusives in the response", !("exclusives" in recA));
 check("compared against Ireland", recA.home?.code === "IE");
-check("at most 5 categories, all personalised",
-  recA.categories.length > 0 && recA.categories.length <= 5 && recA.categories.every((c) => c.personalised));
+check("at most 5 categories, personalised ones first",
+  recA.categories.length > 0 && recA.categories.length <= 5 &&
+  recA.categories.every((c, i, a) => i === 0 || a[i - 1].personalised || !c.personalised));
 const slugsA = recA.categories.map((c) => c.slug);
 check("Aoife: groceries first", slugsA[0] === "groceries", slugsA.join(","));
 check("rent/insurance/pharmacy never shown", !slugsA.some((s) => ["rent", "insurance", "pharmacy"].includes(s)));
+const LOCAL_ONLY = ["cafe", "dining-out", "transport", "telecom"];
+check("local-only categories never recommended (cafés, dining, transport, mobile)", !slugsA.some((s) => LOCAL_ONLY.includes(s)));
 check("electronics not shown for Aoife (only purchase is older than 90 days)", !slugsA.includes("electronics"));
 const productsA = recA.categories.flatMap((c) => c.products);
 check("every product cheaper than home (FR-14)", productsA.every((p) => p.localPrice.amount < p.homePrice.amount));
@@ -102,10 +105,16 @@ check("every category is >=5% cheaper by Eurostat price levels",
   recA.categories.every((c) => c.comparison?.source === "Eurostat prc_ppp_ind" && c.savingPct >= 5 &&
     c.savingPct === Math.round((1 - c.comparison.localIndex / c.comparison.homeIndex) * 100)));
 check("personalised categories carry the user's own typical purchase",
-  recA.categories.every((c) => c.typicalPurchase && c.typicalPurchase.local.amount < c.typicalPurchase.home.amount));
-check("every product is a verified Open Prices shelf price",
-  productsA.every((p) => p.url.startsWith("https://prices.openfoodfacts.org/products/") &&
-    p.evidence?.observations >= 1 && p.evidence.proofs.every((x) => ["RECEIPT", "PRICE_TAG"].includes(x))));
+  recA.categories.filter((c) => c.personalised).every((c) => c.typicalPurchase && c.typicalPurchase.local.amount < c.typicalPurchase.home.amount));
+check("general suggestions are labelled and always have products",
+  recA.categories.filter((c) => !c.personalised).every((c) => c.reason === null && c.typicalPurchase === null && c.products.length > 0));
+check("every product is a verified shelf price or an official average",
+  productsA.every((p) => p.evidence.source === "Open Prices"
+    ? p.url.startsWith("https://prices.openfoodfacts.org/products/") && p.evidence.observations >= 1 &&
+      p.evidence.proofs.every((x) => ["RECEIPT", "PRICE_TAG"].includes(x))
+    : p.evidence.source === "National statistics" && p.homePriceBasis === "observed"));
+check("no near-duplicate products within a category",
+  recA.categories.every((c) => new Set(c.products.map((p) => p.name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim())).size === c.products.length));
 check("home prices are marked observed or estimated", productsA.every((p) => ["observed", "estimated"].includes(p.homePriceBasis)));
 check("no price older than 365 days", productsA.every((p) => (Date.parse("2026-10-17") - Date.parse(p.priceUpdatedAt)) / 864e5 <= 365));
 check("products sorted by saving",
@@ -122,6 +131,7 @@ const slugsJ = recJ.categories.map((c) => c.slug);
 check("Jonas compared against Germany", recJ.home?.code === "DE");
 check("Jonas's categories differ from Aoife's", slugsJ.join() !== slugsA.join(), `${slugsJ} vs ${slugsA}`);
 check("Jonas: gambling and rent never shown", !slugsJ.some((s) => ["gambling", "rent"].includes(s)));
+check("Jonas: his transport, mobile and dining spend is not recommended", !slugsJ.some((s) => LOCAL_ONLY.includes(s)));
 check("Jonas: electronics hidden in PT (Eurostat: dearer than Germany)", !slugsJ.includes("electronics"));
 const firstJ = recJ.categories[0];
 r = await anon.call("GET", `/api/catalog?category=${firstJ.slug}&from=DE&to=PT`);
@@ -153,6 +163,12 @@ check("coffee hidden for Aoife", !r.json.categories.some((c) => c.slug === "coff
 r = await aoife.arrive("HU", "card");
 check("Aoife to HU -> new notification, same trip (edge case 3)", r.json.status === "arrived" && r.json.trip.id === tripId);
 r = await aoife.call("GET", "/api/recommendations");
+const haircut = r.json.categories.find((c) => c.slug === "personal-care")?.products.find((p) => p.id === "ref-mens-haircut");
+check("Aoife in HU: men's haircut from official statistics on both sides",
+  haircut?.homePriceBasis === "observed" && haircut.evidence.source === "National statistics" &&
+  haircut.homePrice.amount > haircut.localPrice.amount && haircut.localPrice.local?.currency === "HUF");
+check("Aoife in HU: butter left out (dearer in Hungary by official averages)",
+  !r.json.categories.some((c) => c.products.some((p) => p.id === "ref-butter")));
 check("HU has HUF local prices at the verified ECB rate",
   r.json.fx?.pair === "EUR/HUF" && r.json.fx.rate > 300 && r.json.categories[0].typicalPurchase.local.local?.currency === "HUF");
 r = await aoife.arrive("JP");

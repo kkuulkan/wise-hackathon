@@ -2,11 +2,12 @@ import "server-only";
 
 import priceLevelsJson from "@/data/real/price-levels.json";
 import productsJson from "@/data/real/products.json";
+import referenceItemsJson from "@/data/real/reference-items.json";
 import categoriesJson from "@/data/seed/categories.json";
 import transactionsJson from "@/data/seed/transactions.json";
 import usersJson from "@/data/seed/users.json";
 
-import type { CategoryDef, PriceLevels, RealProduct, SeedTransaction } from "./types";
+import type { CategoryDef, PriceLevels, RealProduct, ReferenceItem, SeedTransaction } from "./types";
 
 /**
  * Read-only data. Users and transactions are demo seed; price levels and
@@ -55,6 +56,11 @@ export function getCategoryDef(slug: string): CategoryDef | undefined {
 /** Verified Open Prices products for every country. */
 export function getRealProducts(): RealProduct[] {
   return productsJson.products as RealProduct[];
+}
+
+/** Official national average prices matched across countries (CSO, KSH). */
+export function getReferenceItems(): ReferenceItem[] {
+  return referenceItemsJson.items as ReferenceItem[];
 }
 
 /** Eurostat price level indices (EU27 = 100) by category and country. */

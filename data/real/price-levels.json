@@ -4,7 +4,7 @@
   "measure": "PLI_EU27_2020",
   "year": "2024",
   "updated": "2025-07-10T11:00:00+0200",
-  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON&lang=EN&na_item=PLI_EU27_2020&geo=IE&geo=DE&geo=PT&geo=HU&geo=ES&ppp_cat=A010101&ppp_cat=A01010101&ppp_cat=A01010102&ppp_cat=A01010103&ppp_cat=A01010104&ppp_cat=A01010105&ppp_cat=A01010106&ppp_cat=A010102&ppp_cat=A0103&ppp_cat=A010703&ppp_cat=A0108&ppp_cat=A010901&ppp_cat=A0111&ppp_cat=A0112&lastTimePeriod=2",
+  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_ppp_ind?format=JSON&lang=EN&na_item=PLI_EU27_2020&geo=IE&geo=DE&geo=PT&geo=HU&geo=ES&ppp_cat=A010101&ppp_cat=A01010101&ppp_cat=A01010102&ppp_cat=A01010103&ppp_cat=A01010104&ppp_cat=A01010105&ppp_cat=A01010106&ppp_cat=A01010199&ppp_cat=A010102&ppp_cat=A0103&ppp_cat=A010703&ppp_cat=A0108&ppp_cat=A010901&ppp_cat=A0111&ppp_cat=A0112&lastTimePeriod=2",
   "levels": {
     "A010101": {
       "label": "Food",
@@ -74,6 +74,16 @@
         "PT": 98.5,
         "HU": 97.7,
         "ES": 95.8
+      }
+    },
+    "A01010199": {
+      "label": "Other food",
+      "values": {
+        "IE": 137.2,
+        "DE": 93.8,
+        "PT": 138,
+        "HU": 106.3,
+        "ES": 106.5
       }
     },
     "A010102": {
@@ -147,5 +157,5 @@
       }
     }
   },
-  "fetchedAt": "2026-10-17T02:30:20.967Z"
+  "fetchedAt": "2026-10-17T06:53:56.830Z"
 }

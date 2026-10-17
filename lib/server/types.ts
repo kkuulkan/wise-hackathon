@@ -6,6 +6,14 @@
 
 export type CategoryKind = "everyday" | "sensitive" | "non-actionable";
 
+/**
+ * take-home   goods a traveller can buy here instead of at home
+ * timeable    services needed anyway that can be done while here
+ * local-only  bought here either way (transport, mobile, cafés, restaurants),
+ *             so a lower price changes nothing and it is never recommended
+ */
+export type BuyWhere = "take-home" | "timeable" | "local-only";
+
 export type CategoryDef = {
   slug: string;
   label: string;
@@ -14,6 +22,8 @@ export type CategoryDef = {
   isDefault: boolean;
   /** Eurostat prc_ppp_ind category that prices it; null means never compared. */
   priceLevel: string | null;
+  /** Null for categories that are never recommended anyway (sensitive, non-actionable). */
+  buyWhere: BuyWhere | null;
 };
 
 export type SeedTransaction = {
@@ -48,6 +58,21 @@ export type RealProduct = {
   shops: string[];
   proofs: string[];
   url: string;
+};
+
+/** An item both countries' statistics offices price, matched by hand. */
+export type ReferenceItem = {
+  id: string;
+  category: string;
+  name: string;
+  /** What the price is for, e.g. "per kg", "per cut". */
+  unit: string;
+  /** Any difference between the two countries' definitions. */
+  note: string | null;
+  prices: Record<
+    string,
+    { price: number; currency: string; priceEur: number; period: string; source: string; url: string }
+  >;
 };
 
 export type PriceLevels = {
@@ -97,8 +122,14 @@ export type ComparedProduct = {
   approximate: true;
   /** Date of the most recent verified observation. */
   priceUpdatedAt: string;
-  evidence: { observations: number; shops: string[]; proofs: string[]; source: "Open Prices" };
-  /** The product's public Open Prices page. */
+  /**
+   * Open Prices          shelf price seen in the destination (receipt or price-tag photo)
+   * National statistics  official national averages on both sides (CSO, KSH)
+   */
+  evidence:
+    | { source: "Open Prices"; observations: number; shops: string[]; proofs: string[] }
+    | { source: "National statistics"; home: string; local: string; note: string | null };
+  /** The product's public Open Prices page, or the destination's statistics table. */
   url: string;
 };
 

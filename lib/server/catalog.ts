@@ -10,7 +10,7 @@ import {
   MAX_PRICE_AGE_DAYS,
   MAX_PRODUCTS_PER_CATEGORY,
 } from "./config";
-import { getCategoryDef, getPriceLevels, getRealProducts } from "./seed";
+import { getCategoryDef, getPriceLevels, getRealProducts, getReferenceItems } from "./seed";
 import { readCatalogCache, readStaleCatalogCache, writeCatalogCache } from "./store";
 import type {
   CatalogResponse,
@@ -25,10 +25,13 @@ import type {
  *
  *   category level  Eurostat price level indices say how much cheaper the
  *                   whole category is in `to` than in `from`.
+ *   item level      named items both statistics offices price (CSO Ireland,
+ *                   KSH Hungary), e.g. a men's haircut. Observed on both sides,
+ *                   so they come first.
  *   product level   verified Open Prices shelf prices seen in `to`. Their home
  *                   price is the same barcode's verified price in `from` when
  *                   one exists, otherwise an estimate from the Eurostat ratio
- *                   of the product's own sub-index (bread, dairy, oils…).
+ *                   of the product's own sub-index (oils, cheese, pasta…).
  *
  * Its whole input is a category slug and a country pair (FR-15). It cannot be
  * handed a user, a merchant or an amount, because the signature has nowhere
@@ -77,9 +80,16 @@ export function compareCategory(category: string, from: string, to: string): Cat
   };
 }
 
-function isFresh(lastSeen: string): boolean {
-  const age = (Date.parse(`${DEMO_TODAY}T00:00:00Z`) - Date.parse(`${lastSeen}T00:00:00Z`)) / DAY_MS;
-  return Number.isFinite(age) && age >= 0 && age <= MAX_PRICE_AGE_DAYS;
+/**
+ * Official annual averages are published after the year ends, so they get a
+ * longer window than shelf prices; the fetch script uses the same limit.
+ */
+const MAX_REFERENCE_AGE_DAYS = 550;
+
+function isFresh(date: string, maxAgeDays = MAX_PRICE_AGE_DAYS): boolean {
+  const age = (Date.parse(`${DEMO_TODAY}T00:00:00Z`) - Date.parse(`${date}T00:00:00Z`)) / DAY_MS;
+  // A month-end period can sit a few days after the pinned demo date.
+  return Number.isFinite(age) && age >= -31 && age <= maxAgeDays;
 }
 
 /**
@@ -113,6 +123,35 @@ function validProducts(raw: unknown[]): RealProduct[] {
 
 function describe(product: RealProduct): string {
   return [product.quantity, product.shops[0]].filter(Boolean).join(" · ");
+}
+
+/** Official items priced in both countries. FR-14 still applies. */
+function compareReferenceItems(query: CatalogQuery): ComparedProduct[] {
+  return getReferenceItems()
+    .filter((item) => item.category === query.category)
+    .flatMap((item): ComparedProduct[] => {
+      const home = item.prices[query.from];
+      const local = item.prices[query.to];
+      if (!home || !local || !isFresh(local.period, MAX_REFERENCE_AGE_DAYS)) return [];
+      if (local.priceEur >= home.priceEur) return [];
+
+      return [
+        {
+          id: item.id,
+          name: item.name,
+          description: [item.unit, "national average"].join(" · "),
+          homePrice: toPrice(home.priceEur, query.from, home.currency === "EUR" ? undefined : home.price),
+          homePriceBasis: "observed",
+          localPrice: toPrice(local.priceEur, query.to, local.currency === "EUR" ? undefined : local.price),
+          savingPct: Math.round(((home.priceEur - local.priceEur) / home.priceEur) * 100),
+          approximate: true,
+          // The older of the two sides, so the date never overstates freshness.
+          priceUpdatedAt: [home.period, local.period].sort()[0],
+          evidence: { source: "National statistics", home: home.source, local: local.source, note: item.note },
+          url: local.url,
+        },
+      ];
+    });
 }
 
 function compareProducts(products: RealProduct[], query: CatalogQuery): ComparedProduct[] {
@@ -155,24 +194,53 @@ function compareProducts(products: RealProduct[], query: CatalogQuery): Compared
           approximate: true,
           priceUpdatedAt: product.lastSeen,
           evidence: {
+            source: "Open Prices",
             observations: product.observations,
             shops: product.shops,
             proofs: product.proofs,
-            source: "Open Prices",
           },
           url: product.url,
         },
       ];
     })
-    // FR-12: biggest saving first, then the best-evidenced, then by id so
-    // the order never wobbles.
-    .sort(
-      (a, b) =>
-        b.savingPct - a.savingPct ||
-        b.evidence.observations - a.evidence.observations ||
-        a.id.localeCompare(b.id),
-    )
-    .slice(0, MAX_PRODUCTS_PER_CATEGORY);
+    .sort(bySaving)
+    .filter(variety(new Map(products.map((product) => [product.id, product.priceLevel]))));
+}
+
+/**
+ * Estimated savings are equal within a Eurostat sub-index, so ranking alone
+ * would fill every slot from one shelf (three tins of tuna). Keep one product
+ * per name and at most two per sub-index, so the list spans the category.
+ */
+const MAX_PER_SUB_INDEX = 2;
+
+function variety(subIndexOf: Map<string, string>) {
+  const names = new Set<string>();
+  const perIndex = new Map<string, number>();
+  return (product: ComparedProduct) => {
+    const name = product.name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+    const index = subIndexOf.get(product.id) ?? "";
+    if (names.has(name) || (perIndex.get(index) ?? 0) >= MAX_PER_SUB_INDEX) return false;
+    names.add(name);
+    perIndex.set(index, (perIndex.get(index) ?? 0) + 1);
+    return true;
+  };
+}
+
+const evidenceRank = (product: ComparedProduct) =>
+  product.evidence.source === "National statistics" ? Number.MAX_SAFE_INTEGER : product.evidence.observations;
+
+/** FR-12: biggest saving first, then the best-evidenced, then by id so the order never wobbles. */
+function bySaving(a: ComparedProduct, b: ComparedProduct): number {
+  return b.savingPct - a.savingPct || evidenceRank(b) - evidenceRank(a) || a.id.localeCompare(b.id);
+}
+
+/** Observed-on-both-sides items lead; shelf products fill the rest. */
+function compareAll(products: RealProduct[], query: CatalogQuery): ComparedProduct[] {
+  return [...compareReferenceItems(query).sort(bySaving), ...compareProducts(products, query)].slice(
+    0,
+    MAX_PRODUCTS_PER_CATEGORY,
+  );
 }
 
 /**
@@ -224,7 +292,7 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
     const response: CatalogResponse = {
       ...query,
       comparison,
-      products: compareProducts(validProducts(raw), query),
+      products: compareAll(validProducts(raw), query),
       source: "live",
       fetchedAt: new Date(now).toISOString(),
     };
@@ -239,7 +307,7 @@ export async function queryCatalog(query: CatalogQuery): Promise<CatalogResponse
     return {
       ...query,
       comparison,
-      products: compareProducts(validProducts(getRealProducts()), query),
+      products: compareAll(validProducts(getRealProducts()), query),
       source: "fallback",
       fetchedAt: new Date(now).toISOString(),
     };

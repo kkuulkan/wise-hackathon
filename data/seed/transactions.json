@@ -1,5 +1,5 @@
 {
-  "_source": "Illustrative 90-day statements for the two demo users, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Each includes rows the backend must ignore (rent, insurance, pharmacy, gambling) so the exclusions are visible.",
+  "_source": "Illustrative 90-day statements for the two demo users, shaped like a Wise balance statement. Mock data for the BME x Wise hackathon prototype. Each includes rows the backend must ignore (rent, insurance, pharmacy, gambling) so the exclusions are visible. Café visits are categorised 'cafe' (bought locally either way), distinct from 'coffee' bought to take home.",
   "transactions": {
     "aoife": [
       {
@@ -32,7 +32,7 @@
         "id": "ab-060",
         "date": "2026-10-08",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -58,7 +58,7 @@
         "id": "ab-058",
         "date": "2026-10-05",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -110,7 +110,7 @@
         "id": "ab-054",
         "date": "2026-10-01",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -136,7 +136,7 @@
         "id": "ab-052",
         "date": "2026-09-28",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -188,7 +188,7 @@
         "id": "ab-048",
         "date": "2026-09-24",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -214,7 +214,7 @@
         "id": "ab-046",
         "date": "2026-09-21",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -253,7 +253,7 @@
         "id": "ab-043",
         "date": "2026-09-17",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -266,7 +266,7 @@
         "id": "ab-042",
         "date": "2026-09-14",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -305,7 +305,7 @@
         "id": "ab-039",
         "date": "2026-09-10",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -318,7 +318,7 @@
         "id": "ab-038",
         "date": "2026-09-07",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -383,7 +383,7 @@
         "id": "ab-033",
         "date": "2026-09-03",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -409,7 +409,7 @@
         "id": "ab-031",
         "date": "2026-08-31",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -448,7 +448,7 @@
         "id": "ab-028",
         "date": "2026-08-27",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -461,7 +461,7 @@
         "id": "ab-027",
         "date": "2026-08-24",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -500,7 +500,7 @@
         "id": "ab-024",
         "date": "2026-08-20",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -526,7 +526,7 @@
         "id": "ab-022",
         "date": "2026-08-17",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -565,7 +565,7 @@
         "id": "ab-019",
         "date": "2026-08-13",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -578,7 +578,7 @@
         "id": "ab-018",
         "date": "2026-08-10",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -617,7 +617,7 @@
         "id": "ab-015",
         "date": "2026-08-06",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -656,7 +656,7 @@
         "id": "ab-012",
         "date": "2026-08-03",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -721,7 +721,7 @@
         "id": "ab-007",
         "date": "2026-07-30",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -734,7 +734,7 @@
         "id": "ab-006",
         "date": "2026-07-27",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -773,7 +773,7 @@
         "id": "ab-003",
         "date": "2026-07-23",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {
@@ -786,7 +786,7 @@
         "id": "ab-002",
         "date": "2026-07-20",
         "merchant": "Proper Grind Coffee",
-        "category": "coffee",
+        "category": "cafe",
         "city": "Dublin",
         "countryCode": "IE",
         "amount": {

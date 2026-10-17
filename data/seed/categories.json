@@ -1,19 +1,20 @@
 {
-  "_source": "Category taxonomy for the backend. kind decides eligibility: only 'everyday' categories are ever personalised or shown. 'sensitive' (PRD edge case 11) and 'non-actionable' (edge case 13) are filtered out before ranking. isDefault marks the general set used when history is thin (US-7). priceLevel is the Eurostat prc_ppp_ind category that prices it (coffee is priced as café spending, so it uses restaurants); null means never compared.",
+  "_source": "Category taxonomy for the backend. kind decides eligibility: only 'everyday' categories are ever personalised. 'sensitive' (PRD edge case 11) and 'non-actionable' (edge case 13) are filtered out before ranking. buyWhere decides whether recommending it can save anything: 'take-home' goods can be bought here instead of at home, 'timeable' services can be done while here, 'local-only' things (transport, mobile, cafés, restaurants) are bought here either way, so they are never recommended. isDefault marks the general take-home set used when history is thin (US-7). priceLevel is the Eurostat prc_ppp_ind category that prices it; null means never compared.",
   "categories": [
-    {"slug": "groceries", "label": "Groceries", "icon": "cart", "kind": "everyday", "isDefault": true, "priceLevel": "A010101"},
-    {"slug": "coffee", "label": "Coffee", "icon": "cup", "kind": "everyday", "isDefault": true, "priceLevel": "A0111"},
-    {"slug": "dining-out", "label": "Dining out", "icon": "plate", "kind": "everyday", "isDefault": true, "priceLevel": "A0111"},
-    {"slug": "transport", "label": "Local transport", "icon": "train", "kind": "everyday", "isDefault": true, "priceLevel": "A010703"},
-    {"slug": "telecom", "label": "Mobile data", "icon": "phone", "kind": "everyday", "isDefault": true, "priceLevel": "A0108"},
-    {"slug": "skincare-beauty", "label": "Skincare & beauty", "icon": "bottle", "kind": "everyday", "isDefault": false, "priceLevel": "A0112"},
-    {"slug": "sneakers-clothing", "label": "Sneakers & clothing", "icon": "shoe", "kind": "everyday", "isDefault": false, "priceLevel": "A0103"},
-    {"slug": "electronics", "label": "Electronics", "icon": "headphones", "kind": "everyday", "isDefault": false, "priceLevel": "A010901"},
-    {"slug": "personal-care", "label": "Hair & personal care", "icon": "scissors", "kind": "everyday", "isDefault": false, "priceLevel": "A0112"},
-    {"slug": "pharmacy", "label": "Pharmacy", "icon": "pill", "kind": "sensitive", "isDefault": false, "priceLevel": null},
-    {"slug": "gambling", "label": "Gambling", "icon": "dice", "kind": "sensitive", "isDefault": false, "priceLevel": null},
-    {"slug": "rent", "label": "Rent", "icon": "house", "kind": "non-actionable", "isDefault": false, "priceLevel": null},
-    {"slug": "insurance", "label": "Insurance", "icon": "shield", "kind": "non-actionable", "isDefault": false, "priceLevel": null},
-    {"slug": "other", "label": "Other", "icon": "dots", "kind": "non-actionable", "isDefault": false, "priceLevel": null}
+    {"slug": "groceries", "label": "Groceries to take home", "icon": "cart", "kind": "everyday", "isDefault": true, "priceLevel": "A010101", "buyWhere": "take-home"},
+    {"slug": "coffee", "label": "Coffee to take home", "icon": "cup", "kind": "everyday", "isDefault": true, "priceLevel": "A010102", "buyWhere": "take-home"},
+    {"slug": "cafe", "label": "Cafés", "icon": "cup", "kind": "everyday", "isDefault": false, "priceLevel": "A0111", "buyWhere": "local-only"},
+    {"slug": "dining-out", "label": "Dining out", "icon": "plate", "kind": "everyday", "isDefault": false, "priceLevel": "A0111", "buyWhere": "local-only"},
+    {"slug": "transport", "label": "Local transport", "icon": "train", "kind": "everyday", "isDefault": false, "priceLevel": "A010703", "buyWhere": "local-only"},
+    {"slug": "telecom", "label": "Mobile data", "icon": "phone", "kind": "everyday", "isDefault": false, "priceLevel": "A0108", "buyWhere": "local-only"},
+    {"slug": "skincare-beauty", "label": "Skincare & beauty", "icon": "bottle", "kind": "everyday", "isDefault": true, "priceLevel": "A0112", "buyWhere": "take-home"},
+    {"slug": "sneakers-clothing", "label": "Sneakers & clothing", "icon": "shoe", "kind": "everyday", "isDefault": true, "priceLevel": "A0103", "buyWhere": "take-home"},
+    {"slug": "electronics", "label": "Electronics", "icon": "headphones", "kind": "everyday", "isDefault": false, "priceLevel": "A010901", "buyWhere": "take-home"},
+    {"slug": "personal-care", "label": "Hair & personal care", "icon": "scissors", "kind": "everyday", "isDefault": false, "priceLevel": "A0112", "buyWhere": "timeable"},
+    {"slug": "pharmacy", "label": "Pharmacy", "icon": "pill", "kind": "sensitive", "isDefault": false, "priceLevel": null, "buyWhere": null},
+    {"slug": "gambling", "label": "Gambling", "icon": "dice", "kind": "sensitive", "isDefault": false, "priceLevel": null, "buyWhere": null},
+    {"slug": "rent", "label": "Rent", "icon": "house", "kind": "non-actionable", "isDefault": false, "priceLevel": null, "buyWhere": null},
+    {"slug": "insurance", "label": "Insurance", "icon": "shield", "kind": "non-actionable", "isDefault": false, "priceLevel": null, "buyWhere": null},
+    {"slug": "other", "label": "Other", "icon": "dots", "kind": "non-actionable", "isDefault": false, "priceLevel": null, "buyWhere": null}
   ]
 }

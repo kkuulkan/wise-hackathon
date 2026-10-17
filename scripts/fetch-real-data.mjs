@@ -6,6 +6,8 @@
 //   Eurostat prc_ppp_ind   official price level indices per spending category and country (EU27 = 100)
 //   Open Prices (OFF)      crowdsourced shelf prices, each backed by a receipt or price-tag photo
 //   ECB via Frankfurter    EUR exchange rates, cross-checked against Eurostat ert_bil_eur_d
+//   CSO Ireland CPM12      official national average prices of named items, monthly
+//   KSH Hungary ara0004    official national average prices of named items, annual
 //
 // Every record passes through verification gates. Anything that fails is
 // dropped and counted in data/real/verification-report.json. If a source
@@ -32,25 +34,62 @@ const COUNTRIES = {
 
 /** Eurostat analytical categories the app needs. Keys are COICOP-based ppp_cat codes. */
 const PRICE_LEVEL_CODES = [
-  "A010101", "A01010101", "A01010102", "A01010103", "A01010104", "A01010105", "A01010106",
+  "A010101", "A01010101", "A01010102", "A01010103", "A01010104", "A01010105", "A01010106", "A01010199",
   "A010102", "A0103", "A010703", "A0108", "A010901", "A0111", "A0112",
 ];
 
 /**
  * Open Food Facts category tags → our taxonomy and the Eurostat index that
  * prices them. First match wins, so specific groups sit above broad ones.
+ *
+ * Only things a traveller can buy here and take home: shelf-stable food,
+ * coffee to brew, toiletries. Fresh produce, meat, milk and bread are bought
+ * and eaten locally either way, so recommending them saves nothing.
  */
 const PRODUCT_GROUPS = [
-  // Beans, ground, capsules and instant: sold by weight. Ready-to-drink coffee is not what a café-goer means.
+  // Beans, ground, capsules and instant: sold by weight, which also rules out ready-to-drink coffee.
   { category: "coffee", index: "A010102", tags: ["en:coffees"], unit: "g" },
-  { category: "groceries", index: "A01010101", tags: ["en:breads", "en:pastas", "en:rices", "en:breakfast-cereals", "en:flours"] },
-  { category: "groceries", index: "A01010104", tags: ["en:milks", "en:cheeses", "en:eggs", "en:yogurts"] },
-  { category: "groceries", index: "A01010105", tags: ["en:olive-oils", "en:vegetable-oils", "en:butters"] },
-  { category: "groceries", index: "A01010106", tags: ["en:fruits", "en:vegetables", "en:potatoes"] },
-  { category: "groceries", index: "A01010103", tags: ["en:fishes", "en:seafood"] },
-  { category: "groceries", index: "A01010102", tags: ["en:meats"] },
+  { category: "groceries", index: "A01010105", tags: ["en:olive-oils", "en:vegetable-oils"] },
+  { category: "groceries", index: "A01010103", tags: ["en:canned-fishes"] },
+  { category: "groceries", index: "A01010199", tags: ["en:chocolates", "en:honeys", "en:jams"] },
+  { category: "groceries", index: "A01010104", tags: ["en:cheeses"] },
+  { category: "groceries", index: "A01010101", tags: ["en:pastas", "en:rices", "en:breakfast-cereals", "en:biscuits"] },
   { category: "skincare-beauty", index: "A0112", tags: ["en:shampoos", "en:shower-gels", "en:deodorants", "en:body-milks", "en:toothpastes"] },
 ];
+
+/**
+ * Named items that both national statistics offices price. Only pairs that
+ * are the same thing, or whose difference is stated in `note`. Rejected on
+ * review: jam (KSH specifies ≥50% fruit, CSO does not), spaghetti (egg pasta
+ * vs plain), cheese (trappist vs cheddar), flour (plain vs self-raising). Prices are
+ * normalised to `unit` by dividing by `per` (the quantity the source quotes).
+ */
+const REFERENCE_ITEMS = [
+  {
+    id: "ref-mens-haircut", category: "personal-care", name: "Men's haircut", unit: "per cut",
+    note: "Ireland's figure is a dry cut; Hungary's includes washing and drying, so the gap is if anything larger.",
+    sources: { IE: { label: "Gent's dry cut fee", per: 1 }, HU: { code: "63003", per: 1 } },
+  },
+  {
+    id: "ref-womens-haircut", category: "personal-care", name: "Women's wash, cut and blow-dry", unit: "per visit",
+    note: null,
+    sources: { IE: { label: "Ladies' wash, cut and blow dry fee", per: 1 }, HU: { code: "63005", per: 1 } },
+  },
+  {
+    id: "ref-butter", category: "groceries", name: "Butter", unit: "per kg",
+    note: null,
+    sources: { IE: { label: "Butter per lb", per: 0.4536 }, HU: { code: "12001", per: 0.1 } },
+  },
+  {
+    id: "ref-sugar", category: "groceries", name: "Granulated sugar", unit: "per kg",
+    note: null,
+    sources: { IE: { label: "White granulated sugar per 1 kg", per: 1 }, HU: { code: "13501", per: 1 } },
+  },
+];
+const CSO_URL = "https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/CPM12/JSON-stat/2.0/en";
+const KSH_URL = "https://www.ksh.hu/stadat_files/ara/en/ara0004.csv";
+const MAX_REFERENCE_AGE_DAYS = 550; // KSH publishes annual averages, so last year's figure must still pass
+const MAX_REFERENCE_RATIO = 5; // a home/local price ratio beyond 5x (either way) means a unit or matching error
 
 /** Never recommended (PRD edge case 21 and sensitive goods). */
 const EXCLUDED_TAGS = [
@@ -320,6 +359,84 @@ function verifyPrices(country, { prices, currency }, fx) {
   };
 }
 
+// 4. Official reference items (CSO Ireland, KSH Hungary)
+
+async function fetchCso() {
+  const data = await getJson(CSO_URL);
+  const itemDim = data.id.find((dim) => dim.startsWith("C0"));
+  const timeDim = "TLIST(M1)";
+  const asMap = (index) => (Array.isArray(index) ? Object.fromEntries(index.map((k, i) => [k, i])) : index);
+  const items = asMap(data.dimension[itemDim].category.index);
+  const times = asMap(data.dimension[timeDim].category.index);
+  const latest = Object.keys(times).sort((a, b) => times[a] - times[b]).at(-1);
+  // Period codes look like "202609" (older tables use "2026M09").
+  const match = /^(\d{4})M?(\d{2})$/.exec(latest);
+  if (!match) throw new Error(`CSO period "${latest}" not understood`);
+  const period = `${match[1]}-${match[2]}-28`;
+
+  const byLabel = {};
+  for (const [code, position] of Object.entries(items)) {
+    const pos = { STATISTIC: 0, [timeDim]: times[latest], [itemDim]: position };
+    const flat = data.id.reduce((acc, dim, i) => acc * data.size[i] + (pos[dim] ?? 0), 0);
+    byLabel[data.dimension[itemDim].category.label[code]] = data.value[flat];
+  }
+  return { byLabel, period, label: data.dimension[timeDim].category.label[latest] };
+}
+
+async function fetchKsh() {
+  const response = await fetch(KSH_URL, { headers: { "user-agent": USER_AGENT } });
+  if (!response.ok) throw new Error(`KSH ${response.status}`);
+  const text = new TextDecoder("iso-8859-2").decode(await response.arrayBuffer());
+  const rows = text.split(/\r?\n/).map((line) => line.split(";"));
+  const header = rows.find((row) => row[0] === "Code");
+  const year = header.filter((cell) => /^\d{4}$/.test(cell)).at(-1);
+  const column = header.indexOf(year);
+  const byCode = {};
+  for (const row of rows) {
+    if (!/^\d+$/.test(row[0] ?? "")) continue;
+    // Thousands are space-grouped ("4 010"); ".." means not published.
+    const value = Number((row[column] ?? "").replace(/[\s\u00a0]/g, ""));
+    byCode[row[0]] = { name: row[1], value: Number.isFinite(value) && value > 0 ? value : null };
+  }
+  return { byCode, year, period: `${year}-12-31` };
+}
+
+async function fetchReferenceItems(fx) {
+  const [cso, ksh] = await Promise.all([fetchCso(), fetchKsh()]);
+  const kept = [];
+  const rejected = [];
+
+  for (const item of REFERENCE_ITEMS) {
+    const ie = cso.byLabel[item.sources.IE.label];
+    const hu = ksh.byCode[item.sources.HU.code]?.value;
+    const prices = {
+      IE: typeof ie === "number" ? { price: ie / item.sources.IE.per, currency: "EUR", period: cso.period, source: `CSO Ireland CPM12, ${cso.label}`, url: "https://data.cso.ie/table/CPM12" } : null,
+      HU: typeof hu === "number" ? { price: hu / item.sources.HU.per, currency: "HUF", period: ksh.period, source: `KSH Hungary ara0004, ${ksh.year} average`, url: "https://www.ksh.hu/stadat_files/ara/en/ara0004.html" } : null,
+    };
+
+    const problems = [];
+    for (const [country, entry] of Object.entries(prices)) {
+      if (!entry) { problems.push(`${country}: no published value`); continue; }
+      const age = daysBetween(entry.period, TODAY);
+      if (!(age >= -31 && age <= MAX_REFERENCE_AGE_DAYS)) problems.push(`${country}: ${entry.period} is too old`);
+      entry.price = round2(entry.price);
+      entry.priceEur = round2(entry.price / fx.perEur[entry.currency]);
+    }
+    if (prices.IE && prices.HU) {
+      const ratio = prices.IE.priceEur / prices.HU.priceEur;
+      if (ratio > MAX_REFERENCE_RATIO || ratio < 1 / MAX_REFERENCE_RATIO) problems.push(`implausible IE/HU ratio ${ratio.toFixed(2)}`);
+    }
+
+    if (problems.length > 0) rejected.push({ id: item.id, problems });
+    else kept.push({ id: item.id, category: item.category, name: item.name, unit: item.unit, note: item.note, prices });
+  }
+
+  // One bad match is a data problem; all of them failing is a parsing problem.
+  if (kept.length === 0) throw new Error(`Reference gate failed: every item rejected (${JSON.stringify(rejected)})`);
+
+  return { items: kept, report: { cso: cso.label, ksh: ksh.year, candidates: REFERENCE_ITEMS.length, kept: kept.length, rejected } };
+}
+
 // Main
 
 async function writeJson(name, value) {
@@ -350,6 +467,11 @@ async function main() {
     console.log(`  ${country}: ${report.passedRecordGates}/${report.candidates} prices passed, ${report.keptProducts} products kept`);
   }
 
+  console.log("Official reference items …");
+  const { items: referenceItems, report: referenceReport } = await fetchReferenceItems(fx);
+  console.log(`  ${referenceReport.kept}/${referenceReport.candidates} items passed (CSO ${referenceReport.cso}, KSH ${referenceReport.ksh})`);
+  for (const miss of referenceReport.rejected) console.log(`  rejected ${miss.id}: ${miss.problems.join("; ")}`);
+
   await mkdir(OUT_DIR, { recursive: true });
   const fetchedAt = new Date().toISOString();
   const files = [
@@ -361,7 +483,12 @@ async function main() {
       window: { from: new Date(Date.parse(`${TODAY}T00:00:00Z`) - MAX_AGE_DAYS * 86_400_000).toISOString().slice(0, 10), to: TODAY },
       products,
     }),
-    await writeJson("verification-report.json", { fetchedAt, today: TODAY, fx: fxReport, priceLevels: levelReport, openPrices: productReport }),
+    await writeJson("reference-items.json", {
+      _source: "Official national average prices: CSO Ireland table CPM12 (CC BY 4.0) and KSH Hungary STADAT ara0004. Matched by hand to the same item; prices normalised to `unit`.",
+      fetchedAt,
+      items: referenceItems,
+    }),
+    await writeJson("verification-report.json", { fetchedAt, today: TODAY, fx: fxReport, priceLevels: levelReport, openPrices: productReport, referenceItems: referenceReport }),
   ];
   // Swap all files in only once everything succeeded.
   for (const file of files) await rename(`${file}.tmp`, file);

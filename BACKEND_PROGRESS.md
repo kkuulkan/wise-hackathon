@@ -17,7 +17,7 @@
 | Breaking changes for frontend | **None.** No existing file under `app/` (pages), `components/`, `lib/data.ts`, `lib/types.ts`, `lib/format.ts` or `data/*.json` was modified. |
 | New dependencies | None (`import "server-only"` is resolved by Next itself) |
 | Env vars | None required. Optional: `OTHERWISE_TODAY`, `OTHERWISE_CATALOG_MODE` (see §6) |
-| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **62/62** against `next start` |
+| Verification | `npm run build` passes, `eslint` is clean, `npm run smoke` passes **68/68** against `next start` |
 
 ### Scope decisions (from aim-t, 2026-10-17)
 
@@ -30,6 +30,7 @@
 
 | Date | Change | Merge impact |
 |---|---|---|
+| 2026-10-17 | **Only recommend what a traveller can buy here instead of at home** (§13). Categories gain `buyWhere`; transport, mobile, dining and the new `cafe` category are never recommended. Coffee means coffee to take home. Groceries are shelf-stable take-home goods only. New official matched items from CSO Ireland + KSH Hungary (haircuts, sugar). Product lists vary across sub-categories. Café transactions re-tagged `cafe` | Additive API (`evidence` is now a union, see §13). `categories.json` and `transactions.json` changed |
 | 2026-10-17 | **Real data replaces the mock catalog.** New `scripts/fetch-real-data.mjs` (`npm run fetch-data`) builds `data/real/` from Eurostat, Open Prices and the ECB through verification gates. `data/seed/catalog.json` deleted. Category savings now come from official price levels; products are real shelf prices; FX is the real ECB rate (363 HUF, was a hard-coded 395). `categories.json` gains `priceLevel`. API responses gain fields (none removed); `products` may now be empty. `lib/live.ts` adapted | Additive API. Frontend reading `products[0]` must handle empty lists (§12) |
 | 2026-10-17 | `main` fast-forwarded to `integration` and pushed. Build passes on `main` | Pull `main` before branching |
 | 2026-10-17 | `integration`: wired the frontend pages to the backend through `lib/live.ts` and `components/live/*`; only `app/page.tsx` and `app/cheaper/page.tsx` edited | See §11 |
@@ -384,4 +385,32 @@ Jonas's top category, electronics, never shows: Eurostat has PT 2% dearer and ES
 - Crowdsourced prices come from a few shops per country, so they aren't a national average.
 - **Frontend `Visa`** still prints "At {country} avg" for each product (`vsLocalAvgPct: 0` from `lib/live.ts`). With real shelf prices that line is no longer accurate.
   The component should show `description` (quantity and shop) and `homePriceBasis` instead. It also prints a forint line outside Hungary, and its map pin should open `url`.
+
+## 13. Take-home and timeable only (2026-10-17)
+
+**Decision (aim-t):** a lower price only helps if the traveller *chooses where to buy*. Every category now has `buyWhere`:
+
+| `buyWhere` | Meaning | Categories | Recommended? |
+|---|---|---|---|
+| `take-home` | Buy here instead of at home (no customs limits within the EU for personal use) | groceries (shelf-stable), coffee (beans, ground, capsules), skincare & beauty, sneakers & clothing, electronics | ✅ |
+| `timeable` | Needed anyway, can be done while here | personal care (haircuts) | ✅ |
+| `local-only` | Bought here either way | `cafe`, dining-out, transport, telecom (and EU roam-like-at-home makes a local SIM rarely worth it) | ❌ never ranked or shown |
+
+- `personalize.ts` skips local-only spend, so it can't push take-home categories down. Aoife's café visits are now `cafe` transactions, separate from `coffee` (bought to take home).
+- The default set for thin history is take-home staples: groceries, coffee, skincare, clothing. A general suggestion still needs at least one real product.
+- Long-stay users (Erasmus, foreign workers) would benefit from a separate "living costs here" view for transport, mobile and rent. That's not built.
+
+**Data changes in `scripts/fetch-real-data.mjs`:**
+- Groceries are limited to take-home shelf goods: olive and vegetable oils, canned fish, cheese, chocolate, honey, jam, pasta, rice, cereals, biscuits. Fresh produce, meat, milk and bread were dropped. New Eurostat sub-index `A01010199` (other food).
+- **Official matched items (`data/real/reference-items.json`):** named items priced by both CSO Ireland (CPM12, monthly) and KSH Hungary (ara0004, 2025 annual average), matched by hand and normalised per unit.
+  Kept: men's haircut (note: Ireland's figure is a dry cut), women's wash-cut-blow-dry, butter, sugar. Rejected after review: jam (KSH requires ≥50% fruit), spaghetti (egg pasta),
+  cheese (trappist vs cheddar), flour (plain vs self-raising). Gates: both values published, CSO ≤ 550 days old, IE/HU ratio within 5×, and **at least one item must survive** (this
+  caught a period-parsing bug that had silently rejected everything). Germany, Portugal and Spain publish no comparable averages, so only Ireland ↔ Hungary has these.
+- For Aoife in Budapest: women's wash-cut-blow-dry €58.32 → €20.93 (64%), men's haircut €21.46 → €11.04 (49%), sugar 45%. Butter is left out because it's dearer in Hungary (€15.53 vs €9.34 per kg).
+
+**API changes (additive):**
+- `products[].evidence` is now either `{ source: "Open Prices", observations, shops, proofs }` or `{ source: "National statistics", home, local, note }`.
+  The second kind has `homePriceBasis: "observed"`, `url` pointing to the destination's statistics table, and `description` = "per cut · national average". **Show `evidence.note` when present.**
+- Official items come first in a category, then shelf products ranked by saving, with at most 2 per Eurostat sub-category and no duplicate names.
+- Categories may now include general (`personalised: false`) take-home suggestions after the personal ones, e.g. "Coffee to take home" for Aoife in Portugal.
 

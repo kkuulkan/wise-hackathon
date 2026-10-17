@@ -1,103 +1,11 @@
 {
   "_source": "Open Prices (prices.openfoodfacts.org), crowdsourced shelf prices with receipt or price-tag proof. Only records that passed every gate in verification-report.json. ODbL licence.",
-  "fetchedAt": "2026-10-17T02:30:20.967Z",
+  "fetchedAt": "2026-10-17T06:53:56.830Z",
   "window": {
     "from": "2025-10-17",
     "to": "2026-10-17"
   },
   "products": [
-    {
-      "id": "op-ie-5059697765513",
-      "code": "5059697765513",
-      "country": "IE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Brown bread loaf",
-      "brand": "",
-      "quantity": null,
-      "price": 3,
-      "currency": "EUR",
-      "priceEur": 3,
-      "observations": 1,
-      "firstSeen": "2026-10-11",
-      "lastSeen": "2026-10-11",
-      "shops": [
-        "Tesco, Swords"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5059697765513"
-    },
-    {
-      "id": "op-ie-5057753912413",
-      "code": "5057753912413",
-      "country": "IE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Gouda",
-      "brand": "Tesco",
-      "quantity": "250 g",
-      "price": 2.2,
-      "currency": "EUR",
-      "priceEur": 2.2,
-      "observations": 1,
-      "firstSeen": "2026-08-30",
-      "lastSeen": "2026-08-30",
-      "shops": [
-        "Tesco Express, Dublin"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5057753912413"
-    },
-    {
-      "id": "op-ie-5201054017418",
-      "code": "5201054017418",
-      "country": "IE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Total 0% fat",
-      "brand": "FAGE",
-      "quantity": "450 g",
-      "price": 5,
-      "currency": "EUR",
-      "priceEur": 5,
-      "observations": 1,
-      "firstSeen": "2026-08-30",
-      "lastSeen": "2026-08-30",
-      "shops": [
-        "Tesco Express, Dublin"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5201054017418"
-    },
-    {
-      "id": "op-ie-4056489743026",
-      "code": "4056489743026",
-      "country": "IE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Northern Irish Barn Eggs",
-      "brand": "O'CONNELL FARM",
-      "quantity": null,
-      "price": 4.25,
-      "currency": "EUR",
-      "priceEur": 4.25,
-      "observations": 1,
-      "firstSeen": "2026-08-14",
-      "lastSeen": "2026-08-14",
-      "shops": [
-        "Lidl, Athy"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4056489743026"
-    },
     {
       "id": "op-ie-4088600205335",
       "code": "4088600205335",
@@ -145,37 +53,83 @@
       "url": "https://prices.openfoodfacts.org/products/5000442007617"
     },
     {
-      "id": "op-ie-5054269363432",
-      "code": "5054269363432",
+      "id": "op-ie-7622300845759",
+      "code": "7622300845759",
       "country": "IE",
       "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Tomatoes On The Vine",
-      "brand": "Tesco",
-      "quantity": null,
-      "price": 2.27,
+      "priceLevel": "A01010199",
+      "name": "Dairy Milk",
+      "brand": "Cadbury",
+      "quantity": "110 g",
+      "price": 3.99,
       "currency": "EUR",
-      "priceEur": 2.27,
+      "priceEur": 3.99,
       "observations": 1,
-      "firstSeen": "2026-08-30",
-      "lastSeen": "2026-08-30",
+      "firstSeen": "2026-04-20",
+      "lastSeen": "2026-04-20",
       "shops": [
-        "Tesco Express, Dublin"
+        "WHSmith, Dublin"
       ],
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/5054269363432"
+      "url": "https://prices.openfoodfacts.org/products/7622300845759"
     },
     {
-      "id": "op-ie-5054402955746",
-      "code": "5054402955746",
+      "id": "op-ie-8720701144538",
+      "code": "8720701144538",
       "country": "IE",
       "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Whole strawberries frozen",
+      "priceLevel": "A01010199",
+      "name": "Everything Bar",
+      "brand": "Tony’s Chocolonely",
+      "quantity": "180 g",
+      "price": 6.49,
+      "currency": "EUR",
+      "priceEur": 6.49,
+      "observations": 1,
+      "firstSeen": "2026-04-20",
+      "lastSeen": "2026-04-20",
+      "shops": [
+        "WHSmith, Dublin"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8720701144538"
+    },
+    {
+      "id": "op-ie-4335619250567",
+      "code": "4335619250567",
+      "country": "IE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Mint Chocolate",
+      "brand": "JD Gross Lidl",
+      "quantity": "300 g",
+      "price": 3.49,
+      "currency": "EUR",
+      "priceEur": 3.49,
+      "observations": 1,
+      "firstSeen": "2026-01-10",
+      "lastSeen": "2026-01-10",
+      "shops": [
+        "Lidl, Cork"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4335619250567"
+    },
+    {
+      "id": "op-ie-5057753912413",
+      "code": "5057753912413",
+      "country": "IE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Gouda",
       "brand": "Tesco",
-      "quantity": null,
+      "quantity": "250 g",
       "price": 2.2,
       "currency": "EUR",
       "priceEur": 2.2,
@@ -188,76 +142,76 @@
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/5054402955746"
+      "url": "https://prices.openfoodfacts.org/products/5057753912413"
     },
     {
-      "id": "op-ie-5099874231080",
-      "code": "5099874231080",
+      "id": "op-ie-5010909006602",
+      "code": "5010909006602",
       "country": "IE",
       "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Cod Fishcakes",
-      "brand": "Dunnes Stores",
-      "quantity": "340 g",
-      "price": 3.79,
-      "currency": "EUR",
-      "priceEur": 3.79,
-      "observations": 1,
-      "firstSeen": "2026-07-29",
-      "lastSeen": "2026-07-29",
-      "shops": [
-        "ILAC Centre, Dublin"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5099874231080"
-    },
-    {
-      "id": "op-ie-5053947211485",
-      "code": "5053947211485",
-      "country": "IE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Chicken Breast Slices",
-      "brand": "Tesco",
+      "priceLevel": "A01010101",
+      "name": "Shortbread sheep",
+      "brand": "",
       "quantity": null,
-      "price": 3.05,
+      "price": 3.95,
       "currency": "EUR",
-      "priceEur": 3.05,
+      "priceEur": 3.95,
       "observations": 1,
-      "firstSeen": "2026-08-30",
-      "lastSeen": "2026-08-30",
+      "firstSeen": "2026-04-20",
+      "lastSeen": "2026-04-20",
       "shops": [
-        "Tesco Express, Dublin"
+        "Carroll's Irish Gifts, Dublin"
       ],
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/5053947211485"
+      "url": "https://prices.openfoodfacts.org/products/5010909006602"
     },
     {
-      "id": "op-ie-5391549941462",
-      "code": "5391549941462",
+      "id": "op-ie-20026554",
+      "code": "20026554",
       "country": "IE",
       "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Irish Beef Medallion Steaks",
-      "brand": "Bright Meat Company",
-      "quantity": "280 g",
-      "price": 5.5,
+      "priceLevel": "A01010101",
+      "name": "Schokobutterkeks Zartbitter",
+      "brand": "Inter Biscuits,Lidl,Sondey",
+      "quantity": "125 g",
+      "price": 1.35,
       "currency": "EUR",
-      "priceEur": 5.5,
+      "priceEur": 1.35,
       "observations": 1,
-      "firstSeen": "2026-08-16",
-      "lastSeen": "2026-08-16",
+      "firstSeen": "2026-01-22",
+      "lastSeen": "2026-01-22",
       "shops": [
-        "Tesco Extra, Cork"
+        "Lidl, Cork"
       ],
       "proofs": [
-        "PRICE_TAG"
+        "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/5391549941462"
+      "url": "https://prices.openfoodfacts.org/products/20026554"
+    },
+    {
+      "id": "op-ie-4335619062788",
+      "code": "4335619062788",
+      "country": "IE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Giant Neo",
+      "brand": "Lidl",
+      "quantity": "340 g",
+      "price": 1.99,
+      "currency": "EUR",
+      "priceEur": 1.99,
+      "observations": 1,
+      "firstSeen": "2026-01-22",
+      "lastSeen": "2026-01-22",
+      "shops": [
+        "Lidl, Cork"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4335619062788"
     },
     {
       "id": "op-de-8002200140694",
@@ -494,515 +448,6 @@
       "url": "https://prices.openfoodfacts.org/products/20327545"
     },
     {
-      "id": "op-de-4056489183631",
-      "code": "4056489183631",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Pure Kornkraft Haferbrot",
-      "brand": "GRAFSCHAFTER",
-      "quantity": "400 g",
-      "price": 1.75,
-      "currency": "EUR",
-      "priceEur": 1.75,
-      "observations": 7,
-      "firstSeen": "2026-03-20",
-      "lastSeen": "2026-07-29",
-      "shops": [
-        "Lidl, München",
-        "Lidl, Münster"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4056489183631"
-    },
-    {
-      "id": "op-de-4337256643214",
-      "code": "4337256643214",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Das Pure",
-      "brand": "REWE Bio",
-      "quantity": "300 g",
-      "price": 1.75,
-      "currency": "EUR",
-      "priceEur": 1.75,
-      "observations": 6,
-      "firstSeen": "2026-04-02",
-      "lastSeen": "2026-08-21",
-      "shops": [
-        "REWE, Berlin",
-        "Rewe, Bielefeld",
-        "REWE, Hamburg"
-      ],
-      "proofs": [
-        "PRICE_TAG",
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4337256643214"
-    },
-    {
-      "id": "op-de-21658990",
-      "code": "21658990",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Knöpfle",
-      "brand": "Landmanns, Penny, Penny Ready",
-      "quantity": "500 g",
-      "price": 1.89,
-      "currency": "EUR",
-      "priceEur": 1.89,
-      "observations": 5,
-      "firstSeen": "2025-10-23",
-      "lastSeen": "2026-09-17",
-      "shops": [
-        "Penny, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/21658990"
-    },
-    {
-      "id": "op-de-4316268723909",
-      "code": "4316268723909",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Haferbrot",
-      "brand": "Kornmühle",
-      "quantity": null,
-      "price": 1.75,
-      "currency": "EUR",
-      "priceEur": 1.75,
-      "observations": 5,
-      "firstSeen": "2026-02-20",
-      "lastSeen": "2026-08-29",
-      "shops": [
-        "Netto City, München",
-        "Netto Marken-Discount, Braunschweig"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4316268723909"
-    },
-    {
-      "id": "op-de-4337256112260",
-      "code": "4337256112260",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Beeren Müsli",
-      "brand": "Rewe, Rewe Bio",
-      "quantity": "500 g",
-      "price": 2.79,
-      "currency": "EUR",
-      "priceEur": 2.79,
-      "observations": 4,
-      "firstSeen": "2026-02-03",
-      "lastSeen": "2026-10-01",
-      "shops": [
-        "REWE, Berlin",
-        "REWE, Kempten (Allgäu)",
-        "Rewe, Bielefeld"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4337256112260"
-    },
-    {
-      "id": "op-de-4056489206026",
-      "code": "4056489206026",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Eiweißreiches Weizenvollkornbrot",
-      "brand": "GRÄFSCHAFTER",
-      "quantity": "500 g",
-      "price": 1.99,
-      "currency": "EUR",
-      "priceEur": 1.99,
-      "observations": 4,
-      "firstSeen": "2025-11-15",
-      "lastSeen": "2026-08-27",
-      "shops": [
-        "Lidl, Münster",
-        "Lidl, Hamburg"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4056489206026"
-    },
-    {
-      "id": "op-de-4061461010911",
-      "code": "4061461010911",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Grissotti",
-      "brand": "Cucina",
-      "quantity": "200 g",
-      "price": 1.29,
-      "currency": "EUR",
-      "priceEur": 1.29,
-      "observations": 4,
-      "firstSeen": "2026-04-25",
-      "lastSeen": "2026-08-06",
-      "shops": [
-        "Aldi, Strausberg",
-        "Aldi Süd, Stuttgart"
-      ],
-      "proofs": [
-        "PRICE_TAG",
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4061461010911"
-    },
-    {
-      "id": "op-de-4337256783132",
-      "code": "4337256783132",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Rewe Bio Haferflocken zart",
-      "brand": "Rewe Bio",
-      "quantity": "500 g",
-      "price": 0.85,
-      "currency": "EUR",
-      "priceEur": 0.85,
-      "observations": 4,
-      "firstSeen": "2026-06-20",
-      "lastSeen": "2026-07-31",
-      "shops": [
-        "REWE, Berlin",
-        "Rewe, Bielefeld"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4337256783132"
-    },
-    {
-      "id": "op-de-8852018101024",
-      "code": "8852018101024",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Yum Yum Chicken Flavour",
-      "brand": "YumYum",
-      "quantity": "60 g",
-      "price": 0.69,
-      "currency": "EUR",
-      "priceEur": 0.69,
-      "observations": 3,
-      "firstSeen": "2025-12-13",
-      "lastSeen": "2026-10-05",
-      "shops": [
-        "Lidl, Münster",
-        "Netto Marken-Discount, Strausberg",
-        "Lidl, München"
-      ],
-      "proofs": [
-        "PRICE_TAG",
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8852018101024"
-    },
-    {
-      "id": "op-de-4337256894210",
-      "code": "4337256894210",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Finn Toastbrötchen",
-      "brand": "REWE Bio",
-      "quantity": "260 g",
-      "price": 0.95,
-      "currency": "EUR",
-      "priceEur": 0.95,
-      "observations": 3,
-      "firstSeen": "2026-06-13",
-      "lastSeen": "2026-10-01",
-      "shops": [
-        "Rewe, Bielefeld"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4337256894210"
-    },
-    {
-      "id": "op-de-4008452027589",
-      "code": "4008452027589",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Haltbare Milch 1,5% Fett",
-      "brand": "Weihenstephan",
-      "quantity": "1000 ml",
-      "price": 1.69,
-      "currency": "EUR",
-      "priceEur": 1.69,
-      "observations": 12,
-      "firstSeen": "2025-11-19",
-      "lastSeen": "2026-09-11",
-      "shops": [
-        "V-MARKT, Mariaberg",
-        "REWE, Kempten (Allgäu)",
-        "Feneberg, Kempten (Allgäu)"
-      ],
-      "proofs": [
-        "PRICE_TAG",
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4008452027589"
-    },
-    {
-      "id": "op-de-4316268698849",
-      "code": "4316268698849",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Frische Vollmilch",
-      "brand": "Gutes Land",
-      "quantity": "1000 ml",
-      "price": 0.95,
-      "currency": "EUR",
-      "priceEur": 0.95,
-      "observations": 10,
-      "firstSeen": "2025-11-24",
-      "lastSeen": "2026-10-16",
-      "shops": [
-        "Netto City, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4316268698849"
-    },
-    {
-      "id": "op-de-4028900004665",
-      "code": "4028900004665",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Landjoghurt mild 1,5% Fett",
-      "brand": "Milchwerke Schwaben",
-      "quantity": "1000 g",
-      "price": 2.89,
-      "currency": "EUR",
-      "priceEur": 2.89,
-      "observations": 7,
-      "firstSeen": "2025-11-13",
-      "lastSeen": "2026-06-19",
-      "shops": [
-        "V-MARKT, Mariaberg",
-        "Feneberg, Zollhaus",
-        "Feneberg, Kempten (Allgäu)"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4028900004665"
-    },
-    {
-      "id": "op-de-4316268604895",
-      "code": "4316268604895",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Gouda Jung",
-      "brand": "Gutes Land, Netto Marken Discount",
-      "quantity": "400 g",
-      "price": 2.45,
-      "currency": "EUR",
-      "priceEur": 2.45,
-      "observations": 6,
-      "firstSeen": "2026-07-17",
-      "lastSeen": "2026-09-29",
-      "shops": [
-        "Netto Marken-Discount, Villingen-Schwenningen"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4316268604895"
-    },
-    {
-      "id": "op-de-4061459193695",
-      "code": "4061459193695",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Frische Bio-Vollmilch 3,8 % Fett",
-      "brand": "Bio,Aldi",
-      "quantity": "1000 ml",
-      "price": 1.35,
-      "currency": "EUR",
-      "priceEur": 1.35,
-      "observations": 5,
-      "firstSeen": "2025-11-13",
-      "lastSeen": "2026-04-18",
-      "shops": [
-        "Aldi Süd, Darmstadt"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4061459193695"
-    },
-    {
-      "id": "op-de-4004953005514",
-      "code": "4004953005514",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Frische Bio Eier",
-      "brand": "Eifrisch",
-      "quantity": null,
-      "price": 3.99,
-      "currency": "EUR",
-      "priceEur": 3.99,
-      "observations": 4,
-      "firstSeen": "2025-11-24",
-      "lastSeen": "2026-08-21",
-      "shops": [
-        "Netto, Strausberg",
-        "REWE, Berlin",
-        "Rewe, Bielefeld"
-      ],
-      "proofs": [
-        "PRICE_TAG",
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4004953005514"
-    },
-    {
-      "id": "op-de-4337256781510",
-      "code": "4337256781510",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Frische Weidemilch 1,5 %",
-      "brand": "Rewe Bio, NordseeMilch",
-      "quantity": "1000 ml",
-      "price": 1.25,
-      "currency": "EUR",
-      "priceEur": 1.25,
-      "observations": 4,
-      "firstSeen": "2026-06-29",
-      "lastSeen": "2026-07-31",
-      "shops": [
-        "Rewe, Bielefeld"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4337256781510"
-    },
-    {
-      "id": "op-de-4028900004641",
-      "code": "4028900004641",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Joghurt 3,5% Fett",
-      "brand": "Weideglück",
-      "quantity": "1000 g",
-      "price": 2.99,
-      "currency": "EUR",
-      "priceEur": 2.99,
-      "observations": 4,
-      "firstSeen": "2026-01-14",
-      "lastSeen": "2026-07-21",
-      "shops": [
-        "V-MARKT, Mariaberg",
-        "Feneberg, Kempten (Allgäu)"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4028900004641"
-    },
-    {
-      "id": "op-de-4311501677230",
-      "code": "4311501677230",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Harzer Käse",
-      "brand": "Gut & Günstig",
-      "quantity": "200 g",
-      "price": 1.89,
-      "currency": "EUR",
-      "priceEur": 1.89,
-      "observations": 4,
-      "firstSeen": "2025-11-10",
-      "lastSeen": "2026-05-05",
-      "shops": [
-        "EDEKA, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4311501677230"
-    },
-    {
-      "id": "op-de-4002468228893",
-      "code": "4002468228893",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Chili & Paprika herzhaft pikant",
-      "brand": "Grünländer",
-      "quantity": "140 g",
-      "price": 2.29,
-      "currency": "EUR",
-      "priceEur": 2.29,
-      "observations": 4,
-      "firstSeen": "2025-12-18",
-      "lastSeen": "2026-03-16",
-      "shops": [
-        "REWE, Kempten (Allgäu)",
-        "Feneberg, Kempten (Allgäu)"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4002468228893"
-    },
-    {
-      "id": "op-de-4311596460151",
-      "code": "4311596460151",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Butter",
-      "brand": "Gut & Günstig",
-      "quantity": "250 g",
-      "price": 1.05,
-      "currency": "EUR",
-      "priceEur": 1.05,
-      "observations": 7,
-      "firstSeen": "2025-11-10",
-      "lastSeen": "2026-09-12",
-      "shops": [
-        "EDEKA, München",
-        "Feneberg, Kempten (Allgäu)",
-        "Edeka, Gunzenhausen"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4311596460151"
-    },
-    {
       "id": "op-de-4061461377601",
       "code": "4061461377601",
       "country": "DE",
@@ -1075,100 +520,6 @@
       "url": "https://prices.openfoodfacts.org/products/4069365382097"
     },
     {
-      "id": "op-de-4067517000349",
-      "code": "4067517000349",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Landliebe Butter",
-      "brand": "Landliebe",
-      "quantity": "250 g",
-      "price": 1.24,
-      "currency": "EUR",
-      "priceEur": 1.24,
-      "observations": 2,
-      "firstSeen": "2026-07-24",
-      "lastSeen": "2026-07-24",
-      "shops": [
-        "Netto Marken-Discount, Woltersdorf"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4067517000349"
-    },
-    {
-      "id": "op-de-4316268557948",
-      "code": "4316268557948",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Deutsche Markenbutter",
-      "brand": "Gutes Land, Gutes Land / Netto",
-      "quantity": "250 g",
-      "price": 1.17,
-      "currency": "EUR",
-      "priceEur": 1.17,
-      "observations": 2,
-      "firstSeen": "2025-11-20",
-      "lastSeen": "2026-07-18",
-      "shops": [
-        "Netto City, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4316268557948"
-    },
-    {
-      "id": "op-de-4001954161010",
-      "code": "4001954161010",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Irische Butter",
-      "brand": "Kerrygold",
-      "quantity": "250 g",
-      "price": 3.49,
-      "currency": "EUR",
-      "priceEur": 3.49,
-      "observations": 2,
-      "firstSeen": "2026-03-27",
-      "lastSeen": "2026-06-16",
-      "shops": [
-        "REWE, Dresden",
-        "EDEKA Woltersdorf, Woltersdorf"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4001954161010"
-    },
-    {
-      "id": "op-de-4400034393509",
-      "code": "4400034393509",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Unsere Butter streichfein",
-      "brand": "Sachsenmilch",
-      "quantity": "250 g",
-      "price": 1.55,
-      "currency": "EUR",
-      "priceEur": 1.55,
-      "observations": 2,
-      "firstSeen": "2025-11-05",
-      "lastSeen": "2026-06-06",
-      "shops": [
-        "Netto Marken-Discount, Dahme/Mark",
-        "Netto, Strausberg"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4400034393509"
-    },
-    {
       "id": "op-de-4311596421626",
       "code": "4311596421626",
       "country": "DE",
@@ -1193,333 +544,142 @@
       "url": "https://prices.openfoodfacts.org/products/4311596421626"
     },
     {
-      "id": "op-de-4311501648766",
-      "code": "4311501648766",
+      "id": "op-de-4400050320145",
+      "code": "4400050320145",
       "country": "DE",
       "category": "groceries",
       "priceLevel": "A01010105",
-      "name": "Deutsche Markenbutter",
-      "brand": "Edeka, Gut& Günstig",
-      "quantity": "250 g",
-      "price": 1.19,
-      "currency": "EUR",
-      "priceEur": 1.19,
-      "observations": 1,
-      "firstSeen": "2026-09-28",
-      "lastSeen": "2026-09-28",
-      "shops": [
-        "Edeka, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4311501648766"
-    },
-    {
-      "id": "op-de-8436557138934",
-      "code": "8436557138934",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Cherry-Roma Tomaten Klasse 1",
-      "brand": "Frisch Penny, ja!",
-      "quantity": "250 g",
-      "price": 0.75,
-      "currency": "EUR",
-      "priceEur": 0.75,
-      "observations": 5,
-      "firstSeen": "2026-04-17",
-      "lastSeen": "2026-08-31",
-      "shops": [
-        "REWE, Dahme/Mark",
-        "REWE Center, Frankfurt am Main",
-        "REWE, Bamberg"
-      ],
-      "proofs": [
-        "PRICE_TAG",
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8436557138934"
-    },
-    {
-      "id": "op-de-26206455",
-      "code": "26206455",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Rotkohl mit Preiselbeeren",
-      "brand": "greenland",
-      "quantity": "400 g",
-      "price": 1.19,
-      "currency": "EUR",
-      "priceEur": 1.19,
-      "observations": 4,
-      "firstSeen": "2026-01-19",
-      "lastSeen": "2026-07-07",
-      "shops": [
-        "Penny, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/26206455"
-    },
-    {
-      "id": "op-de-5712872952909",
-      "code": "5712872952909",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Ananasstücke in Ananassaft",
-      "brand": "Harvest Best, Siam Food",
-      "quantity": "340 g",
-      "price": 1.79,
-      "currency": "EUR",
-      "priceEur": 1.79,
-      "observations": 4,
-      "firstSeen": "2025-11-13",
-      "lastSeen": "2026-07-06",
-      "shops": [
-        "Netto, Strausberg"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5712872952909"
-    },
-    {
-      "id": "op-de-8717496041647",
-      "code": "8717496041647",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Framboises",
-      "brand": "Driscoll's",
-      "quantity": "125 g",
-      "price": 1.79,
-      "currency": "EUR",
-      "priceEur": 1.79,
-      "observations": 3,
-      "firstSeen": "2025-12-29",
-      "lastSeen": "2026-09-19",
-      "shops": [
-        "Bayern",
-        "EDEKA, Fellbach"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8717496041647"
-    },
-    {
-      "id": "op-de-7290017999609",
-      "code": "7290017999609",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Medjoul Datteln mit Stein",
-      "brand": "Agrifood,Desert Farmers",
-      "quantity": "200 g",
+      "name": "Rapsöl von Kunella",
+      "brand": "K-Favoutites, Kunella Feinkost, Rapso, Kunella",
+      "quantity": "500 ml",
       "price": 2.99,
       "currency": "EUR",
       "priceEur": 2.99,
-      "observations": 3,
-      "firstSeen": "2026-03-31",
-      "lastSeen": "2026-08-12",
+      "observations": 1,
+      "firstSeen": "2026-09-09",
+      "lastSeen": "2026-09-09",
       "shops": [
-        "Bayern",
+        "Netto Marken-Discount, Leipzig"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4400050320145"
+    },
+    {
+      "id": "op-de-4316268427548",
+      "code": "4316268427548",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010105",
+      "name": "Sonnenblumenöl",
+      "brand": "Netto, Vegola",
+      "quantity": "1000 ml",
+      "price": 1.89,
+      "currency": "EUR",
+      "priceEur": 1.89,
+      "observations": 1,
+      "firstSeen": "2026-09-04",
+      "lastSeen": "2026-09-04",
+      "shops": [
+        "Netto Marken-Discount, Berlin"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4316268427548"
+    },
+    {
+      "id": "op-de-4316268522441",
+      "code": "4316268522441",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010105",
+      "name": "Rapsöl",
+      "brand": "Vegola",
+      "quantity": "1000 ml",
+      "price": 1.89,
+      "currency": "EUR",
+      "priceEur": 1.89,
+      "observations": 1,
+      "firstSeen": "2026-09-03",
+      "lastSeen": "2026-09-03",
+      "shops": [
+        "Netto Marken-Discount, Woldegk"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4316268522441"
+    },
+    {
+      "id": "op-de-4270005399300",
+      "code": "4270005399300",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010105",
+      "name": "RIFYON natives Olivenöl extra",
+      "brand": "RIFYON",
+      "quantity": "250 ml",
+      "price": 14.99,
+      "currency": "EUR",
+      "priceEur": 14.99,
+      "observations": 1,
+      "firstSeen": "2026-08-30",
+      "lastSeen": "2026-08-30",
+      "shops": [
+        "Offenbacher Wochenmarkt, Offenbach am Main"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4270005399300"
+    },
+    {
+      "id": "op-de-4028712300405",
+      "code": "4028712300405",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010105",
+      "name": "Raps-& Frühlingsblüte",
+      "brand": "Bienenwirtschaft Meissen",
+      "quantity": "500 g",
+      "price": 5.49,
+      "currency": "EUR",
+      "priceEur": 5.49,
+      "observations": 1,
+      "firstSeen": "2026-08-29",
+      "lastSeen": "2026-08-29",
+      "shops": [
         "Netto Marken-Discount, Strausberg"
       ],
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/7290017999609"
+      "url": "https://prices.openfoodfacts.org/products/4028712300405"
     },
     {
-      "id": "op-de-94001129",
-      "code": "94001129",
+      "id": "op-de-8001250220011",
+      "code": "8001250220011",
       "country": "DE",
       "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Sungold Kiwi",
-      "brand": "Zespri",
-      "quantity": "118 g",
-      "price": 0.79,
+      "priceLevel": "A01010105",
+      "name": "Olio extra vergine di oliva - Classico",
+      "brand": "De Cecco",
+      "quantity": "1000 ml",
+      "price": 11.99,
       "currency": "EUR",
-      "priceEur": 0.79,
-      "observations": 3,
-      "firstSeen": "2026-07-22",
-      "lastSeen": "2026-07-31",
+      "priceEur": 11.99,
+      "observations": 1,
+      "firstSeen": "2026-08-17",
+      "lastSeen": "2026-08-17",
       "shops": [
-        "Rewe, Bielefeld"
+        "REWE, Berlin"
       ],
       "proofs": [
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/94001129"
-    },
-    {
-      "id": "op-de-4316268599672",
-      "code": "4316268599672",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Tafeläpfel, Sorte Elstar, Kl. II",
-      "brand": "Ein Herz für Erzeuger",
-      "quantity": "2000 g",
-      "price": 2.99,
-      "currency": "EUR",
-      "priceEur": 2.99,
-      "observations": 3,
-      "firstSeen": "2025-12-30",
-      "lastSeen": "2026-07-14",
-      "shops": [
-        "Netto City, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4316268599672"
-    },
-    {
-      "id": "op-de-5712873177929",
-      "code": "5712873177929",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Ananas",
-      "brand": "Harvest Best",
-      "quantity": "340 g",
-      "price": 1.79,
-      "currency": "EUR",
-      "priceEur": 1.79,
-      "observations": 3,
-      "firstSeen": "2025-11-13",
-      "lastSeen": "2026-07-06",
-      "shops": [
-        "Netto, Strausberg"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5712873177929"
-    },
-    {
-      "id": "op-de-4311596446094",
-      "code": "4311596446094",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Cornichons",
-      "brand": "Gut & Günstig",
-      "quantity": "370 g",
-      "price": 1.29,
-      "currency": "EUR",
-      "priceEur": 1.29,
-      "observations": 3,
-      "firstSeen": "2026-01-24",
-      "lastSeen": "2026-06-10",
-      "shops": [
-        "EDEKA, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4311596446094"
-    },
-    {
-      "id": "op-de-4061458248129",
-      "code": "4061458248129",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Brokkoli",
-      "brand": "NATUR Lieblinge",
-      "quantity": "500 g",
-      "price": 1.49,
-      "currency": "EUR",
-      "priceEur": 1.49,
-      "observations": 3,
-      "firstSeen": "2025-11-27",
-      "lastSeen": "2026-04-18",
-      "shops": [
-        "Aldi Süd, Darmstadt",
-        "Aldi Süd, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4061458248129"
-    },
-    {
-      "id": "op-de-42394495",
-      "code": "42394495",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Marinierte Garnelen - Knoblauch & Kräuter",
-      "brand": "SeaGold",
-      "quantity": "100 g",
-      "price": 1.99,
-      "currency": "EUR",
-      "priceEur": 1.99,
-      "observations": 3,
-      "firstSeen": "2026-04-11",
-      "lastSeen": "2026-10-16",
-      "shops": [
-        "Netto City, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/42394495"
-    },
-    {
-      "id": "op-de-4337256988674",
-      "code": "4337256988674",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Yuriko Sushi",
-      "brand": "REWE to go, Rewe",
-      "quantity": "360 g",
-      "price": 7.99,
-      "currency": "EUR",
-      "priceEur": 7.99,
-      "observations": 3,
-      "firstSeen": "2025-11-19",
-      "lastSeen": "2026-10-01",
-      "shops": [
-        "Rewe, Bielefeld"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4337256988674"
-    },
-    {
-      "id": "op-de-4250241203524",
-      "code": "4250241203524",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Fischstäbchen",
-      "brand": "IGLO",
-      "quantity": "450 g",
-      "price": 4.88,
-      "currency": "EUR",
-      "priceEur": 4.88,
-      "observations": 3,
-      "firstSeen": "2025-11-24",
-      "lastSeen": "2026-09-29",
-      "shops": [
-        "Netto, Strausberg",
-        "Netto Marken-Discount, Dahme/Mark"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4250241203524"
+      "url": "https://prices.openfoodfacts.org/products/8001250220011"
     },
     {
       "id": "op-de-4311501675236",
@@ -1545,111 +705,577 @@
       "url": "https://prices.openfoodfacts.org/products/4311501675236"
     },
     {
-      "id": "op-de-5712877680401",
-      "code": "5712877680401",
+      "id": "op-de-4316268723329",
+      "code": "4316268723329",
       "country": "DE",
       "category": "groceries",
       "priceLevel": "A01010103",
-      "name": "White Tiger Garnelen",
-      "brand": "Navito",
+      "name": "Bratheringfilets",
+      "brand": "Seagold",
       "quantity": "200 g",
-      "price": 3.24,
+      "price": 1.99,
       "currency": "EUR",
-      "priceEur": 3.24,
-      "observations": 2,
-      "firstSeen": "2026-08-10",
-      "lastSeen": "2026-10-08",
+      "priceEur": 1.99,
+      "observations": 1,
+      "firstSeen": "2026-09-25",
+      "lastSeen": "2026-09-25",
       "shops": [
-        "Netto, Strausberg"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5712877680401"
-    },
-    {
-      "id": "op-de-4337256318327",
-      "code": "4337256318327",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Fischstäbchen",
-      "brand": "Rewe",
-      "quantity": null,
-      "price": 2.99,
-      "currency": "EUR",
-      "priceEur": 2.99,
-      "observations": 2,
-      "firstSeen": "2026-07-21",
-      "lastSeen": "2026-10-01",
-      "shops": [
-        "Rewe, Bielefeld"
+        "Netto Marken-Discount, Witzerath"
       ],
       "proofs": [
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/4337256318327"
+      "url": "https://prices.openfoodfacts.org/products/4316268723329"
     },
     {
-      "id": "op-de-42394518",
-      "code": "42394518",
+      "id": "op-de-42489566",
+      "code": "42489566",
       "country": "DE",
       "category": "groceries",
       "priceLevel": "A01010103",
-      "name": "Marinierte Garnelen, Zitrone & Pfeffer",
-      "brand": "SeaGold",
-      "quantity": "100 g",
-      "price": 1.99,
+      "name": "Herings Filets Mango-Pfeffer-Creme",
+      "brand": "Netto Marken-Discount, Sea Gold",
+      "quantity": "200 g",
+      "price": 1.09,
       "currency": "EUR",
-      "priceEur": 1.99,
-      "observations": 2,
-      "firstSeen": "2025-12-22",
-      "lastSeen": "2026-07-31",
+      "priceEur": 1.09,
+      "observations": 1,
+      "firstSeen": "2026-08-18",
+      "lastSeen": "2026-08-18",
+      "shops": [
+        "Netto Marken-Discount, Villingen-Schwenningen"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/42489566"
+    },
+    {
+      "id": "op-de-3165950578164",
+      "code": "3165950578164",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Tuna natural without oil",
+      "brand": "Saupiquet",
+      "quantity": "480 g",
+      "price": 7.99,
+      "currency": "EUR",
+      "priceEur": 7.99,
+      "observations": 1,
+      "firstSeen": "2026-06-10",
+      "lastSeen": "2026-06-10",
+      "shops": [
+        "V-MARKT, Mariaberg"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/3165950578164"
+    },
+    {
+      "id": "op-de-4068706096617",
+      "code": "4068706096617",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Thunfisch",
+      "brand": "Almare",
+      "quantity": "185 g",
+      "price": 1.29,
+      "currency": "EUR",
+      "priceEur": 1.29,
+      "observations": 1,
+      "firstSeen": "2026-05-27",
+      "lastSeen": "2026-05-27",
+      "shops": [
+        "ALDI Süd, Mühltal"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4068706096617"
+    },
+    {
+      "id": "op-de-4316268674638",
+      "code": "4316268674638",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Sardinen",
+      "brand": "Dreimaster",
+      "quantity": null,
+      "price": 1.19,
+      "currency": "EUR",
+      "priceEur": 1.19,
+      "observations": 1,
+      "firstSeen": "2026-04-14",
+      "lastSeen": "2026-04-14",
+      "shops": [
+        "Netto Marken-Discount, Velten"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4316268674638"
+    },
+    {
+      "id": "op-de-4026968017054",
+      "code": "4026968017054",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Wildlachsfilet im eigenen Saft",
+      "brand": "Fontaine",
+      "quantity": "85 g",
+      "price": 3.89,
+      "currency": "EUR",
+      "priceEur": 3.89,
+      "observations": 1,
+      "firstSeen": "2026-02-14",
+      "lastSeen": "2026-02-14",
+      "shops": [
+        "Naturkost Schwarz, Wetzlar"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4026968017054"
+    },
+    {
+      "id": "op-de-4063367393938",
+      "code": "4063367393938",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Thunfisch Pikant",
+      "brand": "K Classic",
+      "quantity": "185 g",
+      "price": 1.29,
+      "currency": "EUR",
+      "priceEur": 1.29,
+      "observations": 1,
+      "firstSeen": "2026-01-27",
+      "lastSeen": "2026-01-27",
+      "shops": [
+        "Kaufland, Lohmar"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4063367393938"
+    },
+    {
+      "id": "op-de-4020500922011",
+      "code": "4020500922011",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Zarte Filets vom Hering",
+      "brand": "Appel",
+      "quantity": "200 g",
+      "price": 0.99,
+      "currency": "EUR",
+      "priceEur": 0.99,
+      "observations": 1,
+      "firstSeen": "2026-01-08",
+      "lastSeen": "2026-01-08",
+      "shops": [
+        "Aldi Süd, München"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4020500922011"
+    },
+    {
+      "id": "op-de-4020500922073",
+      "code": "4020500922073",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Zarte Filets vom Hering",
+      "brand": "Appel, Appel (Edeka)",
+      "quantity": "200 g",
+      "price": 0.99,
+      "currency": "EUR",
+      "priceEur": 0.99,
+      "observations": 1,
+      "firstSeen": "2026-01-08",
+      "lastSeen": "2026-01-08",
+      "shops": [
+        "Aldi Süd, München"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4020500922073"
+    },
+    {
+      "id": "op-de-20884604",
+      "code": "20884604",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Honig-Salz-Mandel",
+      "brand": "fin CARRE",
+      "quantity": "200 g",
+      "price": 2.49,
+      "currency": "EUR",
+      "priceEur": 2.49,
+      "observations": 6,
+      "firstSeen": "2025-11-14",
+      "lastSeen": "2026-03-31",
+      "shops": [
+        "Lidl, München"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/20884604"
+    },
+    {
+      "id": "op-de-4316268666763",
+      "code": "4316268666763",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Schweizer Edel-Zartbitter Schokolade",
+      "brand": "Netto MD,Schokoliebe",
+      "quantity": "100 g",
+      "price": 1.89,
+      "currency": "EUR",
+      "priceEur": 1.89,
+      "observations": 4,
+      "firstSeen": "2026-02-17",
+      "lastSeen": "2026-08-29",
       "shops": [
         "Netto City, München"
       ],
       "proofs": [
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/42394518"
+      "url": "https://prices.openfoodfacts.org/products/4316268666763"
     },
     {
-      "id": "op-de-4250241203494",
-      "code": "4250241203494",
+      "id": "op-de-4000417670212",
+      "code": "4000417670212",
       "country": "DE",
       "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Schlemmerfilet klein",
-      "brand": "iglo",
-      "quantity": "250 g",
-      "price": 4.49,
+      "priceLevel": "A01010199",
+      "name": "Schokolade Dunkle Voll-Nuss",
+      "brand": "Ritter Sport",
+      "quantity": "100 g",
+      "price": 2.29,
       "currency": "EUR",
-      "priceEur": 4.49,
-      "observations": 2,
-      "firstSeen": "2026-03-10",
-      "lastSeen": "2026-03-11",
+      "priceEur": 2.29,
+      "observations": 3,
+      "firstSeen": "2026-01-22",
+      "lastSeen": "2026-09-01",
       "shops": [
-        "REWE Petz, Selters (Westerwald)"
+        "Netto Marken-Discount, Dahme/Mark",
+        "Netto, Strausberg",
+        "REWE City, Mainz"
       ],
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/4250241203494"
+      "url": "https://prices.openfoodfacts.org/products/4000417670212"
     },
     {
-      "id": "op-de-5712875683138",
-      "code": "5712875683138",
+      "id": "op-de-4316268740227",
+      "code": "4316268740227",
       "country": "DE",
       "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "White Tiger Garnelen",
-      "brand": "Navito",
-      "quantity": "200 g",
+      "priceLevel": "A01010199",
+      "name": "Chocoluv Macadamia meets Sea Salt",
+      "brand": "Lieblings",
+      "quantity": "150 g",
       "price": 2.99,
       "currency": "EUR",
       "priceEur": 2.99,
-      "observations": 1,
-      "firstSeen": "2026-10-08",
+      "observations": 2,
+      "firstSeen": "2026-08-29",
+      "lastSeen": "2026-10-14",
+      "shops": [
+        "Netto Marken-Discount, Strausberg"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4316268740227"
+    },
+    {
+      "id": "op-de-4316268740289",
+      "code": "4316268740289",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Chocoluv Peanut Loves Caramel",
+      "brand": "Lieblings",
+      "quantity": "150 g",
+      "price": 2.99,
+      "currency": "EUR",
+      "priceEur": 2.99,
+      "observations": 2,
+      "firstSeen": "2026-08-29",
+      "lastSeen": "2026-10-14",
+      "shops": [
+        "Netto Marken-Discount, Strausberg"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4316268740289"
+    },
+    {
+      "id": "op-de-4000417670014",
+      "code": "4000417670014",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Nussklasse Voll-Nuss",
+      "brand": "Ritter Sport",
+      "quantity": "100 g",
+      "price": 2.29,
+      "currency": "EUR",
+      "priceEur": 2.29,
+      "observations": 2,
+      "firstSeen": "2026-01-22",
+      "lastSeen": "2026-09-01",
+      "shops": [
+        "Netto Marken-Discount, Dahme/Mark",
+        "Netto, Strausberg"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4000417670014"
+    },
+    {
+      "id": "op-de-4055500012240",
+      "code": "4055500012240",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Sonnenblumenhonig",
+      "brand": "Bihophar",
+      "quantity": "500 g",
+      "price": 4.49,
+      "currency": "EUR",
+      "priceEur": 4.49,
+      "observations": 2,
+      "firstSeen": "2025-11-21",
+      "lastSeen": "2026-08-15",
+      "shops": [
+        "Netto, Strausberg"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4055500012240"
+    },
+    {
+      "id": "op-de-5712876002396",
+      "code": "5712876002396",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "GO BIO Blütenhonig cremig",
+      "brand": "GO BIO",
+      "quantity": "500 g",
+      "price": 3.99,
+      "currency": "EUR",
+      "priceEur": 3.99,
+      "observations": 2,
+      "firstSeen": "2026-03-26",
+      "lastSeen": "2026-08-15",
+      "shops": [
+        "Netto, Strausberg"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5712876002396"
+    },
+    {
+      "id": "op-de-3046920029681",
+      "code": "3046920029681",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Excellence Noir Délicat Doux 85% Cacao",
+      "brand": "LINDT EXCELLENCE",
+      "quantity": "100 g",
+      "price": 4.99,
+      "currency": "EUR",
+      "priceEur": 4.99,
+      "observations": 2,
+      "firstSeen": "2026-06-27",
+      "lastSeen": "2026-07-20",
+      "shops": [
+        "V-MARKT, Mariaberg"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/3046920029681"
+    },
+    {
+      "id": "op-de-4000417670113",
+      "code": "4000417670113",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Weiße Nuss",
+      "brand": "Ritter Sport",
+      "quantity": "100 g",
+      "price": 2.29,
+      "currency": "EUR",
+      "priceEur": 2.29,
+      "observations": 2,
+      "firstSeen": "2026-01-22",
+      "lastSeen": "2026-04-28",
+      "shops": [
+        "Netto Marken-Discount, Dahme/Mark",
+        "REWE City, Mainz"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4000417670113"
+    },
+    {
+      "id": "op-de-4316268604895",
+      "code": "4316268604895",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Gouda Jung",
+      "brand": "Gutes Land, Netto Marken Discount",
+      "quantity": "400 g",
+      "price": 2.45,
+      "currency": "EUR",
+      "priceEur": 2.45,
+      "observations": 6,
+      "firstSeen": "2026-07-17",
+      "lastSeen": "2026-09-29",
+      "shops": [
+        "Netto Marken-Discount, Villingen-Schwenningen"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4316268604895"
+    },
+    {
+      "id": "op-de-4311501677230",
+      "code": "4311501677230",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Harzer Käse",
+      "brand": "Gut & Günstig",
+      "quantity": "200 g",
+      "price": 1.89,
+      "currency": "EUR",
+      "priceEur": 1.89,
+      "observations": 4,
+      "firstSeen": "2025-11-10",
+      "lastSeen": "2026-05-05",
+      "shops": [
+        "EDEKA, München"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4311501677230"
+    },
+    {
+      "id": "op-de-4002468228893",
+      "code": "4002468228893",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Chili & Paprika herzhaft pikant",
+      "brand": "Grünländer",
+      "quantity": "140 g",
+      "price": 2.29,
+      "currency": "EUR",
+      "priceEur": 2.29,
+      "observations": 4,
+      "firstSeen": "2025-12-18",
+      "lastSeen": "2026-03-16",
+      "shops": [
+        "REWE, Kempten (Allgäu)",
+        "Feneberg, Kempten (Allgäu)"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4002468228893"
+    },
+    {
+      "id": "op-de-4056489013082",
+      "code": "4056489013082",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Bio Speisequark Magerstufe",
+      "brand": "Bioland",
+      "quantity": "250 g",
+      "price": 1.09,
+      "currency": "EUR",
+      "priceEur": 1.09,
+      "observations": 4,
+      "firstSeen": "2025-10-25",
+      "lastSeen": "2026-02-24",
+      "shops": [
+        "Lidl, Münster"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4056489013082"
+    },
+    {
+      "id": "op-de-4337256454629",
+      "code": "4337256454629",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Mozarella",
+      "brand": "ja!",
+      "quantity": "200 g",
+      "price": 0.85,
+      "currency": "EUR",
+      "priceEur": 0.85,
+      "observations": 3,
+      "firstSeen": "2026-08-21",
+      "lastSeen": "2026-10-14",
+      "shops": [
+        "REWE, Berlin",
+        "REWE Stenten, Aachen"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4337256454629"
+    },
+    {
+      "id": "op-de-5712877210264",
+      "code": "5712877210264",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Maasdamer 9 Scheiben",
+      "brand": "frija",
+      "quantity": "299 g",
+      "price": 2.39,
+      "currency": "EUR",
+      "priceEur": 2.39,
+      "observations": 3,
+      "firstSeen": "2026-01-28",
       "lastSeen": "2026-10-08",
       "shops": [
         "Netto, Strausberg"
@@ -1657,261 +1283,346 @@
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/5712875683138"
+      "url": "https://prices.openfoodfacts.org/products/5712877210264"
     },
     {
-      "id": "op-de-4009239114027",
-      "code": "4009239114027",
+      "id": "op-de-42012986",
+      "code": "42012986",
       "country": "DE",
       "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Klassiche Fisch-Frikadelle",
-      "brand": "Deutsche See",
-      "quantity": "170 g",
-      "price": 2.99,
+      "priceLevel": "A01010104",
+      "name": "Harzer Roller Minis mit Edelschimmel",
+      "brand": "Gutes Land",
+      "quantity": "115 g",
+      "price": 1.19,
       "currency": "EUR",
-      "priceEur": 2.99,
-      "observations": 1,
-      "firstSeen": "2026-09-29",
-      "lastSeen": "2026-09-29",
-      "shops": [
-        "REWE, Schwetzingen"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4009239114027"
-    },
-    {
-      "id": "op-de-4337256955201",
-      "code": "4337256955201",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Hähnchen Filetstreifen",
-      "brand": "ja!",
-      "quantity": "250 g",
-      "price": 2.99,
-      "currency": "EUR",
-      "priceEur": 2.99,
-      "observations": 4,
-      "firstSeen": "2025-11-24",
-      "lastSeen": "2026-07-31",
-      "shops": [
-        "Rewe, Bielefeld"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4337256955201"
-    },
-    {
-      "id": "op-de-4337256427760",
-      "code": "4337256427760",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Chicken Nuggets gold-gelb paniert",
-      "brand": "ja!",
-      "quantity": "500 g",
-      "price": 3.99,
-      "currency": "EUR",
-      "priceEur": 3.99,
+      "priceEur": 1.19,
       "observations": 3,
-      "firstSeen": "2025-11-19",
-      "lastSeen": "2026-09-24",
+      "firstSeen": "2026-04-01",
+      "lastSeen": "2026-08-12",
       "shops": [
-        "Rewe, Bielefeld"
+        "Netto Marken-Discount, Strausberg",
+        "Netto City, München"
       ],
       "proofs": [
+        "PRICE_TAG",
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/4337256427760"
+      "url": "https://prices.openfoodfacts.org/products/42012986"
     },
     {
-      "id": "op-de-4104690826080",
-      "code": "4104690826080",
+      "id": "op-de-4316268673006",
+      "code": "4316268673006",
       "country": "DE",
       "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Lachsschinken",
-      "brand": "Kleinemas",
-      "quantity": "150 g",
-      "price": 3.22,
-      "currency": "EUR",
-      "priceEur": 3.22,
-      "observations": 2,
-      "firstSeen": "2026-06-02",
-      "lastSeen": "2026-09-19",
-      "shops": [
-        "EDEKA, Fellbach"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4104690826080"
-    },
-    {
-      "id": "op-de-4000582265190",
-      "code": "4000582265190",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Fleischwurst",
-      "brand": "Herta",
+      "priceLevel": "A01010104",
+      "name": "Quarkiger Genuss Erdbeer",
+      "brand": "Gutes Land, Netto",
       "quantity": "500 g",
-      "price": 2.62,
-      "currency": "EUR",
-      "priceEur": 2.62,
-      "observations": 2,
-      "firstSeen": "2026-04-21",
-      "lastSeen": "2026-09-12",
-      "shops": [
-        "EDEKA, Fellbach"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4000582265190"
-    },
-    {
-      "id": "op-de-5998003106919",
-      "code": "5998003106919",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Original ungarische Salami",
-      "brand": "Pick",
-      "quantity": "250 g",
-      "price": 5.37,
-      "currency": "EUR",
-      "priceEur": 5.37,
-      "observations": 2,
-      "firstSeen": "2026-08-03",
-      "lastSeen": "2026-09-12",
-      "shops": [
-        "EDEKA, Fellbach",
-        "Kaufland, Berlin"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5998003106919"
-    },
-    {
-      "id": "op-de-4043362500913",
-      "code": "4043362500913",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Schweine Minutensteaks",
-      "brand": "Gut Ponholz",
-      "quantity": "400 g",
-      "price": 2.74,
-      "currency": "EUR",
-      "priceEur": 2.74,
-      "observations": 2,
-      "firstSeen": "2026-07-30",
-      "lastSeen": "2026-08-18",
-      "shops": [
-        "Netto Marken-Discount, Berlin"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4043362500913"
-    },
-    {
-      "id": "op-de-4311501446379",
-      "code": "4311501446379",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Delikatess Bacon",
-      "brand": "Gut & Günstig",
-      "quantity": "100 g",
-      "price": 1.34,
-      "currency": "EUR",
-      "priceEur": 1.34,
-      "observations": 2,
-      "firstSeen": "2025-10-24",
-      "lastSeen": "2026-05-29",
-      "shops": [
-        "EDEKA, München"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4311501446379"
-    },
-    {
-      "id": "op-de-4061458014540",
-      "code": "4061458014540",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Putenbrustfilet",
-      "brand": "Güldenhof, Kupfer",
-      "quantity": "100 g",
       "price": 1.59,
       "currency": "EUR",
       "priceEur": 1.59,
       "observations": 2,
-      "firstSeen": "2026-03-02",
-      "lastSeen": "2026-05-07",
+      "firstSeen": "2026-08-05",
+      "lastSeen": "2026-09-29",
       "shops": [
-        "Aldi, Strausberg"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4061458014540"
-    },
-    {
-      "id": "op-de-4061464795648",
-      "code": "4061464795648",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Mini Hähnchenbrustfiletstücke Paprika",
-      "brand": "Aldi",
-      "quantity": "150 g",
-      "price": 2.19,
-      "currency": "EUR",
-      "priceEur": 2.19,
-      "observations": 2,
-      "firstSeen": "2026-05-07",
-      "lastSeen": "2026-05-07",
-      "shops": [
-        "Aldi, Strausberg"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4061464795648"
-    },
-    {
-      "id": "op-de-4056489351733",
-      "code": "4056489351733",
-      "country": "DE",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "PUTEN-GESCHNETZELTES",
-      "brand": "Lidl",
-      "quantity": "400 g",
-      "price": 4.59,
-      "currency": "EUR",
-      "priceEur": 4.59,
-      "observations": 1,
-      "firstSeen": "2026-09-08",
-      "lastSeen": "2026-09-08",
-      "shops": [
-        "Lidl, Darmstadt"
+        "Netto Marken-Discount, Villingen-Schwenningen"
       ],
       "proofs": [
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/4056489351733"
+      "url": "https://prices.openfoodfacts.org/products/4316268673006"
+    },
+    {
+      "id": "op-de-4311596044573",
+      "code": "4311596044573",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Körniger Frischkäse Halbfettstufe",
+      "brand": "Gut & Günstig",
+      "quantity": "200 g",
+      "price": 1.19,
+      "currency": "EUR",
+      "priceEur": 1.19,
+      "observations": 2,
+      "firstSeen": "2026-09-21",
+      "lastSeen": "2026-09-28",
+      "shops": [
+        "Edeka, München"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4311596044573"
+    },
+    {
+      "id": "op-de-4337256458023",
+      "code": "4337256458023",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Frischkäse",
+      "brand": "ja!",
+      "quantity": "300 g",
+      "price": 1.59,
+      "currency": "EUR",
+      "priceEur": 1.59,
+      "observations": 2,
+      "firstSeen": "2026-09-25",
+      "lastSeen": "2026-09-28",
+      "shops": [
+        "REWE Stenten, Aachen"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4337256458023"
+    },
+    {
+      "id": "op-de-21658990",
+      "code": "21658990",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Knöpfle",
+      "brand": "Landmanns, Penny, Penny Ready",
+      "quantity": "500 g",
+      "price": 1.89,
+      "currency": "EUR",
+      "priceEur": 1.89,
+      "observations": 5,
+      "firstSeen": "2025-10-23",
+      "lastSeen": "2026-09-17",
+      "shops": [
+        "Penny, München"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/21658990"
+    },
+    {
+      "id": "op-de-7622300476144",
+      "code": "7622300476144",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Mikado Milch Schokolade",
+      "brand": "Glico",
+      "quantity": "75 g",
+      "price": 1.99,
+      "currency": "EUR",
+      "priceEur": 1.99,
+      "observations": 5,
+      "firstSeen": "2025-11-15",
+      "lastSeen": "2026-07-31",
+      "shops": [
+        "Aldi, Strausberg",
+        "Netto Marken-Discount, Strausberg",
+        "Lidl, Dahme/Mark"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/7622300476144"
+    },
+    {
+      "id": "op-de-4337256112260",
+      "code": "4337256112260",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Beeren Müsli",
+      "brand": "Rewe, Rewe Bio",
+      "quantity": "500 g",
+      "price": 2.79,
+      "currency": "EUR",
+      "priceEur": 2.79,
+      "observations": 4,
+      "firstSeen": "2026-02-03",
+      "lastSeen": "2026-10-01",
+      "shops": [
+        "REWE, Berlin",
+        "REWE, Kempten (Allgäu)",
+        "Rewe, Bielefeld"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4337256112260"
+    },
+    {
+      "id": "op-de-4337256783132",
+      "code": "4337256783132",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Rewe Bio Haferflocken zart",
+      "brand": "Rewe Bio",
+      "quantity": "500 g",
+      "price": 0.85,
+      "currency": "EUR",
+      "priceEur": 0.85,
+      "observations": 4,
+      "firstSeen": "2026-06-20",
+      "lastSeen": "2026-07-31",
+      "shops": [
+        "REWE, Berlin",
+        "Rewe, Bielefeld"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4337256783132"
+    },
+    {
+      "id": "op-de-7622300479008",
+      "code": "7622300479008",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Mikado Zartherbe Schokolade",
+      "brand": "Glico, LU, Mondelez",
+      "quantity": "75 g",
+      "price": 2.09,
+      "currency": "EUR",
+      "priceEur": 2.09,
+      "observations": 4,
+      "firstSeen": "2025-11-15",
+      "lastSeen": "2026-07-31",
+      "shops": [
+        "Aldi, Strausberg",
+        "Netto Marken-Discount, Strausberg",
+        "Lidl, Dahme/Mark"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/7622300479008"
+    },
+    {
+      "id": "op-de-4006894519303",
+      "code": "4006894519303",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Compliments",
+      "brand": "Lambertz",
+      "quantity": "500 g",
+      "price": 5.24,
+      "currency": "EUR",
+      "priceEur": 5.24,
+      "observations": 4,
+      "firstSeen": "2025-11-15",
+      "lastSeen": "2026-07-11",
+      "shops": [
+        "Netto, Strausberg",
+        "Netto Marken-Discount, Strausberg"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4006894519303"
+    },
+    {
+      "id": "op-de-8852018101024",
+      "code": "8852018101024",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Yum Yum Chicken Flavour",
+      "brand": "YumYum",
+      "quantity": "60 g",
+      "price": 0.69,
+      "currency": "EUR",
+      "priceEur": 0.69,
+      "observations": 3,
+      "firstSeen": "2025-12-13",
+      "lastSeen": "2026-10-05",
+      "shops": [
+        "Lidl, Münster",
+        "Netto Marken-Discount, Strausberg",
+        "Lidl, München"
+      ],
+      "proofs": [
+        "PRICE_TAG",
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8852018101024"
+    },
+    {
+      "id": "op-de-4070308042886",
+      "code": "4070308042886",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Basis Porridge",
+      "brand": "Lebensgarten, REWE Bio, Rewe",
+      "quantity": "500 g",
+      "price": 2.79,
+      "currency": "EUR",
+      "priceEur": 2.79,
+      "observations": 3,
+      "firstSeen": "2026-06-27",
+      "lastSeen": "2026-08-29",
+      "shops": [
+        "Rewe, Bielefeld"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4070308042886"
+    },
+    {
+      "id": "op-de-8000500217078",
+      "code": "8000500217078",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Nutella B-ready",
+      "brand": "Nutella, Ferrero, Nutella b-ready",
+      "quantity": "220 g",
+      "price": 3.25,
+      "currency": "EUR",
+      "priceEur": 3.25,
+      "observations": 3,
+      "firstSeen": "2026-04-23",
+      "lastSeen": "2026-07-27",
+      "shops": [
+        "Netto, Strausberg",
+        "Bayern"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8000500217078"
+    },
+    {
+      "id": "op-de-4002966004067",
+      "code": "4002966004067",
+      "country": "DE",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Nudeln Weizen Spiralen",
+      "brand": "3 Glocken",
+      "quantity": "300 g",
+      "price": 1,
+      "currency": "EUR",
+      "priceEur": 1,
+      "observations": 3,
+      "firstSeen": "2026-06-20",
+      "lastSeen": "2026-07-25",
+      "shops": [
+        "REWE, Berlin",
+        "Netto, Berlin",
+        "Netto Marken-Discount, Berlin"
+      ],
+      "proofs": [
+        "PRICE_TAG",
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4002966004067"
     },
     {
       "id": "op-de-4006000247076",
@@ -2213,677 +1924,6 @@
       "url": "https://prices.openfoodfacts.org/products/8480000136350"
     },
     {
-      "id": "op-pt-4068706671401",
-      "code": "4068706671401",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Raisin & Nut Muesli Wholegrain",
-      "brand": "Golden Harvest",
-      "quantity": "1000 g",
-      "price": 3.49,
-      "currency": "EUR",
-      "priceEur": 3.49,
-      "observations": 4,
-      "firstSeen": "2025-12-22",
-      "lastSeen": "2026-07-15",
-      "shops": [
-        "Aldi, Santa Maria da Feira",
-        "Aldi, Guifões"
-      ],
-      "proofs": [
-        "PRICE_TAG",
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4068706671401"
-    },
-    {
-      "id": "op-pt-2004060087153",
-      "code": "2004060087153",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Copos de avena suaves XXL",
-      "brand": "Aldi,Golden Bridge",
-      "quantity": "1000 g",
-      "price": 1.45,
-      "currency": "EUR",
-      "priceEur": 1.45,
-      "observations": 3,
-      "firstSeen": "2025-12-22",
-      "lastSeen": "2026-04-12",
-      "shops": [
-        "Aldi, Santa Maria da Feira",
-        "Aldi, Guifões"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/2004060087153"
-    },
-    {
-      "id": "op-pt-4056489167853",
-      "code": "4056489167853",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Muesli Crunchy 0%",
-      "brand": "LIDL",
-      "quantity": "500 g",
-      "price": 2.09,
-      "currency": "EUR",
-      "priceEur": 2.09,
-      "observations": 2,
-      "firstSeen": "2026-06-16",
-      "lastSeen": "2026-09-14",
-      "shops": [
-        "Lidl, Santa Maria da Feira",
-        "Lidl, Espinho"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4056489167853"
-    },
-    {
-      "id": "op-pt-5601009160211",
-      "code": "5601009160211",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Pão de Forma Branco",
-      "brand": "Pingo Doce",
-      "quantity": "600 g",
-      "price": 1.09,
-      "currency": "EUR",
-      "priceEur": 1.09,
-      "observations": 2,
-      "firstSeen": "2026-07-28",
-      "lastSeen": "2026-08-30",
-      "shops": [
-        "Pingo Doce, Porto"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601009160211"
-    },
-    {
-      "id": "op-pt-8001665722605",
-      "code": "8001665722605",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Folhas de Massa Fresca para Lasanha",
-      "brand": "Rana",
-      "quantity": "250 g",
-      "price": 2.79,
-      "currency": "EUR",
-      "priceEur": 2.79,
-      "observations": 1,
-      "firstSeen": "2026-09-29",
-      "lastSeen": "2026-09-29",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8001665722605"
-    },
-    {
-      "id": "op-pt-8413164023310",
-      "code": "8413164023310",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Bocaditos sabor jamón y tomate",
-      "brand": "Snatt's",
-      "quantity": null,
-      "price": 1.89,
-      "currency": "EUR",
-      "priceEur": 1.89,
-      "observations": 1,
-      "firstSeen": "2026-09-29",
-      "lastSeen": "2026-09-29",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8413164023310"
-    },
-    {
-      "id": "op-pt-8413164023327",
-      "code": "8413164023327",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "bocaditos TOMATE & ORÉGANO",
-      "brand": "GREFUSA S.L., Grefusa, snatt's",
-      "quantity": "110 g",
-      "price": 1.89,
-      "currency": "EUR",
-      "priceEur": 1.89,
-      "observations": 1,
-      "firstSeen": "2026-09-29",
-      "lastSeen": "2026-09-29",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8413164023327"
-    },
-    {
-      "id": "op-pt-8413164023358",
-      "code": "8413164023358",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "bocaditos OLIVAS & ROMERO AZEITONAS E ALECRIM",
-      "brand": "GREFUSA S.L.",
-      "quantity": "110 g",
-      "price": 1.89,
-      "currency": "EUR",
-      "priceEur": 1.89,
-      "observations": 1,
-      "firstSeen": "2026-09-29",
-      "lastSeen": "2026-09-29",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8413164023358"
-    },
-    {
-      "id": "op-pt-24023009",
-      "code": "24023009",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Pão de forma",
-      "brand": "Panet's",
-      "quantity": "600 g",
-      "price": 0.98,
-      "currency": "EUR",
-      "priceEur": 0.98,
-      "observations": 1,
-      "firstSeen": "2026-09-19",
-      "lastSeen": "2026-09-19",
-      "shops": [
-        "Aldi, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/24023009"
-    },
-    {
-      "id": "op-pt-5601312185499",
-      "code": "5601312185499",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Pão De Forma Clássico",
-      "brand": "Continente",
-      "quantity": "520 g",
-      "price": 1.49,
-      "currency": "EUR",
-      "priceEur": 1.49,
-      "observations": 1,
-      "firstSeen": "2026-09-14",
-      "lastSeen": "2026-09-14",
-      "shops": [
-        "Continente Modelo Cantanhede, Cantanhede"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601312185499"
-    },
-    {
-      "id": "op-pt-24068154",
-      "code": "24068154",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Yogures sabores",
-      "brand": "Milsani, Aldi",
-      "quantity": "1500 g",
-      "price": 1.79,
-      "currency": "EUR",
-      "priceEur": 1.79,
-      "observations": 1,
-      "firstSeen": "2026-09-19",
-      "lastSeen": "2026-09-19",
-      "shops": [
-        "Aldi, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/24068154"
-    },
-    {
-      "id": "op-pt-5601312306825",
-      "code": "5601312306825",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Queijo Emmental",
-      "brand": "Continente, SONAE",
-      "quantity": "150 g",
-      "price": 1.69,
-      "currency": "EUR",
-      "priceEur": 1.69,
-      "observations": 1,
-      "firstSeen": "2026-09-05",
-      "lastSeen": "2026-09-05",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601312306825"
-    },
-    {
-      "id": "op-pt-5601312508649",
-      "code": "5601312508649",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Ovos frescos de galinhas criadas no solo M cat. A",
-      "brand": "Continente",
-      "quantity": null,
-      "price": 2.99,
-      "currency": "EUR",
-      "priceEur": 2.99,
-      "observations": 1,
-      "firstSeen": "2026-09-04",
-      "lastSeen": "2026-09-04",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601312508649"
-    },
-    {
-      "id": "op-pt-5601312519119",
-      "code": "5601312519119",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Leite UHT meio-gordo Açores",
-      "brand": "Continente",
-      "quantity": "1000 ml",
-      "price": 0.87,
-      "currency": "EUR",
-      "priceEur": 0.87,
-      "observations": 1,
-      "firstSeen": "2026-09-04",
-      "lastSeen": "2026-09-04",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601312519119"
-    },
-    {
-      "id": "op-pt-8713734033825",
-      "code": "8713734033825",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Queso Gouda",
-      "brand": "Koninklijke A-ware Food Group B.V.",
-      "quantity": "300 g",
-      "price": 2.15,
-      "currency": "EUR",
-      "priceEur": 2.15,
-      "observations": 1,
-      "firstSeen": "2026-08-24",
-      "lastSeen": "2026-08-24",
-      "shops": [
-        "Mercadona, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8713734033825"
-    },
-    {
-      "id": "op-pt-5601312518860",
-      "code": "5601312518860",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Iogurte zero% mix sabores",
-      "brand": "Continente",
-      "quantity": "1000 g",
-      "price": 1.45,
-      "currency": "EUR",
-      "priceEur": 1.45,
-      "observations": 1,
-      "firstSeen": "2026-08-13",
-      "lastSeen": "2026-08-13",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601312518860"
-    },
-    {
-      "id": "op-pt-20921729",
-      "code": "20921729",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Eggs",
-      "brand": "Lidl",
-      "quantity": null,
-      "price": 2.99,
-      "currency": "EUR",
-      "priceEur": 2.99,
-      "observations": 1,
-      "firstSeen": "2026-08-07",
-      "lastSeen": "2026-08-07",
-      "shops": [
-        "Lidl, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/20921729"
-    },
-    {
-      "id": "op-pt-4056489601593",
-      "code": "4056489601593",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "High Protein pfirsich- maracuja Quark-Creme",
-      "brand": "Milbona, Lidl",
-      "quantity": "500 g",
-      "price": 1.99,
-      "currency": "EUR",
-      "priceEur": 1.99,
-      "observations": 1,
-      "firstSeen": "2026-08-07",
-      "lastSeen": "2026-08-07",
-      "shops": [
-        "Lidl, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4056489601593"
-    },
-    {
-      "id": "op-pt-4056489601609",
-      "code": "4056489601609",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Protein Quark-Creme Erdbeer",
-      "brand": "Milbona, Lidl",
-      "quantity": "500 g",
-      "price": 1.99,
-      "currency": "EUR",
-      "priceEur": 1.99,
-      "observations": 1,
-      "firstSeen": "2026-08-07",
-      "lastSeen": "2026-08-07",
-      "shops": [
-        "Lidl, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4056489601609"
-    },
-    {
-      "id": "op-pt-4056489601616",
-      "code": "4056489601616",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Protein Quark Creme Vanille",
-      "brand": "Milbona, Lidl, Pilos",
-      "quantity": "500 g",
-      "price": 1.99,
-      "currency": "EUR",
-      "priceEur": 1.99,
-      "observations": 1,
-      "firstSeen": "2026-08-07",
-      "lastSeen": "2026-08-07",
-      "shops": [
-        "Lidl, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4056489601616"
-    },
-    {
-      "id": "op-pt-5601312504986",
-      "code": "5601312504986",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Manteiga dos Açores",
-      "brand": "Continente",
-      "quantity": "250 g",
-      "price": 1.99,
-      "currency": "EUR",
-      "priceEur": 1.99,
-      "observations": 1,
-      "firstSeen": "2026-08-13",
-      "lastSeen": "2026-08-13",
-      "shops": [
-        "Continente Bom Dia, Porto"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601312504986"
-    },
-    {
-      "id": "op-pt-5601049614330",
-      "code": "5601049614330",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Manteiga Açoriana",
-      "brand": "Milhafre dos Açores",
-      "quantity": "250 g",
-      "price": 2.49,
-      "currency": "EUR",
-      "priceEur": 2.49,
-      "observations": 1,
-      "firstSeen": "2026-07-25",
-      "lastSeen": "2026-07-25",
-      "shops": [
-        "Lidl Vidigueira, Vidigueira"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601049614330"
-    },
-    {
-      "id": "op-pt-5601009240395",
-      "code": "5601009240395",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Manteiga Pasteurizada com Sal",
-      "brand": "Pingo Doce",
-      "quantity": "250 g",
-      "price": 2.09,
-      "currency": "EUR",
-      "priceEur": 2.09,
-      "observations": 1,
-      "firstSeen": "2026-07-09",
-      "lastSeen": "2026-07-09",
-      "shops": [
-        "Pingo Doce, Porto"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601009240395"
-    },
-    {
-      "id": "op-pt-5601312133476",
-      "code": "5601312133476",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Manteiga dos Açores",
-      "brand": "Continente,SONAE",
-      "quantity": "250 g",
-      "price": 2.09,
-      "currency": "EUR",
-      "priceEur": 2.09,
-      "observations": 1,
-      "firstSeen": "2026-05-13",
-      "lastSeen": "2026-05-13",
-      "shops": [
-        "Continente Modelo, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601312133476"
-    },
-    {
-      "id": "op-pt-8480000212511",
-      "code": "8480000212511",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Manteiga Açores com Sal",
-      "brand": "Hacendado, Mercadona",
-      "quantity": "250 g",
-      "price": 2.1,
-      "currency": "EUR",
-      "priceEur": 2.1,
-      "observations": 1,
-      "firstSeen": "2026-04-15",
-      "lastSeen": "2026-04-15",
-      "shops": [
-        "Mercadona, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480000212511"
-    },
-    {
-      "id": "op-pt-20317652",
-      "code": "20317652",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Manteiga dos Açores com Sal",
-      "brand": "Terra do Vento,Lidl",
-      "quantity": "250 g",
-      "price": 2.09,
-      "currency": "EUR",
-      "priceEur": 2.09,
-      "observations": 1,
-      "firstSeen": "2026-03-16",
-      "lastSeen": "2026-03-16",
-      "shops": [
-        "Lidl, Vila Nova de Gaia"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/20317652"
-    },
-    {
-      "id": "op-pt-5601227023985",
-      "code": "5601227023985",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Green Peas",
-      "brand": null,
-      "quantity": null,
-      "price": 1.19,
-      "currency": "EUR",
-      "priceEur": 1.19,
-      "observations": 1,
-      "firstSeen": "2026-08-01",
-      "lastSeen": "2026-08-01",
-      "shops": [
-        "Amanhecer, Évora"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5601227023985"
-    },
-    {
-      "id": "op-pt-20004330",
-      "code": "20004330",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Gewürzgurken Auslese",
-      "brand": "",
-      "quantity": "200 g",
-      "price": 1.49,
-      "currency": "EUR",
-      "priceEur": 1.49,
-      "observations": 1,
-      "firstSeen": "2026-05-27",
-      "lastSeen": "2026-05-27",
-      "shops": [
-        "Lidl, São João da Madeira"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/20004330"
-    },
-    {
-      "id": "op-pt-5603697270203",
-      "code": "5603697270203",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Jaca em calda",
-      "brand": "Koala",
-      "quantity": "230 g",
-      "price": 2.95,
-      "currency": "EUR",
-      "priceEur": 2.95,
-      "observations": 1,
-      "firstSeen": "2026-05-13",
-      "lastSeen": "2026-05-13",
-      "shops": [
-        "Continente Modelo, Santa Maria da Feira"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5603697270203"
-    },
-    {
       "id": "op-pt-8412604988387",
       "code": "8412604988387",
       "country": "PT",
@@ -3027,29 +2067,6 @@
       "url": "https://prices.openfoodfacts.org/products/4068706881183"
     },
     {
-      "id": "op-pt-4068263012778",
-      "code": "4068263012778",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Mexilhões em escabeche",
-      "brand": "Aldi, Sal de Plata",
-      "quantity": "111 g",
-      "price": 1.45,
-      "currency": "EUR",
-      "priceEur": 1.45,
-      "observations": 1,
-      "firstSeen": "2026-05-29",
-      "lastSeen": "2026-05-29",
-      "shops": [
-        "Aldi, São João da Madeira"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4068263012778"
-    },
-    {
       "id": "op-pt-5601312107521",
       "code": "5601312107521",
       "country": "PT",
@@ -3071,29 +2088,6 @@
         "PRICE_TAG"
       ],
       "url": "https://prices.openfoodfacts.org/products/5601312107521"
-    },
-    {
-      "id": "op-pt-8412604987878",
-      "code": "8412604987878",
-      "country": "PT",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Atum ao Natural",
-      "brand": "Lidl",
-      "quantity": null,
-      "price": 0.79,
-      "currency": "EUR",
-      "priceEur": 0.79,
-      "observations": 1,
-      "firstSeen": "2026-05-27",
-      "lastSeen": "2026-05-27",
-      "shops": [
-        "Lidl, São João da Madeira"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8412604987878"
     },
     {
       "id": "op-pt-5601002125613",
@@ -3119,27 +2113,470 @@
       "url": "https://prices.openfoodfacts.org/products/5601002125613"
     },
     {
-      "id": "op-hu-4056489258353",
-      "code": "4056489258353",
-      "country": "HU",
+      "id": "op-pt-8412604985454",
+      "code": "8412604985454",
+      "country": "PT",
       "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Raspberry-Pomegranate Milk Product",
-      "brand": "LIDL",
-      "quantity": "200 g",
-      "price": 195,
-      "currency": "HUF",
-      "priceEur": 0.54,
+      "priceLevel": "A01010103",
+      "name": "Atum Posta em tomate",
+      "brand": "Dorita",
+      "quantity": "72 g",
+      "price": 0.79,
+      "currency": "EUR",
+      "priceEur": 0.79,
       "observations": 1,
-      "firstSeen": "2026-05-13",
-      "lastSeen": "2026-05-13",
+      "firstSeen": "2026-05-07",
+      "lastSeen": "2026-05-07",
       "shops": [
-        "Lidl, Budapest"
+        "Pingo Doce, Porto"
       ],
       "proofs": [
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/4056489258353"
+      "url": "https://prices.openfoodfacts.org/products/8412604985454"
+    },
+    {
+      "id": "op-pt-2002070008052",
+      "code": "2002070008052",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Filetes de Atum em Azeite",
+      "brand": "Tesouros do Mar",
+      "quantity": "120 g",
+      "price": 1.79,
+      "currency": "EUR",
+      "priceEur": 1.79,
+      "observations": 1,
+      "firstSeen": "2026-03-31",
+      "lastSeen": "2026-03-31",
+      "shops": [
+        "Aldi, Almada"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/2002070008052"
+    },
+    {
+      "id": "op-pt-8424465949742",
+      "code": "8424465949742",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Dunkin Strawberry Sprinkle",
+      "brand": "Dunkin' Donuts",
+      "quantity": "146 g",
+      "price": 2.99,
+      "currency": "EUR",
+      "priceEur": 2.99,
+      "observations": 1,
+      "firstSeen": "2026-06-08",
+      "lastSeen": "2026-06-08",
+      "shops": [
+        "Continente Modelo, Carcavelos"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8424465949742"
+    },
+    {
+      "id": "op-pt-5601312306825",
+      "code": "5601312306825",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queijo Emmental",
+      "brand": "Continente, SONAE",
+      "quantity": "150 g",
+      "price": 1.69,
+      "currency": "EUR",
+      "priceEur": 1.69,
+      "observations": 1,
+      "firstSeen": "2026-09-05",
+      "lastSeen": "2026-09-05",
+      "shops": [
+        "Continente Bom Dia, Porto"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5601312306825"
+    },
+    {
+      "id": "op-pt-8713734033825",
+      "code": "8713734033825",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queso Gouda",
+      "brand": "Koninklijke A-ware Food Group B.V.",
+      "quantity": "300 g",
+      "price": 2.15,
+      "currency": "EUR",
+      "priceEur": 2.15,
+      "observations": 1,
+      "firstSeen": "2026-08-24",
+      "lastSeen": "2026-08-24",
+      "shops": [
+        "Mercadona, Santa Maria da Feira"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8713734033825"
+    },
+    {
+      "id": "op-pt-4056489601609",
+      "code": "4056489601609",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Protein Quark-Creme Erdbeer",
+      "brand": "Milbona, Lidl",
+      "quantity": "500 g",
+      "price": 1.99,
+      "currency": "EUR",
+      "priceEur": 1.99,
+      "observations": 1,
+      "firstSeen": "2026-08-07",
+      "lastSeen": "2026-08-07",
+      "shops": [
+        "Lidl, Santa Maria da Feira"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4056489601609"
+    },
+    {
+      "id": "op-pt-5601312305958",
+      "code": "5601312305958",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queijo Brie",
+      "brand": "Continente, SONAE",
+      "quantity": "200 g",
+      "price": 1.65,
+      "currency": "EUR",
+      "priceEur": 1.65,
+      "observations": 1,
+      "firstSeen": "2026-07-06",
+      "lastSeen": "2026-07-06",
+      "shops": [
+        "Continente Modelo, Santa Maria da Feira"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5601312305958"
+    },
+    {
+      "id": "op-pt-4061462615481",
+      "code": "4061462615481",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Skyr Natur",
+      "brand": "Milsani",
+      "quantity": "500 g",
+      "price": 1.45,
+      "currency": "EUR",
+      "priceEur": 1.45,
+      "observations": 1,
+      "firstSeen": "2026-05-24",
+      "lastSeen": "2026-05-24",
+      "shops": [
+        "Aldi, Cascais"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4061462615481"
+    },
+    {
+      "id": "op-pt-20317041",
+      "code": "20317041",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queijo Flamengo dos Açores light",
+      "brand": "Milbona, Lidl",
+      "quantity": "200 g",
+      "price": 1.89,
+      "currency": "EUR",
+      "priceEur": 1.89,
+      "observations": 1,
+      "firstSeen": "2026-04-30",
+      "lastSeen": "2026-04-30",
+      "shops": [
+        "Lidl Santa Maria da Feira, Santa Maria da Feira"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/20317041"
+    },
+    {
+      "id": "op-pt-5601511000357",
+      "code": "5601511000357",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queijo flamengo fatias -50% gordura",
+      "brand": "Limiano",
+      "quantity": "200 g",
+      "price": 2.89,
+      "currency": "EUR",
+      "priceEur": 2.89,
+      "observations": 1,
+      "firstSeen": "2026-03-16",
+      "lastSeen": "2026-03-16",
+      "shops": [
+        "Lidl, Vila Nova de Gaia"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5601511000357"
+    },
+    {
+      "id": "op-pt-4068706671401",
+      "code": "4068706671401",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Raisin & Nut Muesli Wholegrain",
+      "brand": "Golden Harvest",
+      "quantity": "1000 g",
+      "price": 3.49,
+      "currency": "EUR",
+      "priceEur": 3.49,
+      "observations": 4,
+      "firstSeen": "2025-12-22",
+      "lastSeen": "2026-07-15",
+      "shops": [
+        "Aldi, Santa Maria da Feira",
+        "Aldi, Guifões"
+      ],
+      "proofs": [
+        "PRICE_TAG",
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4068706671401"
+    },
+    {
+      "id": "op-pt-2004060087153",
+      "code": "2004060087153",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Copos de avena suaves XXL",
+      "brand": "Aldi,Golden Bridge",
+      "quantity": "1000 g",
+      "price": 1.45,
+      "currency": "EUR",
+      "priceEur": 1.45,
+      "observations": 3,
+      "firstSeen": "2025-12-22",
+      "lastSeen": "2026-04-12",
+      "shops": [
+        "Aldi, Santa Maria da Feira",
+        "Aldi, Guifões"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/2004060087153"
+    },
+    {
+      "id": "op-pt-4056489167853",
+      "code": "4056489167853",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Muesli Crunchy 0%",
+      "brand": "LIDL",
+      "quantity": "500 g",
+      "price": 2.09,
+      "currency": "EUR",
+      "priceEur": 2.09,
+      "observations": 2,
+      "firstSeen": "2026-06-16",
+      "lastSeen": "2026-09-14",
+      "shops": [
+        "Lidl, Santa Maria da Feira",
+        "Lidl, Espinho"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4056489167853"
+    },
+    {
+      "id": "op-pt-5602519000325",
+      "code": "5602519000325",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Lagartos",
+      "brand": "A Minha Padaria",
+      "quantity": "750 g",
+      "price": 2.45,
+      "currency": "EUR",
+      "priceEur": 2.45,
+      "observations": 2,
+      "firstSeen": "2026-06-16",
+      "lastSeen": "2026-08-07",
+      "shops": [
+        "Lidl, Santa Maria da Feira"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5602519000325"
+    },
+    {
+      "id": "op-pt-5602519001315",
+      "code": "5602519001315",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Lagartos",
+      "brand": "Confeitaria Carlos Gonçalves",
+      "quantity": "750 g",
+      "price": 2.49,
+      "currency": "EUR",
+      "priceEur": 2.49,
+      "observations": 2,
+      "firstSeen": "2026-07-09",
+      "lastSeen": "2026-07-28",
+      "shops": [
+        "Pingo Doce, Porto"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5602519001315"
+    },
+    {
+      "id": "op-pt-8480000142139",
+      "code": "8480000142139",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Digestive Avena",
+      "brand": "MERCADONA",
+      "quantity": "425 g",
+      "price": 1.35,
+      "currency": "EUR",
+      "priceEur": 1.35,
+      "observations": 2,
+      "firstSeen": "2026-04-03",
+      "lastSeen": "2026-04-15",
+      "shops": [
+        "Mercadona, São João da Madeira",
+        "Mercadona, Santa Maria da Feira"
+      ],
+      "proofs": [
+        "PRICE_TAG",
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8480000142139"
+    },
+    {
+      "id": "op-pt-8001665722605",
+      "code": "8001665722605",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Folhas de Massa Fresca para Lasanha",
+      "brand": "Rana",
+      "quantity": "250 g",
+      "price": 2.79,
+      "currency": "EUR",
+      "priceEur": 2.79,
+      "observations": 1,
+      "firstSeen": "2026-09-29",
+      "lastSeen": "2026-09-29",
+      "shops": [
+        "Continente Bom Dia, Porto"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8001665722605"
+    },
+    {
+      "id": "op-pt-5601312069645",
+      "code": "5601312069645",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Muesli Crunchy Chocolate",
+      "brand": "Continente",
+      "quantity": "500 g",
+      "price": 2.65,
+      "currency": "EUR",
+      "priceEur": 2.65,
+      "observations": 1,
+      "firstSeen": "2026-09-10",
+      "lastSeen": "2026-09-10",
+      "shops": [
+        "Continente Bom Dia, Porto"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5601312069645"
+    },
+    {
+      "id": "op-pt-5601312066361",
+      "code": "5601312066361",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Esparguete",
+      "brand": "Continente",
+      "quantity": null,
+      "price": 0.99,
+      "currency": "EUR",
+      "priceEur": 0.99,
+      "observations": 1,
+      "firstSeen": "2026-09-04",
+      "lastSeen": "2026-09-04",
+      "shops": [
+        "Continente Bom Dia, Porto"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5601312066361"
+    },
+    {
+      "id": "op-pt-5601312074892",
+      "code": "5601312074892",
+      "country": "PT",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Flocos de Trigo com Mel",
+      "brand": "Continente",
+      "quantity": "300 g",
+      "price": 1.99,
+      "currency": "EUR",
+      "priceEur": 1.99,
+      "observations": 1,
+      "firstSeen": "2026-08-13",
+      "lastSeen": "2026-08-13",
+      "shops": [
+        "Continente Bom Dia, Porto"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/5601312074892"
     },
     {
       "id": "op-es-8711000357576",
@@ -3234,119 +2671,625 @@
       "url": "https://prices.openfoodfacts.org/products/8410100021546"
     },
     {
-      "id": "op-es-8423102210351",
-      "code": "8423102210351",
+      "id": "op-es-8480000047182",
+      "code": "8480000047182",
       "country": "ES",
       "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "100% trigo espelta integral",
-      "brand": "Anitín",
-      "quantity": "150 g",
-      "price": 1.32,
+      "priceLevel": "A01010105",
+      "name": "Aceite de oliva virgen extra",
+      "brand": "Hacendado",
+      "quantity": "200 ml",
+      "price": 2.7,
       "currency": "EUR",
-      "priceEur": 1.32,
-      "observations": 2,
-      "firstSeen": "2026-02-04",
-      "lastSeen": "2026-08-24",
+      "priceEur": 2.7,
+      "observations": 1,
+      "firstSeen": "2026-04-04",
+      "lastSeen": "2026-04-04",
       "shops": [
-        "Mercadona, Tres Cantos"
+        "Mercadona, La Mancha"
       ],
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/8423102210351"
+      "url": "https://prices.openfoodfacts.org/products/8480000047182"
     },
     {
-      "id": "op-es-8431876342512",
-      "code": "8431876342512",
+      "id": "op-es-0077521941013",
+      "code": "0077521941013",
       "country": "ES",
       "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Pan de pipas",
-      "brand": "Carrefour",
-      "quantity": "83 g",
-      "price": 1.09,
+      "priceLevel": "A01010105",
+      "name": "Pure huile de sésame",
+      "brand": "Yeo's",
+      "quantity": "150 ml",
+      "price": 4.95,
       "currency": "EUR",
-      "priceEur": 1.09,
+      "priceEur": 4.95,
       "observations": 1,
-      "firstSeen": "2026-09-25",
-      "lastSeen": "2026-09-25",
+      "firstSeen": "2026-01-15",
+      "lastSeen": "2026-01-15",
+      "shops": [
+        "Hiper Asia, València"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/0077521941013"
+    },
+    {
+      "id": "op-es-8480017137999",
+      "code": "8480017137999",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Sardinillas en aceite de oliva",
+      "brand": "Dia",
+      "quantity": null,
+      "price": 2.09,
+      "currency": "EUR",
+      "priceEur": 2.09,
+      "observations": 1,
+      "firstSeen": "2026-05-18",
+      "lastSeen": "2026-05-18",
+      "shops": [
+        "Dia, Premià de Mar"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8480017137999"
+    },
+    {
+      "id": "op-es-8429583017861",
+      "code": "8429583017861",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Atún en Aceite de Oliva",
+      "brand": "FRINSA DEL NOROESTE, Ribeira",
+      "quantity": "750 g",
+      "price": 7.59,
+      "currency": "EUR",
+      "priceEur": 7.59,
+      "observations": 1,
+      "firstSeen": "2026-04-10",
+      "lastSeen": "2026-04-10",
+      "shops": [
+        "Lidl, Sant Joan d'Alacant"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8429583017861"
+    },
+    {
+      "id": "op-es-8480000180308",
+      "code": "8480000180308",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Atún en aceite de oliva",
+      "brand": "Hacendado, MERCADONA",
+      "quantity": "900 g",
+      "price": 7.6,
+      "currency": "EUR",
+      "priceEur": 7.6,
+      "observations": 1,
+      "firstSeen": "2026-04-04",
+      "lastSeen": "2026-04-04",
+      "shops": [
+        "Mercadona, La Mancha"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8480000180308"
+    },
+    {
+      "id": "op-es-8429583006605",
+      "code": "8429583006605",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Atún al natural",
+      "brand": "Auchan",
+      "quantity": "185 g",
+      "price": 1.88,
+      "currency": "EUR",
+      "priceEur": 1.88,
+      "observations": 1,
+      "firstSeen": "2026-02-07",
+      "lastSeen": "2026-02-07",
+      "shops": [
+        "Alcampo, Madrid"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8429583006605"
+    },
+    {
+      "id": "op-es-6943487723052",
+      "code": "6943487723052",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010103",
+      "name": "Anchois Grenadier Frits",
+      "brand": "",
+      "quantity": "184 g",
+      "price": 4.2,
+      "currency": "EUR",
+      "priceEur": 4.2,
+      "observations": 1,
+      "firstSeen": "2026-01-15",
+      "lastSeen": "2026-01-15",
+      "shops": [
+        "Hiper Asia, València"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/6943487723052"
+    },
+    {
+      "id": "op-es-7622201109615",
+      "code": "7622201109615",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Oreo white",
+      "brand": "Milka, Mondelez",
+      "quantity": "100 g",
+      "price": 1.97,
+      "currency": "EUR",
+      "priceEur": 1.97,
+      "observations": 2,
+      "firstSeen": "2025-11-07",
+      "lastSeen": "2025-11-08",
+      "shops": [
+        "Supeco, Barcelona"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/7622201109615"
+    },
+    {
+      "id": "op-es-8413761000363",
+      "code": "8413761000363",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Chocolate artesano negro con naranja",
+      "brand": "Subiza",
+      "quantity": "100 g",
+      "price": 2.99,
+      "currency": "EUR",
+      "priceEur": 2.99,
+      "observations": 1,
+      "firstSeen": "2026-10-14",
+      "lastSeen": "2026-10-14",
+      "shops": [
+        "Eroski City, Pamplona / Iruña"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8413761000363"
+    },
+    {
+      "id": "op-es-8402001033902",
+      "code": "8402001033902",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Chocolate 0% Azúcares Añadidos",
+      "brand": "MERCADONA",
+      "quantity": "100 g",
+      "price": 1.35,
+      "currency": "EUR",
+      "priceEur": 1.35,
+      "observations": 1,
+      "firstSeen": "2026-09-01",
+      "lastSeen": "2026-09-01",
+      "shops": [
+        "Mercadona, Fuenlabrada"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8402001033902"
+    },
+    {
+      "id": "op-es-8480000706522",
+      "code": "8480000706522",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Chocolate Negro 55%",
+      "brand": "MERCADONA",
+      "quantity": "150 g",
+      "price": 1.75,
+      "currency": "EUR",
+      "priceEur": 1.75,
+      "observations": 1,
+      "firstSeen": "2026-06-09",
+      "lastSeen": "2026-06-09",
+      "shops": [
+        "Mercadona, Olot"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8480000706522"
+    },
+    {
+      "id": "op-es-4056489366461",
+      "code": "4056489366461",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Extra Dark 85% Cocoa",
+      "brand": "LIDL",
+      "quantity": "100 g",
+      "price": 1.69,
+      "currency": "EUR",
+      "priceEur": 1.69,
+      "observations": 1,
+      "firstSeen": "2026-06-06",
+      "lastSeen": "2026-06-06",
+      "shops": [
+        "Lidl, Olot"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4056489366461"
+    },
+    {
+      "id": "op-es-20005832",
+      "code": "20005832",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Dark chocolate 50% Cocoa",
+      "brand": "Fin Carré",
+      "quantity": "100 g",
+      "price": 0.99,
+      "currency": "EUR",
+      "priceEur": 0.99,
+      "observations": 1,
+      "firstSeen": "2026-04-21",
+      "lastSeen": "2026-04-21",
+      "shops": [
+        "Lidl, Olot"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/20005832"
+    },
+    {
+      "id": "op-es-20177218",
+      "code": "20177218",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "NOIR DEGUSTATION 70% CARAMEL",
+      "brand": "",
+      "quantity": "125 g",
+      "price": 2.99,
+      "currency": "EUR",
+      "priceEur": 2.99,
+      "observations": 1,
+      "firstSeen": "2026-04-10",
+      "lastSeen": "2026-04-10",
+      "shops": [
+        "Lidl, Sant Joan d'Alacant"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/20177218"
+    },
+    {
+      "id": "op-es-8414306000060",
+      "code": "8414306000060",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Spanish Style Hot Chocolate",
+      "brand": "Horno San José",
+      "quantity": "200 g",
+      "price": 3.09,
+      "currency": "EUR",
+      "priceEur": 3.09,
+      "observations": 1,
+      "firstSeen": "2025-11-09",
+      "lastSeen": "2025-11-09",
+      "shops": [
+        "Lupa, Entrambasaguas"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8414306000060"
+    },
+    {
+      "id": "op-es-3560071006310",
+      "code": "3560071006310",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Chocolate blanco para postres",
+      "brand": "Carrefour",
+      "quantity": "200 g",
+      "price": 2.19,
+      "currency": "EUR",
+      "priceEur": 2.19,
+      "observations": 1,
+      "firstSeen": "2025-11-08",
+      "lastSeen": "2025-11-08",
+      "shops": [
+        "Supeco, Barcelona"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/3560071006310"
+    },
+    {
+      "id": "op-es-7613035314375",
+      "code": "7613035314375",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010199",
+      "name": "Netsle Chocolat noir 100% cacao",
+      "brand": "Nestlé",
+      "quantity": "125 g",
+      "price": 3.2,
+      "currency": "EUR",
+      "priceEur": 3.2,
+      "observations": 1,
+      "firstSeen": "2025-11-08",
+      "lastSeen": "2025-11-08",
+      "shops": [
+        "Supeco, Barcelona"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/7613035314375"
+    },
+    {
+      "id": "op-es-8411620001155",
+      "code": "8411620001155",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queso fundido",
+      "brand": "Mondelez, el caserio",
+      "quantity": null,
+      "price": 2.92,
+      "currency": "EUR",
+      "priceEur": 2.92,
+      "observations": 1,
+      "firstSeen": "2026-06-09",
+      "lastSeen": "2026-06-09",
+      "shops": [
+        "Novavenda, Girona"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8411620001155"
+    },
+    {
+      "id": "op-es-8422410800254",
+      "code": "8422410800254",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queso de oveja",
+      "brand": "Bonpreu",
+      "quantity": "200 g",
+      "price": 2.89,
+      "currency": "EUR",
+      "priceEur": 2.89,
+      "observations": 1,
+      "firstSeen": "2026-06-04",
+      "lastSeen": "2026-06-04",
+      "shops": [
+        "Bonpreu, Olot"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8422410800254"
+    },
+    {
+      "id": "op-es-8422410800278",
+      "code": "8422410800278",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queso cabra",
+      "brand": "Bonpreu",
+      "quantity": null,
+      "price": 3.15,
+      "currency": "EUR",
+      "priceEur": 3.15,
+      "observations": 1,
+      "firstSeen": "2026-06-04",
+      "lastSeen": "2026-06-04",
+      "shops": [
+        "Bonpreu, Olot"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8422410800278"
+    },
+    {
+      "id": "op-es-8480017287342",
+      "code": "8480017287342",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Rulo de vaca",
+      "brand": "Dia",
+      "quantity": "140 g",
+      "price": 1.59,
+      "currency": "EUR",
+      "priceEur": 1.59,
+      "observations": 1,
+      "firstSeen": "2026-05-18",
+      "lastSeen": "2026-05-18",
+      "shops": [
+        "Dia, Premià de Mar"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8480017287342"
+    },
+    {
+      "id": "op-es-20002183",
+      "code": "20002183",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Fiocchi di latte",
+      "brand": "Milbona",
+      "quantity": "200 g",
+      "price": 1.15,
+      "currency": "EUR",
+      "priceEur": 1.15,
+      "observations": 1,
+      "firstSeen": "2026-04-10",
+      "lastSeen": "2026-04-10",
+      "shops": [
+        "Lidl, Sant Joan d'Alacant"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/20002183"
+    },
+    {
+      "id": "op-es-7622201751418",
+      "code": "7622201751418",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Emmental especial gratinar",
+      "brand": "El Casero",
+      "quantity": null,
+      "price": 2.99,
+      "currency": "EUR",
+      "priceEur": 2.99,
+      "observations": 1,
+      "firstSeen": "2026-04-06",
+      "lastSeen": "2026-04-06",
+      "shops": [
+        "HiperDino Express Alegría Barranco, Los Cristianos"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/7622201751418"
+    },
+    {
+      "id": "op-es-8402001031670",
+      "code": "8402001031670",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Queso Sin Lactosa Lonchas",
+      "brand": "MERCADONA",
+      "quantity": null,
+      "price": 2.6,
+      "currency": "EUR",
+      "priceEur": 2.6,
+      "observations": 1,
+      "firstSeen": "2026-04-04",
+      "lastSeen": "2026-04-04",
+      "shops": [
+        "Mercadona, La Mancha"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8402001031670"
+    },
+    {
+      "id": "op-es-8480000511263",
+      "code": "8480000511263",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Mozzarella",
+      "brand": "MERCADONA",
+      "quantity": "200 g",
+      "price": 1.8,
+      "currency": "EUR",
+      "priceEur": 1.8,
+      "observations": 1,
+      "firstSeen": "2026-04-04",
+      "lastSeen": "2026-04-04",
+      "shops": [
+        "Mercadona, La Mancha"
+      ],
+      "proofs": [
+        "PRICE_TAG"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/8480000511263"
+    },
+    {
+      "id": "op-es-3245413442420",
+      "code": "3245413442420",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010104",
+      "name": "Fromage Frais",
+      "brand": "Carrefour BIO, CARREFOUR FRANCE, Carrefour",
+      "quantity": "500 g",
+      "price": 2.25,
+      "currency": "EUR",
+      "priceEur": 2.25,
+      "observations": 1,
+      "firstSeen": "2026-02-15",
+      "lastSeen": "2026-02-15",
       "shops": [
         "Carrefour Market, Madrid"
       ],
       "proofs": [
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/8431876342512"
+      "url": "https://prices.openfoodfacts.org/products/3245413442420"
     },
     {
-      "id": "op-es-8480024764867",
-      "code": "8480024764867",
+      "id": "op-es-3560070060252",
+      "code": "3560070060252",
       "country": "ES",
       "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Panecillos Tostados",
-      "brand": "Alteza",
-      "quantity": "160 g",
-      "price": 1.88,
+      "priceLevel": "A01010104",
+      "name": "MOZZARELLA",
+      "brand": "CARREFOUR FRANCE",
+      "quantity": "225 g",
+      "price": 0.93,
       "currency": "EUR",
-      "priceEur": 1.88,
+      "priceEur": 0.93,
       "observations": 1,
-      "firstSeen": "2026-08-13",
-      "lastSeen": "2026-08-13",
+      "firstSeen": "2026-02-15",
+      "lastSeen": "2026-02-15",
       "shops": [
-        "Diskont, Son Oleo"
+        "Carrefour Market, Madrid"
       ],
       "proofs": [
         "RECEIPT"
       ],
-      "url": "https://prices.openfoodfacts.org/products/8480024764867"
-    },
-    {
-      "id": "op-es-7300400118118",
-      "code": "7300400118118",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "ORIGINAL au seigle",
-      "brand": "Barilla Sverige AB",
-      "quantity": "205 g",
-      "price": 2.22,
-      "currency": "EUR",
-      "priceEur": 2.22,
-      "observations": 1,
-      "firstSeen": "2026-07-02",
-      "lastSeen": "2026-07-02",
-      "shops": [
-        "Cash Fresh, Málaga"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/7300400118118"
-    },
-    {
-      "id": "op-es-8411929302144",
-      "code": "8411929302144",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010101",
-      "name": "Pan cristal",
-      "brand": "Mendez",
-      "quantity": "120 g",
-      "price": 1.28,
-      "currency": "EUR",
-      "priceEur": 1.28,
-      "observations": 1,
-      "firstSeen": "2026-07-02",
-      "lastSeen": "2026-07-02",
-      "shops": [
-        "Cash Fresh, Málaga"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8411929302144"
+      "url": "https://prices.openfoodfacts.org/products/3560070060252"
     },
     {
       "id": "op-es-4335619104488",
@@ -3370,6 +3313,29 @@
         "RECEIPT"
       ],
       "url": "https://prices.openfoodfacts.org/products/4335619104488"
+    },
+    {
+      "id": "op-es-4335619263758",
+      "code": "4335619263758",
+      "country": "ES",
+      "category": "groceries",
+      "priceLevel": "A01010101",
+      "name": "Digestive Avena /Aveia",
+      "brand": "Sondey",
+      "quantity": "425 g",
+      "price": 1.49,
+      "currency": "EUR",
+      "priceEur": 1.49,
+      "observations": 1,
+      "firstSeen": "2026-06-13",
+      "lastSeen": "2026-06-13",
+      "shops": [
+        "Lidl, Antequera"
+      ],
+      "proofs": [
+        "RECEIPT"
+      ],
+      "url": "https://prices.openfoodfacts.org/products/4335619263758"
     },
     {
       "id": "op-es-8431876343557",
@@ -3464,40 +3430,17 @@
       "url": "https://prices.openfoodfacts.org/products/8480010193572"
     },
     {
-      "id": "op-es-8402001001970",
-      "code": "8402001001970",
+      "id": "op-es-8480010282856",
+      "code": "8480010282856",
       "country": "ES",
       "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Leche entera",
-      "brand": "MERCADONA",
-      "quantity": "1200 ml",
-      "price": 1.71,
+      "priceLevel": "A01010101",
+      "name": "Flocs de civada integral",
+      "brand": "Eroski",
+      "quantity": "500 g",
+      "price": 0.85,
       "currency": "EUR",
-      "priceEur": 1.71,
-      "observations": 1,
-      "firstSeen": "2026-06-09",
-      "lastSeen": "2026-06-09",
-      "shops": [
-        "Mercadona, Olot"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8402001001970"
-    },
-    {
-      "id": "op-es-8410135001322",
-      "code": "8410135001322",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Leche",
-      "brand": "Ato",
-      "quantity": null,
-      "price": 1.59,
-      "currency": "EUR",
-      "priceEur": 1.59,
+      "priceEur": 0.85,
       "observations": 1,
       "firstSeen": "2026-06-09",
       "lastSeen": "2026-06-09",
@@ -3507,66 +3450,20 @@
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/8410135001322"
+      "url": "https://prices.openfoodfacts.org/products/8480010282856"
     },
     {
-      "id": "op-es-8411620001155",
-      "code": "8411620001155",
+      "id": "op-es-4056489043652",
+      "code": "4056489043652",
       "country": "ES",
       "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Queso fundido",
-      "brand": "Mondelez, el caserio",
-      "quantity": null,
-      "price": 2.92,
-      "currency": "EUR",
-      "priceEur": 2.92,
-      "observations": 1,
-      "firstSeen": "2026-06-09",
-      "lastSeen": "2026-06-09",
-      "shops": [
-        "Novavenda, Girona"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8411620001155"
-    },
-    {
-      "id": "op-es-8424395141162",
-      "code": "8424395141162",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Fageda desnatat",
-      "brand": "La Fageda",
+      "priceLevel": "A01010101",
+      "name": "Macarrón Rayado",
+      "brand": "Combino",
       "quantity": "500 g",
-      "price": 2.39,
+      "price": 0.75,
       "currency": "EUR",
-      "priceEur": 2.39,
-      "observations": 1,
-      "firstSeen": "2026-06-09",
-      "lastSeen": "2026-06-09",
-      "shops": [
-        "Novavenda, Girona"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8424395141162"
-    },
-    {
-      "id": "op-es-20857325",
-      "code": "20857325",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Yogur strachiatela",
-      "brand": "",
-      "quantity": "125 g",
-      "price": 1.79,
-      "currency": "EUR",
-      "priceEur": 1.79,
+      "priceEur": 0.75,
       "observations": 1,
       "firstSeen": "2026-06-06",
       "lastSeen": "2026-06-06",
@@ -3576,858 +3473,53 @@
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/20857325"
+      "url": "https://prices.openfoodfacts.org/products/4056489043652"
     },
     {
-      "id": "op-es-8422410800254",
-      "code": "8422410800254",
+      "id": "op-es-4056489044062",
+      "code": "4056489044062",
       "country": "ES",
       "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Queso de oveja",
-      "brand": "Bonpreu",
-      "quantity": "200 g",
-      "price": 2.89,
-      "currency": "EUR",
-      "priceEur": 2.89,
-      "observations": 1,
-      "firstSeen": "2026-06-04",
-      "lastSeen": "2026-06-04",
-      "shops": [
-        "Bonpreu, Olot"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8422410800254"
-    },
-    {
-      "id": "op-es-8422410800278",
-      "code": "8422410800278",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Queso cabra",
-      "brand": "Bonpreu",
+      "priceLevel": "A01010101",
+      "name": "Macarron n 6",
+      "brand": "Combino, LIDL",
       "quantity": null,
-      "price": 3.15,
+      "price": 1.14,
       "currency": "EUR",
-      "priceEur": 3.15,
+      "priceEur": 1.14,
       "observations": 1,
-      "firstSeen": "2026-06-04",
-      "lastSeen": "2026-06-04",
+      "firstSeen": "2026-06-06",
+      "lastSeen": "2026-06-06",
       "shops": [
-        "Bonpreu, Olot"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8422410800278"
-    },
-    {
-      "id": "op-es-8480017287342",
-      "code": "8480017287342",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Rulo de vaca",
-      "brand": "Dia",
-      "quantity": "140 g",
-      "price": 1.59,
-      "currency": "EUR",
-      "priceEur": 1.59,
-      "observations": 1,
-      "firstSeen": "2026-05-18",
-      "lastSeen": "2026-05-18",
-      "shops": [
-        "Dia, Premià de Mar"
+        "Lidl, Olot"
       ],
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/8480017287342"
+      "url": "https://prices.openfoodfacts.org/products/4056489044062"
     },
     {
-      "id": "op-es-8422410221509",
-      "code": "8422410221509",
+      "id": "op-es-4056489192985",
+      "code": "4056489192985",
       "country": "ES",
       "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Ous frescos de gallines soltes en galliner",
-      "brand": "",
-      "quantity": null,
-      "price": 1.8,
-      "currency": "EUR",
-      "priceEur": 1.8,
-      "observations": 1,
-      "firstSeen": "2026-05-16",
-      "lastSeen": "2026-05-16",
-      "shops": [
-        "EsclatOil, Olot"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8422410221509"
-    },
-    {
-      "id": "op-es-8423462100040",
-      "code": "8423462100040",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010104",
-      "name": "Huevos bio",
-      "brand": "El corral de San Miguel",
-      "quantity": null,
-      "price": 6.79,
-      "currency": "EUR",
-      "priceEur": 6.79,
-      "observations": 1,
-      "firstSeen": "2026-05-05",
-      "lastSeen": "2026-05-05",
-      "shops": [
-        "Costco, Las Rozas de Madrid"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8423462100040"
-    },
-    {
-      "id": "op-es-8480000047182",
-      "code": "8480000047182",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Aceite de oliva virgen extra",
-      "brand": "Hacendado",
-      "quantity": "200 ml",
-      "price": 2.7,
-      "currency": "EUR",
-      "priceEur": 2.7,
-      "observations": 1,
-      "firstSeen": "2026-04-04",
-      "lastSeen": "2026-04-04",
-      "shops": [
-        "Mercadona, La Mancha"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480000047182"
-    },
-    {
-      "id": "op-es-5740900401785",
-      "code": "5740900401785",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Danish Butter",
-      "brand": "Lurpak",
-      "quantity": "200 g",
-      "price": 4.69,
-      "currency": "EUR",
-      "priceEur": 4.69,
-      "observations": 1,
-      "firstSeen": "2026-03-02",
-      "lastSeen": "2026-03-02",
-      "shops": [
-        "Carrefour Market, Madrid"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/5740900401785"
-    },
-    {
-      "id": "op-es-0077521941013",
-      "code": "0077521941013",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010105",
-      "name": "Pure huile de sésame",
-      "brand": "Yeo's",
-      "quantity": "150 ml",
-      "price": 4.95,
-      "currency": "EUR",
-      "priceEur": 4.95,
-      "observations": 1,
-      "firstSeen": "2026-01-15",
-      "lastSeen": "2026-01-15",
-      "shops": [
-        "Hiper Asia, València"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/0077521941013"
-    },
-    {
-      "id": "op-es-8431876367126",
-      "code": "8431876367126",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Macedonia",
-      "brand": "Carrefour, El Mercado",
-      "quantity": "300 g",
-      "price": 6.99,
-      "currency": "EUR",
-      "priceEur": 6.99,
-      "observations": 1,
-      "firstSeen": "2026-10-12",
-      "lastSeen": "2026-10-12",
-      "shops": [
-        "Carrefour Express, Pamplona / Iruña"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8431876367126"
-    },
-    {
-      "id": "op-es-8480000200204",
-      "code": "8480000200204",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Ciruelas desecadas sin hueso",
-      "brand": "MERCADONA",
-      "quantity": "250 g",
-      "price": 2.14,
-      "currency": "EUR",
-      "priceEur": 2.14,
-      "observations": 1,
-      "firstSeen": "2026-09-01",
-      "lastSeen": "2026-09-01",
-      "shops": [
-        "Mercadona, Fuenlabrada"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480000200204"
-    },
-    {
-      "id": "op-es-8480000334404",
-      "code": "8480000334404",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Piña deshidratada",
-      "brand": "MERCADONA",
-      "quantity": "50 g",
-      "price": 1.6,
-      "currency": "EUR",
-      "priceEur": 1.6,
-      "observations": 1,
-      "firstSeen": "2026-09-01",
-      "lastSeen": "2026-09-01",
-      "shops": [
-        "Mercadona, Fuenlabrada"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480000334404"
-    },
-    {
-      "id": "op-es-8427603144009",
-      "code": "8427603144009",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Judía plana",
-      "brand": "perichan",
-      "quantity": "750 g",
-      "price": 2.95,
-      "currency": "EUR",
-      "priceEur": 2.95,
-      "observations": 1,
-      "firstSeen": "2026-06-09",
-      "lastSeen": "2026-06-09",
-      "shops": [
-        "Mercadona, Olot"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8427603144009"
-    },
-    {
-      "id": "op-es-4335619025257",
-      "code": "4335619025257",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Gazpacho tradicional",
-      "brand": "Lidl",
-      "quantity": "330 ml",
-      "price": 2.15,
-      "currency": "EUR",
-      "priceEur": 2.15,
-      "observations": 1,
-      "firstSeen": "2026-04-26",
-      "lastSeen": "2026-04-26",
-      "shops": [
-        "Lidl, Collado Villalba"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/4335619025257"
-    },
-    {
-      "id": "op-es-7290002490562",
-      "code": "7290002490562",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Natural Dates",
-      "brand": "King Solomon Dates",
-      "quantity": "1000 g",
-      "price": 15.75,
-      "currency": "EUR",
-      "priceEur": 15.75,
-      "observations": 1,
-      "firstSeen": "2026-01-30",
-      "lastSeen": "2026-01-30",
-      "shops": [
-        "HiperDino, San Cristóbal de La Laguna"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/7290002490562"
-    },
-    {
-      "id": "op-es-8436032704876",
-      "code": "8436032704876",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Zanahorias",
-      "brand": "Vega Tajo",
-      "quantity": "1000 g",
-      "price": 1.37,
-      "currency": "EUR",
-      "priceEur": 1.37,
-      "observations": 1,
-      "firstSeen": "2025-11-09",
-      "lastSeen": "2025-11-09",
-      "shops": [
-        "BonÀrea, Barcelona"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8436032704876"
-    },
-    {
-      "id": "op-es-8429222912281",
-      "code": "8429222912281",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Tomaquet",
-      "brand": "La Conca de la Tordera",
+      "priceLevel": "A01010101",
+      "name": "Muesli Crunchy Chocolate Negro",
+      "brand": "LIDL",
       "quantity": "500 g",
-      "price": 2.99,
+      "price": 2.29,
       "currency": "EUR",
-      "priceEur": 2.99,
+      "priceEur": 2.29,
       "observations": 1,
-      "firstSeen": "2025-11-08",
-      "lastSeen": "2025-11-08",
+      "firstSeen": "2026-06-06",
+      "lastSeen": "2026-06-06",
       "shops": [
-        "Supeco, Barcelona"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8429222912281"
-    },
-    {
-      "id": "op-es-3504182920011",
-      "code": "3504182920011",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Tomates Gourmet",
-      "brand": "Azura",
-      "quantity": "250 g",
-      "price": 1,
-      "currency": "EUR",
-      "priceEur": 1,
-      "observations": 1,
-      "firstSeen": "2025-11-07",
-      "lastSeen": "2025-11-07",
-      "shops": [
-        "Supeco, Barcelona"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/3504182920011"
-    },
-    {
-      "id": "op-es-8431876274509",
-      "code": "8431876274509",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010106",
-      "name": "Pimiento tipo Padrón",
-      "brand": "Carrefour",
-      "quantity": "200 g",
-      "price": 1.29,
-      "currency": "EUR",
-      "priceEur": 1.29,
-      "observations": 1,
-      "firstSeen": "2025-11-07",
-      "lastSeen": "2025-11-07",
-      "shops": [
-        "Supeco, Barcelona"
+        "Lidl, Olot"
       ],
       "proofs": [
         "PRICE_TAG"
       ],
-      "url": "https://prices.openfoodfacts.org/products/8431876274509"
-    },
-    {
-      "id": "op-es-8410547948031",
-      "code": "8410547948031",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Boqueron Enharinado",
-      "brand": "bonÀrea",
-      "quantity": null,
-      "price": 3.8,
-      "currency": "EUR",
-      "priceEur": 3.8,
-      "observations": 1,
-      "firstSeen": "2026-06-01",
-      "lastSeen": "2026-06-01",
-      "shops": [
-        "BonÀrea, Olot"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8410547948031"
-    },
-    {
-      "id": "op-es-8480017137999",
-      "code": "8480017137999",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Sardinillas en aceite de oliva",
-      "brand": "Dia",
-      "quantity": null,
-      "price": 2.09,
-      "currency": "EUR",
-      "priceEur": 2.09,
-      "observations": 1,
-      "firstSeen": "2026-05-18",
-      "lastSeen": "2026-05-18",
-      "shops": [
-        "Dia, Premià de Mar"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480017137999"
-    },
-    {
-      "id": "op-es-8429583017861",
-      "code": "8429583017861",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Atún en Aceite de Oliva",
-      "brand": "FRINSA DEL NOROESTE, Ribeira",
-      "quantity": "750 g",
-      "price": 7.59,
-      "currency": "EUR",
-      "priceEur": 7.59,
-      "observations": 1,
-      "firstSeen": "2026-04-10",
-      "lastSeen": "2026-04-10",
-      "shops": [
-        "Lidl, Sant Joan d'Alacant"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8429583017861"
-    },
-    {
-      "id": "op-es-8480000180308",
-      "code": "8480000180308",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Atún en aceite de oliva",
-      "brand": "Hacendado, MERCADONA",
-      "quantity": "900 g",
-      "price": 7.6,
-      "currency": "EUR",
-      "priceEur": 7.6,
-      "observations": 1,
-      "firstSeen": "2026-04-04",
-      "lastSeen": "2026-04-04",
-      "shops": [
-        "Mercadona, La Mancha"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480000180308"
-    },
-    {
-      "id": "op-es-8480000242426",
-      "code": "8480000242426",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Calamar limpio",
-      "brand": "Hacendado",
-      "quantity": null,
-      "price": 6,
-      "currency": "EUR",
-      "priceEur": 6,
-      "observations": 1,
-      "firstSeen": "2026-04-04",
-      "lastSeen": "2026-04-04",
-      "shops": [
-        "Mercadona, La Mancha"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480000242426"
-    },
-    {
-      "id": "op-es-8480017269140",
-      "code": "8480017269140",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Almejones al natural",
-      "brand": "Dia",
-      "quantity": null,
-      "price": 1.35,
-      "currency": "EUR",
-      "priceEur": 1.35,
-      "observations": 1,
-      "firstSeen": "2026-03-15",
-      "lastSeen": "2026-03-15",
-      "shops": [
-        "Dia, Barcelona"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480017269140"
-    },
-    {
-      "id": "op-es-8429583006605",
-      "code": "8429583006605",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Atún al natural",
-      "brand": "Auchan",
-      "quantity": "185 g",
-      "price": 1.88,
-      "currency": "EUR",
-      "priceEur": 1.88,
-      "observations": 1,
-      "firstSeen": "2026-02-07",
-      "lastSeen": "2026-02-07",
-      "shops": [
-        "Alcampo, Madrid"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8429583006605"
-    },
-    {
-      "id": "op-es-24075268",
-      "code": "24075268",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Salmón Ahumado",
-      "brand": "Delikato",
-      "quantity": null,
-      "price": 6.89,
-      "currency": "EUR",
-      "priceEur": 6.89,
-      "observations": 1,
-      "firstSeen": "2026-02-06",
-      "lastSeen": "2026-02-06",
-      "shops": [
-        "ALDI, Barcelona"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/24075268"
-    },
-    {
-      "id": "op-es-6943487723052",
-      "code": "6943487723052",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010103",
-      "name": "Anchois Grenadier Frits",
-      "brand": "",
-      "quantity": "184 g",
-      "price": 4.2,
-      "currency": "EUR",
-      "priceEur": 4.2,
-      "observations": 1,
-      "firstSeen": "2026-01-15",
-      "lastSeen": "2026-01-15",
-      "shops": [
-        "Hiper Asia, València"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/6943487723052"
-    },
-    {
-      "id": "op-es-8410843144007",
-      "code": "8410843144007",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "JAMÓN COCIDO",
-      "brand": "ELPOZO ALIMENTACION S.A.",
-      "quantity": "150 g",
-      "price": 2,
-      "currency": "EUR",
-      "priceEur": 2,
-      "observations": 1,
-      "firstSeen": "2026-10-09",
-      "lastSeen": "2026-10-09",
-      "shops": [
-        "Froiz, Ribadavia"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8410843144007"
-    },
-    {
-      "id": "op-es-2209710004829",
-      "code": "2209710004829",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Filete de Lomo Cerdo",
-      "brand": "",
-      "quantity": null,
-      "price": 4.82,
-      "currency": "EUR",
-      "priceEur": 4.82,
-      "observations": 1,
-      "firstSeen": "2026-09-23",
-      "lastSeen": "2026-09-23",
-      "shops": [
-        "Lidl, Culleredo"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/2209710004829"
-    },
-    {
-      "id": "op-es-8424152013671",
-      "code": "8424152013671",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Pollo y setas empanada",
-      "brand": "Mercadona S.A.",
-      "quantity": "500 g",
-      "price": 3.65,
-      "currency": "EUR",
-      "priceEur": 3.65,
-      "observations": 1,
-      "firstSeen": "2026-08-30",
-      "lastSeen": "2026-08-30",
-      "shops": [
-        "Mercadona, Pamplona / Iruña"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8424152013671"
-    },
-    {
-      "id": "op-es-8412877001035",
-      "code": "8412877001035",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Chorizo de León",
-      "brand": "Palcarsa",
-      "quantity": "325 g",
-      "price": 4.19,
-      "currency": "EUR",
-      "priceEur": 4.19,
-      "observations": 1,
-      "firstSeen": "2026-08-17",
-      "lastSeen": "2026-08-17",
-      "shops": [
-        "Alimerka, Valladolid"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8412877001035"
-    },
-    {
-      "id": "op-es-8410320380621",
-      "code": "8410320380621",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Pavofrío salchichón de pavo",
-      "brand": "Campofrio",
-      "quantity": null,
-      "price": 1,
-      "currency": "EUR",
-      "priceEur": 1,
-      "observations": 1,
-      "firstSeen": "2026-07-22",
-      "lastSeen": "2026-07-22",
-      "shops": [
-        "Benalup-Casas Viejas, Benalup-Casas Viejas"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8410320380621"
-    },
-    {
-      "id": "op-es-8410783344468",
-      "code": "8410783344468",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Delizias pechuga de pavo",
-      "brand": "NOEL ALIMENTARIA S.A.U.",
-      "quantity": "200 g",
-      "price": 2.45,
-      "currency": "EUR",
-      "priceEur": 2.45,
-      "observations": 1,
-      "firstSeen": "2026-04-04",
-      "lastSeen": "2026-04-04",
-      "shops": [
-        "Mercadona, La Mancha"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8410783344468"
-    },
-    {
-      "id": "op-es-8410843129752",
-      "code": "8410843129752",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Pechuga de pavo",
-      "brand": "ElPozo",
-      "quantity": null,
-      "price": 2.61,
-      "currency": "EUR",
-      "priceEur": 2.61,
-      "observations": 1,
-      "firstSeen": "2026-02-09",
-      "lastSeen": "2026-02-09",
-      "shops": [
-        "Alcampo, A Coruña"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8410843129752"
-    },
-    {
-      "id": "op-es-8480000590862",
-      "code": "8480000590862",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Chorizo extra",
-      "brand": "Hacendado",
-      "quantity": "240 g",
-      "price": 2,
-      "currency": "EUR",
-      "priceEur": 2,
-      "observations": 1,
-      "firstSeen": "2025-12-02",
-      "lastSeen": "2025-12-02",
-      "shops": [
-        "Mercadona, La Pola Siero"
-      ],
-      "proofs": [
-        "RECEIPT"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8480000590862"
-    },
-    {
-      "id": "op-es-8410320275989",
-      "code": "8410320275989",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Chorizo tradición extra lonchas sin gluten",
-      "brand": "Revilla",
-      "quantity": null,
-      "price": 1,
-      "currency": "EUR",
-      "priceEur": 1,
-      "observations": 1,
-      "firstSeen": "2025-11-23",
-      "lastSeen": "2025-11-23",
-      "shops": [
-        "Ahorramás, Madrid"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8410320275989"
-    },
-    {
-      "id": "op-es-8431876327939",
-      "code": "8431876327939",
-      "country": "ES",
-      "category": "groceries",
-      "priceLevel": "A01010102",
-      "name": "Burgermeat vacuno original",
-      "brand": "Carrefour",
-      "quantity": "180 g",
-      "price": 4.49,
-      "currency": "EUR",
-      "priceEur": 4.49,
-      "observations": 1,
-      "firstSeen": "2025-10-31",
-      "lastSeen": "2025-10-31",
-      "shops": [
-        "Valcarce, San Vicente del Palacio"
-      ],
-      "proofs": [
-        "PRICE_TAG"
-      ],
-      "url": "https://prices.openfoodfacts.org/products/8431876327939"
+      "url": "https://prices.openfoodfacts.org/products/4056489192985"
     }
   ]
 }

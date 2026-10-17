@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-17T02:30:20.967Z",
+  "fetchedAt": "2026-10-17T06:53:56.830Z",
   "today": "2026-10-17",
   "fx": {
     "ecb": {
@@ -15,14 +15,14 @@
   "priceLevels": {
     "year": "2024",
     "previousYear": "2023",
-    "codes": 14,
+    "codes": 15,
     "countries": 5,
-    "checkedValues": 70
+    "checkedValues": 75
   },
   "openPrices": {
     "IE": {
-      "candidates": 11,
-      "passedRecordGates": 11,
+      "candidates": 9,
+      "passedRecordGates": 9,
       "rejectedBy": {
         "has barcode and name": 0,
         "shop is in this country": 0,
@@ -35,27 +35,27 @@
         "price within plausible bounds": 0,
         "within 2x of the product's median": 0
       },
-      "distinctProducts": 11,
-      "keptProducts": 11,
+      "distinctProducts": 9,
+      "keptProducts": 9,
       "rejectedExamples": []
     },
     "DE": {
-      "candidates": 2571,
-      "passedRecordGates": 1750,
+      "candidates": 1536,
+      "passedRecordGates": 1031,
       "rejectedBy": {
-        "has barcode and name": 44,
+        "has barcode and name": 26,
         "shop is in this country": 0,
         "currency matches country": 0,
         "observed in the last 365 days": 0,
-        "not a discounted price": 757,
+        "not a discounted price": 464,
         "backed by receipt or price-tag photo": 0,
-        "maps to an OtherWise category": 17,
+        "maps to an OtherWise category": 12,
         "sold in the unit its type needs": 3,
         "price within plausible bounds": 0,
-        "within 2x of the product's median": 1
+        "within 2x of the product's median": 0
       },
-      "distinctProducts": 1412,
-      "keptProducts": 80,
+      "distinctProducts": 883,
+      "keptProducts": 70,
       "rejectedExamples": [
         {
           "gate": "not a discounted price",
@@ -68,6 +68,13 @@
           "gate": "not a discounted price",
           "product": "Grillkäse Honey-BBQ",
           "price": 1.49,
+          "currency": "EUR",
+          "date": "2025-11-05"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Choco Crisp",
+          "price": 2.55,
           "currency": "EUR",
           "date": "2025-11-05"
         },
@@ -87,94 +94,45 @@
         },
         {
           "gate": "not a discounted price",
-          "product": "Minipflaumen Rispentomaten",
-          "price": 1.5,
+          "product": "BIO Organic COTTAGE CHEESE",
+          "price": 1.15,
           "currency": "EUR",
-          "date": "2025-11-21"
+          "date": "2025-12-13"
         },
         {
           "gate": "not a discounted price",
-          "product": "Fischstäbchen",
-          "price": 2.99,
+          "product": "Bio Speisequark Magerstufe",
+          "price": 0.99,
           "currency": "EUR",
-          "date": "2025-11-24"
+          "date": "2025-12-13"
         },
         {
           "gate": "not a discounted price",
-          "product": "Salami Chips",
-          "price": 1.3,
+          "product": "Green pea penne",
+          "price": 1.39,
           "currency": "EUR",
-          "date": "2025-11-26"
-        },
-        {
-          "gate": "not a discounted price",
-          "product": "Premium Brioche Burger Buns vorgeschnitten",
-          "price": 1.49,
-          "currency": "EUR",
-          "date": "2025-12-10"
+          "date": "2026-01-08"
         }
       ]
     },
     "PT": {
-      "candidates": 139,
-      "passedRecordGates": 108,
+      "candidates": 88,
+      "passedRecordGates": 74,
       "rejectedBy": {
-        "has barcode and name": 5,
+        "has barcode and name": 4,
         "shop is in this country": 0,
         "currency matches country": 0,
         "observed in the last 365 days": 0,
-        "not a discounted price": 22,
+        "not a discounted price": 9,
         "backed by receipt or price-tag photo": 0,
-        "maps to an OtherWise category": 4,
+        "maps to an OtherWise category": 1,
         "sold in the unit its type needs": 0,
         "price within plausible bounds": 0,
         "within 2x of the product's median": 0
       },
-      "distinctProducts": 96,
-      "keptProducts": 42,
+      "distinctProducts": 60,
+      "keptProducts": 31,
       "rejectedExamples": [
-        {
-          "gate": "not a discounted price",
-          "product": "Leite de Pastagem Meio-Gordo",
-          "price": 0.91,
-          "currency": "EUR",
-          "date": "2025-12-22"
-        },
-        {
-          "gate": "not a discounted price",
-          "product": "Leite Magro mimosa",
-          "price": 0.9,
-          "currency": "EUR",
-          "date": "2025-12-22"
-        },
-        {
-          "gate": "not a discounted price",
-          "product": "Leite Proteína",
-          "price": 1.84,
-          "currency": "EUR",
-          "date": "2025-12-31"
-        },
-        {
-          "gate": "not a discounted price",
-          "product": "Leite de Pastagem Biológico Meio-Gordo",
-          "price": 1.13,
-          "currency": "EUR",
-          "date": "2025-12-31"
-        },
-        {
-          "gate": "maps to an OtherWise category",
-          "product": "L casei 0% fresa",
-          "price": 2.54,
-          "currency": "EUR",
-          "date": "2026-04-03"
-        },
-        {
-          "gate": "maps to an OtherWise category",
-          "product": "La Casera Fresa Morango",
-          "price": 2.54,
-          "currency": "EUR",
-          "date": "2026-04-15"
-        },
         {
           "gate": "not a discounted price",
           "product": "Atum posta ao natural",
@@ -183,17 +141,59 @@
           "date": "2026-05-29"
         },
         {
+          "gate": "not a discounted price",
+          "product": "Posta de Atum",
+          "price": 1.99,
+          "currency": "EUR",
+          "date": "2026-03-23"
+        },
+        {
+          "gate": "has barcode and name",
+          "product": "5601159000412",
+          "price": 2.1,
+          "currency": "EUR",
+          "date": "2026-03-23"
+        },
+        {
+          "gate": "has barcode and name",
+          "product": "4335619058491",
+          "price": 1.29,
+          "currency": "EUR",
+          "date": "2026-03-31"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Copos de avena suaves XXL",
+          "price": 1.29,
+          "currency": "EUR",
+          "date": "2026-04-12"
+        },
+        {
           "gate": "has barcode and name",
           "product": "",
-          "price": 1.2,
+          "price": 1.99,
           "currency": "EUR",
-          "date": "2026-08-24"
+          "date": "2026-04-12"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Atum Posta ao Natural",
+          "price": 1.29,
+          "currency": "EUR",
+          "date": "2026-05-07"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Queijo flamengo em fatias da bola",
+          "price": 2.09,
+          "currency": "EUR",
+          "date": "2026-06-06"
         }
       ]
     },
     "HU": {
-      "candidates": 1,
-      "passedRecordGates": 1,
+      "candidates": 0,
+      "passedRecordGates": 0,
       "rejectedBy": {
         "has barcode and name": 0,
         "shop is in this country": 0,
@@ -206,62 +206,34 @@
         "price within plausible bounds": 0,
         "within 2x of the product's median": 0
       },
-      "distinctProducts": 1,
-      "keptProducts": 1,
+      "distinctProducts": 0,
+      "keptProducts": 0,
       "rejectedExamples": []
     },
     "ES": {
-      "candidates": 131,
-      "passedRecordGates": 116,
+      "candidates": 123,
+      "passedRecordGates": 114,
       "rejectedBy": {
-        "has barcode and name": 4,
+        "has barcode and name": 2,
         "shop is in this country": 0,
         "currency matches country": 0,
         "observed in the last 365 days": 0,
-        "not a discounted price": 8,
+        "not a discounted price": 4,
         "backed by receipt or price-tag photo": 0,
         "maps to an OtherWise category": 0,
         "sold in the unit its type needs": 2,
         "price within plausible bounds": 1,
         "within 2x of the product's median": 0
       },
-      "distinctProducts": 115,
-      "keptProducts": 56,
+      "distinctProducts": 113,
+      "keptProducts": 41,
       "rejectedExamples": [
         {
           "gate": "has barcode and name",
           "product": "",
-          "price": 1.5,
+          "price": 3.07,
           "currency": "EUR",
-          "date": "2025-10-17"
-        },
-        {
-          "gate": "not a discounted price",
-          "product": "Griego Ligero Natural",
-          "price": 2.1,
-          "currency": "EUR",
-          "date": "2026-09-18"
-        },
-        {
-          "gate": "has barcode and name",
-          "product": "",
-          "price": 1.19,
-          "currency": "EUR",
-          "date": "2026-01-26"
-        },
-        {
-          "gate": "has barcode and name",
-          "product": "2275950004950",
-          "price": 4.95,
-          "currency": "EUR",
-          "date": "2026-01-31"
-        },
-        {
-          "gate": "not a discounted price",
-          "product": "Pechuguitas de pollo asada",
-          "price": 2.65,
-          "currency": "EUR",
-          "date": "2026-04-06"
+          "date": "2025-11-06"
         },
         {
           "gate": "sold in the unit its type needs",
@@ -271,20 +243,55 @@
           "date": "2026-04-10"
         },
         {
-          "gate": "not a discounted price",
-          "product": "Greek Style Natural Light 2% fat",
-          "price": 1.25,
-          "currency": "EUR",
-          "date": "2026-04-10"
-        },
-        {
           "gate": "sold in the unit its type needs",
           "product": "Leche Sin lactosa Entera",
           "price": 6.18,
           "currency": "EUR",
           "date": "2026-04-10"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Copos de Avena Suaves",
+          "price": 0.75,
+          "currency": "EUR",
+          "date": "2026-06-06"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Muesli crunch dos chocolates",
+          "price": 2.35,
+          "currency": "EUR",
+          "date": "2026-06-09"
+        },
+        {
+          "gate": "has barcode and name",
+          "product": "8480010245424",
+          "price": 1.35,
+          "currency": "EUR",
+          "date": "2026-06-09"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Chocolate Extrafino Negro",
+          "price": 1.65,
+          "currency": "EUR",
+          "date": "2026-06-09"
+        },
+        {
+          "gate": "not a discounted price",
+          "product": "Flocs de civada",
+          "price": 0.75,
+          "currency": "EUR",
+          "date": "2026-06-17"
         }
       ]
     }
+  },
+  "referenceItems": {
+    "cso": "2026 September",
+    "ksh": "2025",
+    "candidates": 4,
+    "kept": 4,
+    "rejected": []
   }
 }

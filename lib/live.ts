@@ -110,7 +110,12 @@ function toCategory(
       : 0,
     source:
       `${comparison.indexLabel}: price level ${comparison.localIndex} here vs ${comparison.homeIndex} in ${homeCity} (Eurostat ${comparison.year}, EU = 100).` +
-      (products.length ? " Products are real shelf prices from Open Prices; their home prices are estimates." : ""),
+      (products.some((p) => p.evidence.source === "National statistics")
+        ? " Named items are official national averages in both countries."
+        : "") +
+      (products.some((p) => p.evidence.source === "Open Prices")
+        ? " Shelf products are real Open Prices sightings; their home prices are estimates."
+        : ""),
     savingPct: category.savingPct,
     annualSavingEur,
     products: products.map((product) => ({
