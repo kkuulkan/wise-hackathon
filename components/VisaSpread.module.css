@@ -88,7 +88,8 @@
   inset: 0 auto 0 6px;
   width: 3px;
   border-radius: 2px;
-  background: var(--ink);
+  /* Beige: the stack sits on the navy body, so a navy board would vanish. */
+  background: var(--page);
 }
 
 /* Stitching, threaded just inside the board. */
@@ -99,7 +100,7 @@
   width: 1px;
   background: repeating-linear-gradient(
     to bottom,
-    var(--line-strong) 0 7px,
+    rgba(240, 240, 182, 0.5) 0 7px,
     transparent 7px 14px
   );
 }

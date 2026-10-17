@@ -13,6 +13,8 @@
   --paper: var(--navy); /* the cover, behind everything */
   --page: var(--beige); /* the open page */
   --surface: #f7f7d2; /* raised on the page: visas, slips */
+  /* Same colour in channels, so glass can be tinted with it. */
+  --surface-rgb: 247 247 210;
   --band: #e4e49c; /* the machine-readable band and security tints */
 
   --accent: var(--navy);
@@ -55,19 +57,20 @@
    * Frosted glass. Kept this opaque on purpose: navy text sits on it over a
    * photograph, and anything thinner loses the contrast the figures need.
    */
-  --glass: rgba(252, 252, 240, 0.62);
-  --glass-strong: rgba(252, 252, 240, 0.78);
+  --glass: rgb(var(--surface-rgb) / 0.86);
+  /* The ticket's paper colour, so the balance box reads as the same beige. */
+  --glass-strong: rgb(var(--surface-rgb) / 0.88);
   --glass-edge: rgba(255, 255, 255, 0.62);
   /* Saturate and lift as well as blur, which is what reads as "glass". */
   --glass-blur: blur(24px) saturate(1.8) brightness(1.06);
   /* Specular sweep, laid over the tint. */
   --glass-sheen: linear-gradient(
     118deg,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(255, 255, 255, 0.14) 20%,
+    rgba(255, 255, 255, 0.46) 0%,
+    rgba(255, 255, 255, 0.1) 20%,
     rgba(255, 255, 255, 0) 44%,
-    rgba(255, 255, 255, 0.16) 78%,
-    rgba(255, 255, 255, 0.44) 100%
+    rgba(255, 255, 255, 0.12) 78%,
+    rgba(255, 255, 255, 0.3) 100%
   );
   /* Wet edges: bright along the top, a soft bloom inside. */
   --glass-gloss:

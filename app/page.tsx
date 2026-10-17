@@ -52,6 +52,9 @@ async function HomeContent() {
       />
 
       <Hero
+        /* Keyed to the trip: a new arrival remounts the hero, so a dismissed
+           ticket comes back and its entrance plays again. */
+        key={`${account.currentCountryCode}-${away}`}
         account={account}
         categories={categories}
         transactions={transactions}

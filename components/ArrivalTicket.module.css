@@ -10,6 +10,9 @@
   position: relative;
   background: var(--surface);
   color: var(--ink);
+  /* Rounded corners and punched notches both clip: the result is the two
+     combined, so the card is round-cornered with the notches still bitten. */
+  border-radius: var(--radius-glass);
   will-change: transform, opacity;
 
   mask-image:
@@ -96,6 +99,7 @@
 .stub {
   display: flex;
   align-items: center;
+  gap: var(--space-3);
   height: 92px;
   padding: 0 var(--space-6);
   border-top: 2px dashed var(--line-strong);
@@ -128,5 +132,36 @@
 }
 
 .cta:active {
+  transform: scale(0.98);
+}
+
+.later {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-btn);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.later:hover {
+  background: var(--chip-bg);
+}
+
+.later:active {
   transform: scale(0.98);
 }

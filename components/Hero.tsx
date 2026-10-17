@@ -1,4 +1,8 @@
+"use client";
+
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
+import gsap from "gsap";
 
 import type { Account, Category, Transaction } from "@/lib/types";
 import { balanceSeries, recentSpend } from "@/lib/balance";
@@ -27,6 +31,52 @@ type Props = {
 };
 
 export function Hero({ account, categories, transactions, away }: Props) {
+  const [dismissed, setDismissed] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
+  /** Width before the layout switched, so the regrowth can be animated. */
+  const fromWidth = useRef<number | null>(null);
+
+
+  const showTicket = away && !dismissed;
+
+  const handleDismiss = useCallback(() => {
+    fromWidth.current = accountRef.current?.getBoundingClientRect().width ?? null;
+    setDismissed(true);
+  }, []);
+
+  /*
+   * The account grows back. Grid tracks cannot tween between one column and
+   * two, so the old width is measured before the switch and the new one after,
+   * then animated between the two and released.
+   */
+  useLayoutEffect(() => {
+    const element = accountRef.current;
+    const from = fromWidth.current;
+    fromWidth.current = null;
+
+    if (!element || from === null) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const to = element.getBoundingClientRect().width;
+    if (Math.abs(to - from) < 2) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        element,
+        { width: from },
+        { width: to, duration: 0.55, ease: "power3.inOut", clearProps: "width" },
+      );
+      // The column that comes back slides in rather than appearing.
+      gsap.fromTo(
+        `.${styles.week}`,
+        { opacity: 0, x: 28 },
+        { opacity: 1, x: 0, duration: 0.45, delay: 0.12, ease: "power2.out" },
+      );
+    }, accountRef);
+
+    return () => ctx.revert();
+  }, [dismissed]);
+
   const primary = account.balances.find((balance) => balance.primary);
   const secondary = account.balances.filter((balance) => !balance.primary);
 
@@ -60,8 +110,8 @@ export function Hero({ account, categories, transactions, away }: Props) {
           columns. Once the ticket arrives it shrinks to one narrow column. The
           glass is on the account only; the ticket is paper.
         */}
-        <div className={away ? styles.gridAway : styles.gridHome}>
-          <div className={styles.account}>
+        <div className={showTicket ? styles.gridAway : styles.gridHome}>
+          <div className={styles.account} ref={accountRef}>
             <div className={styles.who}>
               <span className={styles.avatar} aria-hidden="true">
                 {initials(account.holder)}
@@ -122,7 +172,7 @@ export function Hero({ account, categories, transactions, away }: Props) {
                 </div>
               </div>
 
-              {!away && (
+              {!showTicket && (
                 <div className={styles.week}>
                 {week.slices.length > 0 && (
                   <>
@@ -196,11 +246,12 @@ export function Hero({ account, categories, transactions, away }: Props) {
             </div>
           </div>
 
-          {away && (
+          {showTicket && (
             <ArrivalTicket
               city={account.currentCity}
               homeCity={account.homeCity}
               categories={categories}
+              onDismiss={handleDismiss}
             />
           )}
         </div>

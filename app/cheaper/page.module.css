@@ -1,9 +1,26 @@
+/* The header reaches the top and both edges, so the page itself is bare. */
 .main {
-  padding-top: var(--space-6);
+  position: relative;
   padding-bottom: var(--space-16);
 }
 
-/* Sits on the navy cover, above the page. */
+/* Floats over the photograph, aligned with the container beneath it. */
+.backWrap {
+  position: absolute;
+  top: var(--space-6);
+  left: 0;
+  right: 0;
+  z-index: 5;
+}
+
+.loading {
+  padding-top: var(--space-16);
+}
+
+.body {
+  padding-top: var(--space-8);
+}
+
 .back {
   display: inline-flex;
   align-items: center;
@@ -15,12 +32,12 @@
   font-stretch: 125%;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(240, 240, 182, 0.8);
   text-decoration: none;
 }
 
 .back:hover {
-  color: var(--ink);
+  color: var(--ink-invert);
 }
 
 /* Same stitched spine as the data page, so it reads as one booklet. */
@@ -33,8 +50,46 @@
   padding: var(--space-2) 0;
 }
 
+/*
+ * The header carries the account screen's photograph, with the country title
+ * sitting on top of it. Text here is beige, so a veil keeps it readable
+ * wherever the image happens to be bright.
+ */
 .head {
-  padding: var(--space-2) 0 var(--space-6);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--ink-invert);
+}
+
+/* Clear of the back link above it, and tight to the top otherwise. */
+.headInner {
+  padding: 68px 0 var(--space-10);
+}
+
+.headBg {
+  z-index: -1;
+  object-fit: cover;
+  object-position: center;
+}
+
+.head::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(15, 44, 92, 0.58);
+}
+
+.head :global(.fieldLabel) {
+  color: rgba(240, 240, 182, 0.78);
+}
+
+@media (max-width: 560px) {
+  .headInner {
+    padding-top: 60px;
+    padding-bottom: var(--space-8);
+  }
 }
 
 .lede {
@@ -42,11 +97,11 @@
   max-width: 42ch;
   font-size: 21px;
   font-weight: 600;
-  color: var(--muted);
+  color: rgba(240, 240, 182, 0.82);
 }
 
 .lede strong {
-  color: var(--ink);
+  color: var(--ink-invert);
   font-weight: 700;
 }
 

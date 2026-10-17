@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
+import { dismissTicket } from "@/lib/ticket";
 import styles from "./DemoBar.module.css";
 
 type DemoUser = { id: string; holder: string; homeCity: string };
@@ -143,7 +144,7 @@ export function DemoBar({ userId, homeCountryCode, tripCountry }: Props) {
               <button
                 type="button"
                 className={styles.secondary}
-                onClick={() => moveTo(homeCountryCode)}
+                onClick={() => void dismissTicket().then(() => moveTo(homeCountryCode))}
                 disabled={pending}
               >
                 Fly home

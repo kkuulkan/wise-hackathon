@@ -26,7 +26,8 @@
   z-index: 0;
   height: 0;
   transform-origin: left center;
-  border-top: 2px dashed var(--line-strong);
+  /* currentColor: the header sets the ink, so the trail follows it. */
+  border-top: 2px dashed currentColor;
   pointer-events: none;
 }
 
@@ -37,7 +38,6 @@
   z-index: 2;
   display: block;
   margin-top: -19px;
-  color: var(--stamp);
   /* Nose up, as a plane sits while it is climbing. */
   rotate: -12deg;
   opacity: 0;
